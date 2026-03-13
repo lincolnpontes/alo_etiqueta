@@ -2,15 +2,13 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    
     <link rel="manifest" href="manifest.json">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#1565C0">
-    <title>Etiquetadora</title>
-    
+    <title>Alô_Etiqueta</title>
     <link rel="icon" sizes="192x192" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
 
@@ -29,7 +27,8 @@
         .app-container { width: 100%; max-width: 500px; background-color: #ffffff; min-height: 100vh; box-shadow: 0 0 10px rgba(0,0,0,0.1); position: relative; }
         .header { background-color: #1565C0; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
         .header-title { flex: 1; font-size: 18px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .header-actions button { background: none; border: none; color: white; font-size: 24px; cursor: pointer; margin-left: 10px; }
+        .status-conexao { font-size: 16px; margin-right: 15px; cursor: help; }
+        .header-actions button { background: none; border: none; color: white; font-size: 24px; cursor: pointer; }
         .operator-bar { background-color: #1976D2; color: white; padding: 8px 15px; display: flex; align-items: center; gap: 10px; font-size: 14px; }
         .operator-bar select { flex: 1; padding: 8px; border-radius: 4px; border: none; font-weight: bold; }
         .search-box { background-color: #E3F2FD; padding: 15px; display: flex; gap: 10px; }
@@ -56,9 +55,10 @@
         .qtd-control { display: flex; align-items: center; gap: 15px; }
         .qtd-btn { background: #e0e0e0; border: none; width: 35px; height: 35px; border-radius: 50%; font-size: 20px; cursor: pointer; }
         .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
-        .btn-cancel { background: #eee; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; color: #333; font-weight: bold; }
-        .btn-action { background: #1976D2; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; color: white; font-weight: bold; }
-        .btn-danger { background: #d32f2f; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; color: white; font-weight: bold; width: 100%; margin-top: 10px; }
+        .btn-cancel { background: #eee; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; color: #333; font-weight: bold; flex: 1; }
+        .btn-action { background: #1976D2; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; color: white; font-weight: bold; flex: 1; }
+        .btn-danger { background: #d32f2f; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; color: white; font-weight: bold; width: 100%; margin-top: 10px; }
+        .btn-warning { background: #FF9800; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; color: white; font-weight: bold; width: 100%; margin-top: 10px; }
         .btn-outline { background: #E3F2FD; color: #1976D2; border: 1px solid #1976D2; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 10px; display: flex; align-items: center; justify-content: flex-start; gap: 15px; }
         .btn-outline-icon { font-size: 28px; }
         .gerenciar-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; }
@@ -66,32 +66,16 @@
         .gerenciar-actions button { background: none; border: none; cursor: pointer; font-size: 20px; margin-left: 10px; }
         .color-preview { display: inline-block; padding: 2px 8px; border-radius: 12px; margin-right: 5px; vertical-align: middle; border: 1px solid #ccc; font-weight: bold; font-size: 12px; }
 
-        /* ESTILOS DA ETIQUETA VISUAL (O GABARITO PARA RAWBT) */
-        #area-impressao-visual {
-            position: absolute; 
-            top: 0; 
-            left: -2000px; 
-            width: 384px; 
-            background: white;
-            color: black;
-            font-family: 'Arial', sans-serif;
-            box-sizing: border-box;
-            border: 4px solid black; 
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
+        /* GABARITO DA ETIQUETA VISUAL (RAWBT) */
+        #area-impressao-visual { position: absolute; top: 0; left: -2000px; width: 384px; background: white; color: black; font-family: 'Arial', sans-serif; box-sizing: border-box; border: 4px solid black; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; }
         .etiqueta-header { text-align: center; font-weight: 900; font-size: 26px; text-transform: uppercase; margin-bottom: 5px; line-height: 1.1; }
         .etiqueta-linha { border-top: 3px solid black; margin: 12px 0; }
         .etiqueta-body { font-size: 19px; line-height: 1.5; padding: 0 5px; }
         .etiqueta-row { display: flex; margin-bottom: 5px; }
         .etiqueta-label { font-weight: bold; margin-right: 8px; }
-        
         .etiqueta-val-container { display: flex; align-items: center; margin-top: 15px; }
         .etiqueta-val-label { font-weight: bold; font-size: 22px; margin-right: 10px; }
         .etiqueta-val-destaque { font-size: 28px; font-weight: 900; }
-        
         .etiqueta-footer { text-align: center; display: flex; flex-direction: column; align-items: center; }
         .etiqueta-restaurante { font-size: 20px; font-weight: bold; }
         .etiqueta-operador { font-size: 18px; font-weight: normal; margin-top: 5px; }
@@ -103,18 +87,9 @@
     <div class="etiqueta-header" id="viz-nome-produto">NOME DO PRODUTO</div>
     <div class="etiqueta-linha"></div>
     <div class="etiqueta-body">
-        <div class="etiqueta-row">
-            <span class="etiqueta-label">Manipulado:</span>
-            <span id="viz-data-man">00/00/0000 - 00:00</span>
-        </div>
-        <div class="etiqueta-row">
-            <span class="etiqueta-label">Peso:</span>
-            <span id="viz-peso">0 g</span>
-        </div>
-        <div class="etiqueta-val-container">
-            <span class="etiqueta-val-label">VALIDADE:</span>
-            <span class="etiqueta-val-destaque" id="viz-data-val">00/00/0000</span>
-        </div>
+        <div class="etiqueta-row"><span class="etiqueta-label">Manipulado:</span><span id="viz-data-man">00/00/0000 - 00:00</span></div>
+        <div class="etiqueta-row"><span class="etiqueta-label">Peso:</span><span id="viz-peso">0 g</span></div>
+        <div class="etiqueta-val-container"><span class="etiqueta-val-label">VALIDADE:</span><span class="etiqueta-val-destaque" id="viz-data-val">00/00/0000</span></div>
     </div>
     <div class="etiqueta-linha"></div>
     <div class="etiqueta-footer">
@@ -125,7 +100,8 @@
 
 <div class="app-container">
     <div class="header">
-        <div class="header-title" id="appTitle">Etiquetadora</div>
+        <div class="header-title" id="appTitle">Alô_Etiqueta</div>
+        <div id="indicadorConexao" class="status-conexao" title="Status de Sincronização">⚪</div>
         <div class="header-actions">
             <button onclick="abrirLoginAdmin()" title="Painel e Configurações">⚙️</button>
         </div>
@@ -146,15 +122,14 @@
 </div>
 
 <div class="modal-overlay" id="modalLoginAdmin">
-    <div class="modal">
+    <div class="modal" style="text-align: center;">
         <div class="modal-title">Acesso Restrito</div>
         <div class="form-group">
             <label>Senha do Administrador:</label>
-            <input type="password" id="senhaAdmin" placeholder="Digite a senha" inputmode="numeric" pattern="[0-9]*">
+            <input type="password" id="senhaAdmin" placeholder="Digite a senha" inputmode="numeric" pattern="[0-9]*" style="text-align: center; font-size: 24px; letter-spacing: 5px;">
         </div>
-        <div class="modal-actions">
+        <div class="modal-actions" style="justify-content: center;">
             <button class="btn-cancel" onclick="fecharModal('modalLoginAdmin')">Cancelar</button>
-            <button class="btn-action" onclick="validarSenhaAdmin()">Entrar</button>
         </div>
     </div>
 </div>
@@ -162,7 +137,7 @@
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
         <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 5px;">
-            Etiquetadora - v1.7 (Correção Imagem)
+            Alô_Etiqueta - vT8 (Offline-First)
         </div>
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #1976D2; padding-bottom: 10px; margin-bottom: 20px;">
             <h2 id="displayEstabelecimento" style="margin: 0; font-size: 18px; color: #333;"></h2>
@@ -170,17 +145,11 @@
         </div>
 
         <h3 style="font-size: 16px; color: #555; margin-bottom: 10px;">Painel de Gestão</h3>
-        <button class="btn-outline" onclick="abrirGerenciar('produtos')">
-            <span class="btn-outline-icon">📦</span> Gerenciar Produtos
-        </button>
-        <button class="btn-outline" onclick="abrirGerenciar('categorias')">
-            <span class="btn-outline-icon">🏷️</span> Gerenciar Categorias
-        </button>
-        <button class="btn-outline" onclick="abrirGerenciar('operadores')">
-            <span class="btn-outline-icon">👥</span> Gerenciar Operadores(as)
-        </button>
+        <button class="btn-outline" onclick="abrirGerenciar('produtos')"><span class="btn-outline-icon">📦</span> Gerenciar Produtos</button>
+        <button class="btn-outline" onclick="abrirGerenciar('categorias')"><span class="btn-outline-icon">🏷️</span> Gerenciar Categorias</button>
+        <button class="btn-outline" onclick="abrirGerenciar('operadores')"><span class="btn-outline-icon">👥</span> Gerenciar Operadores(as)</button>
 
-        <h3 style="font-size: 16px; color: #555; margin-top: 25px; margin-bottom: 10px;">Configurações do Sistema</h3>
+        <h3 style="font-size: 16px; color: #555; margin-top: 25px; margin-bottom: 10px;">Configurações</h3>
         <div class="form-group">
             <label>Destino da Impressão:</label>
             <select id="configModo" onchange="salvarModoRapido()">
@@ -189,15 +158,44 @@
             </select>
         </div>
         
-        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-            <button class="btn-outline" style="margin: 0; flex: 1; justify-content: center;" onclick="exportarBanco()">⬇️ Exportar</button>
-            <button class="btn-outline" style="margin: 0; flex: 1; justify-content: center;" onclick="document.getElementById('fileImport').click()">⬆️ Importar</button>
-            <input type="file" id="fileImport" style="display: none;" accept=".json,.txt" onchange="importarBanco(event)">
-        </div>
-        <button class="btn-danger" onclick="restaurarPadroes()">Restaurar Sistema (Apagar Tudo)</button>
+        <button class="btn-warning" onclick="abrirZonaRisco()">⚠️ ZONA DE RISCO (Avançado)</button>
 
         <div class="modal-actions">
             <button class="btn-cancel" onclick="fecharModal('modalPainelUnificado')">Fechar Painel</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="modalZonaRisco">
+    <div class="modal">
+        <div class="modal-title" style="color: #d32f2f; border-bottom: 2px solid #d32f2f;">Zona de Risco</div>
+        
+        <div class="form-group">
+            <label>URL do Google Apps Script:</label>
+            <input type="text" id="configUrlAppScript" placeholder="https://script.google.com/macros/s/.../exec">
+        </div>
+        
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <button class="btn-action" onclick="salvarUrlEPuxar()"><small>Salvar URL e Puxar Dados</small></button>
+            <button class="btn-action" style="background-color: #388E3C;" onclick="salvarTudoNaNuvem()"><small>Salvar Tudo na Nuvem</small></button>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <button class="btn-outline" style="margin: 0; flex: 1; justify-content: center;" onclick="exportarBancoTXT()">⬇️ Exportar Backup TXT</button>
+            <button class="btn-outline" style="margin: 0; flex: 1; justify-content: center;" onclick="document.getElementById('fileImport').click()">⬆️ Importar TXT</button>
+            <input type="file" id="fileImport" style="display: none;" accept=".txt" onchange="importarBancoTXT(event)">
+        </div>
+
+        <button class="btn-warning" onclick="forcarAtualizacao()">🔄 Atualizar Aplicativo (Limpar Cache)</button>
+
+        <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #ccc;">
+            <label style="color:#d32f2f; font-weight:bold; font-size:14px; margin-bottom: 5px; display:block;">Excluir Histórico (Digite "quero excluir todo o histórico"):</label>
+            <input type="text" id="inputConfirmarExclusao" placeholder='Digite a frase aqui' style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; margin-bottom: 10px;">
+            <button class="btn-danger" onclick="excluirHistoricoSeguro()" style="margin-top: 0;">🗑️ APAGAR HISTÓRICO LOCAL</button>
+        </div>
+
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="fecharModal('modalZonaRisco'); abrirPainelUnificado();">Voltar</button>
         </div>
     </div>
 </div>
@@ -224,7 +222,7 @@
         <button class="btn-action" id="btnNovoListagem" style="width: 100%; margin-bottom: 15px;">+ Novo</button>
         <div id="conteudoListagem" style="max-height: 50vh; overflow-y: auto; padding-right: 5px;"></div>
         <div class="modal-actions">
-            <button class="btn-cancel" onclick="voltarPainelUnificado()">Voltar</button>
+            <button class="btn-cancel" onclick="fecharModal('modalListagem'); abrirPainelUnificado();">Voltar</button>
         </div>
     </div>
 </div>
@@ -233,22 +231,10 @@
     <div class="modal">
         <div class="modal-title">Produto</div>
         <input type="hidden" id="prodCodigoOriginal">
-        <div class="form-group">
-            <label>Código Numérico:</label>
-            <input type="number" id="prodCodigo">
-        </div>
-        <div class="form-group">
-            <label>Nome do Produto:</label>
-            <input type="text" id="prodNome">
-        </div>
-        <div class="form-group">
-            <label>Categoria:</label>
-            <select id="prodCategoria"></select>
-        </div>
-        <div class="form-group">
-            <label>Validade em Dias:</label>
-            <input type="number" id="prodValidade">
-        </div>
+        <div class="form-group"><label>Código Numérico:</label><input type="number" id="prodCodigo"></div>
+        <div class="form-group"><label>Nome do Produto:</label><input type="text" id="prodNome"></div>
+        <div class="form-group"><label>Categoria:</label><select id="prodCategoria"></select></div>
+        <div class="form-group"><label>Validade em Dias:</label><input type="number" id="prodValidade"></div>
         <div class="modal-actions">
             <button class="btn-cancel" onclick="fecharModal('modalFormProduto'); abrirGerenciar('produtos')">Cancelar</button>
             <button class="btn-action" onclick="salvarProduto()">Salvar</button>
@@ -260,19 +246,10 @@
     <div class="modal">
         <div class="modal-title">Categoria</div>
         <input type="hidden" id="catNomeOriginal">
-        <div class="form-group">
-            <label>Nome da Categoria:</label>
-            <input type="text" id="catNome">
-        </div>
+        <div class="form-group"><label>Nome da Categoria:</label><input type="text" id="catNome"></div>
         <div style="display: flex; gap: 10px;">
-            <div class="form-group" style="flex: 1;">
-                <label>Cor do Fundo:</label>
-                <input type="color" id="catCor" value="#1976D2">
-            </div>
-            <div class="form-group" style="flex: 1;">
-                <label>Cor do Texto:</label>
-                <input type="color" id="catCorTexto" value="#ffffff">
-            </div>
+            <div class="form-group" style="flex: 1;"><label>Cor Fundo:</label><input type="color" id="catCor" value="#1976D2"></div>
+            <div class="form-group" style="flex: 1;"><label>Cor Texto:</label><input type="color" id="catCorTexto" value="#ffffff"></div>
         </div>
         <div class="modal-actions">
             <button class="btn-cancel" onclick="fecharModal('modalFormCategoria'); abrirGerenciar('categorias')">Cancelar</button>
@@ -285,14 +262,8 @@
     <div class="modal">
         <div class="modal-title">Operador(a)</div>
         <input type="hidden" id="opNomeOriginal">
-        <div class="form-group">
-            <label>Nome do Operador(a):</label>
-            <input type="text" id="opNome">
-        </div>
-        <div class="form-group">
-            <label>Senha (Deixe em branco para sem senha):</label>
-            <input type="text" id="opSenha" placeholder="Opcional" inputmode="numeric" pattern="[0-9]*">
-        </div>
+        <div class="form-group"><label>Nome:</label><input type="text" id="opNome"></div>
+        <div class="form-group"><label>Senha (Vazio = sem senha):</label><input type="text" id="opSenha" placeholder="Opcional" inputmode="numeric" pattern="[0-9]*"></div>
         <div class="modal-actions">
             <button class="btn-cancel" onclick="fecharModal('modalFormOperador'); abrirGerenciar('operadores')">Cancelar</button>
             <button class="btn-action" onclick="salvarOperador()">Salvar</button>
@@ -312,14 +283,8 @@
                 <button class="qtd-btn" onclick="mudarQtd(1)">+</button>
             </div>
         </div>
-        <div class="form-group">
-            <label>Peso em gramas (Opcional):</label>
-            <input type="number" id="imprimirPeso" placeholder="0 g">
-        </div>
-        <div class="form-group">
-            <label>Data de Validade Final:</label>
-            <input type="date" id="imprimirValidade">
-        </div>
+        <div class="form-group"><label>Peso (Opcional):</label><input type="number" id="imprimirPeso" placeholder="0 g"></div>
+        <div class="form-group"><label>Validade Final:</label><input type="date" id="imprimirValidade"></div>
         <div class="modal-actions">
             <button class="btn-cancel" onclick="fecharModal('modalImprimir')">Cancelar</button>
             <button class="btn-action" id="btnProcessarImpressao" onclick="processarImpressao()">🖨️ IMPRIMIR</button>
@@ -333,52 +298,60 @@
     let quantidadeAtual = 1;
     let operadorAnteriorSelect = null;
 
+    // AUDIO NATIVO
+    const audioBeep = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
+
     function carregarBanco() {
         let defaultDB = {
-            produtos: [
-                { codigo: 1, nome: "Hambúrguer Bovino", categoria: "Carnes", validadeDias: 5 },
-                { codigo: 2, nome: "Linguiça Artesanal", categoria: "Embutidos", validadeDias: 15 }
-            ],
-            categorias: [
-                { nome: "Carnes", cor: "#ffcccc", corTexto: "#000000" },
-                { nome: "Embutidos", cor: "#fff0b3", corTexto: "#000000" }
-            ],
-            operadores: [
-                { nome: "Cozinha 1", senha: "" }
-            ],
-            configs: { 
-                modo: "pdf", 
-                estabelecimento: "Restaurante"
-            }
+            produtos: [{ codigo: 1, nome: "Hambúrguer Bovino", categoria: "Carnes", validadeDias: 5 }],
+            categorias: [{ nome: "Carnes", cor: "#ffcccc", corTexto: "#000000" }],
+            operadores: [{ nome: "Cozinha 1", senha: "" }],
+            configs: { modo: "pdf", estabelecimento: "Alô_Etiqueta", urlAppScript: "" },
+            historico: [],
+            filaRetentativaStatus: []
         };
-
         let local = JSON.parse(localStorage.getItem('etiquetadora_db'));
-        return local || defaultDB;
+        
+        if (local) {
+            // Garantir que novas chaves existam em bancos antigos
+            if (!local.configs.urlAppScript) local.configs.urlAppScript = "";
+            if (!local.historico) local.historico = [];
+            if (!local.filaRetentativaStatus) local.filaRetentativaStatus = [];
+            return local;
+        }
+        return defaultDB;
     }
 
-    function salvarBancoLocal(dados = db) {
-        localStorage.setItem('etiquetadora_db', JSON.stringify(dados));
+    function salvarBancoLocal() {
+        localStorage.setItem('etiquetadora_db', JSON.stringify(db));
     }
 
     function iniciar() {
-        if(!db.configs.estabelecimento) db.configs.estabelecimento = "Nome do Estabelecimento";
-        
         atualizarTituloAplicativo();
         renderizarOperadores();
         renderizarFiltros();
         renderizarLista();
         
-        document.getElementById('senhaAdmin').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') validarSenhaAdmin();
+        // AUTO-SUBMIT SENHA
+        document.getElementById('senhaAdmin').addEventListener('input', function(e) {
+            if(this.value === "1999") { 
+                this.blur(); 
+                fecharModal('modalLoginAdmin'); 
+                abrirPainelUnificado();
+                this.value = ''; 
+            }
         });
         
         document.getElementById('senhaTrocaOperador').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') confirmarTrocaOperador();
         });
-        
         document.getElementById('buscaCodigo').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') buscarPorCodigo();
         });
+
+        // LOOP DE SINCRONIZAÇÃO OFFLINE-FIRST (A cada 5 seg)
+        setInterval(syncGeral, 5000);
+        syncGeral();
     }
 
     function atualizarTituloAplicativo() {
@@ -390,36 +363,22 @@
     function abrirLoginAdmin() {
         document.getElementById('senhaAdmin').value = '';
         document.getElementById('modalLoginAdmin').style.display = 'flex';
-        setTimeout(function() {
-            document.getElementById('senhaAdmin').focus();
-        }, 100);
+        setTimeout(() => document.getElementById('senhaAdmin').focus(), 100);
     }
 
-    function validarSenhaAdmin() {
-        if(document.getElementById('senhaAdmin').value === "1999") {
-            fecharModal('modalLoginAdmin');
-            document.getElementById('displayEstabelecimento').innerText = db.configs.estabelecimento;
-            document.getElementById('configModo').value = db.configs.modo;
-            document.getElementById('modalPainelUnificado').style.display = 'flex';
-        } else {
-            alert("Senha incorreta!");
-            document.getElementById('senhaAdmin').value = '';
-            document.getElementById('senhaAdmin').focus();
-        }
-    }
-
-    function voltarPainelUnificado() {
-        fecharModal('modalListagem');
+    function abrirPainelUnificado() {
+        document.getElementById('displayEstabelecimento').innerText = db.configs.estabelecimento;
+        document.getElementById('configModo').value = db.configs.modo;
         document.getElementById('modalPainelUnificado').style.display = 'flex';
     }
 
     function editarEstabelecimento() {
-        let novoNome = prompt("Digite o nome do estabelecimento:", db.configs.estabelecimento);
+        let novoNome = prompt("Nome do estabelecimento:", db.configs.estabelecimento);
         if(novoNome && novoNome.trim() !== "") {
             db.configs.estabelecimento = novoNome.trim();
-            document.getElementById('displayEstabelecimento').innerText = db.configs.estabelecimento;
             atualizarTituloAplicativo();
             salvarBancoLocal();
+            abrirPainelUnificado();
         }
     }
 
@@ -428,22 +387,55 @@
         salvarBancoLocal();
     }
 
-    function restaurarPadroes() {
-        let senhaDigitada = prompt("AÇÃO PERIGOSA! Digite a senha de administrador para poder continuar:");
-        
-        if (senhaDigitada === "1999") {
-            if(confirm("Tem certeza absoluta? Isso apagará todos os produtos e categorias cadastradas.")) {
-                localStorage.removeItem('etiquetadora_db');
-                location.reload();
-            }
-        } else if (senhaDigitada !== null) {
-            alert("Senha incorreta! Restauração cancelada.");
+    // --- ZONA DE RISCO ---
+    function abrirZonaRisco() {
+        fecharModal('modalPainelUnificado');
+        document.getElementById('configUrlAppScript').value = db.configs.urlAppScript || "";
+        document.getElementById('inputConfirmarExclusao').value = "";
+        document.getElementById('modalZonaRisco').style.display = 'flex';
+    }
+
+    function salvarUrlEPuxar() {
+        db.configs.urlAppScript = document.getElementById('configUrlAppScript').value.trim();
+        salvarBancoLocal();
+        alert("URL salva. (Lógica de puxar dados a ser implementada no Apps Script).");
+    }
+
+    function salvarTudoNaNuvem() {
+        db.configs.urlAppScript = document.getElementById('configUrlAppScript').value.trim();
+        salvarBancoLocal();
+        alert("URL salva. (Lógica de push total a ser implementada no Apps Script).");
+    }
+
+    function excluirHistoricoSeguro() {
+        const confirmacao = document.getElementById('inputConfirmarExclusao').value;
+        if (confirmacao === "quero excluir todo o histórico") {
+            db.historico = [];
+            db.filaRetentativaStatus = [];
+            salvarBancoLocal();
+            alert("Histórico apagado com sucesso!");
+            document.getElementById('inputConfirmarExclusao').value = "";
+        } else {
+            alert("Frase de segurança incorreta.");
         }
     }
 
-    async function exportarBanco() {
+    async function forcarAtualizacao() {
+        sessionStorage.clear();
+        if ('caches' in window) {
+            const names = await caches.keys();
+            await Promise.all(names.map(name => caches.delete(name)));
+        }
+        if ('serviceWorker' in navigator) {
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            for (let registration of registrations) { await registration.unregister(); }
+        }
+        window.location.href = window.location.pathname + '?t=' + new Date().getTime();
+    }
+
+    async function exportarBancoTXT() {
         const dataStr = JSON.stringify(db);
-        const fileName = `backup_etiquetadora_${new Date().getTime()}.txt`; 
+        const fileName = `backup_alo_etiqueta_${new Date().getTime()}.txt`; 
         const blob = new Blob([dataStr], { type: "text/plain" });
         
         if (navigator.canShare) {
@@ -452,14 +444,12 @@
                 if (navigator.canShare({ files: [file] })) {
                     await navigator.share({
                         files: [file],
-                        title: 'Backup da Etiquetadora',
-                        text: 'Arquivo de backup do sistema.'
+                        title: 'Backup Alô_Etiqueta',
+                        text: 'Arquivo de backup completo.'
                     });
                     return; 
                 }
-            } catch (err) {
-                console.log("Compartilhamento nativo falhou. Tentando download.");
-            }
+            } catch (err) { console.log("Compartilhamento nativo falhou."); }
         }
         
         const url = URL.createObjectURL(blob);
@@ -470,23 +460,65 @@
         URL.revokeObjectURL(url);
     }
 
-    function importarBanco(event) {
+    function importarBancoTXT(event) {
         const file = event.target.files[0];
         if (!file) return;
         const reader = new FileReader();
         reader.onload = function(e) {
             try {
                 const novoDB = JSON.parse(e.target.result);
-                if(novoDB.produtos && novoDB.categorias && novoDB.operadores) {
+                if(novoDB.produtos) {
                     db = novoDB;
                     salvarBancoLocal();
-                    alert("Banco de dados restaurado com sucesso!");
+                    alert("Backup restaurado com sucesso!");
                     location.reload();
                 } else { alert("Arquivo inválido."); }
             } catch (err) { alert("Erro ao ler o arquivo."); }
         };
         reader.readAsText(file);
     }
+    // -----------------------
+
+    // --- LÓGICA DE SINCRONIZAÇÃO (OFFLINE-FIRST) ---
+    async function syncGeral() {
+        const indicador = document.getElementById('indicadorConexao');
+        
+        if (!db.configs.urlAppScript) {
+            indicador.innerText = '⚪'; // Sem URL configurada
+            return;
+        }
+        if (!navigator.onLine) {
+            indicador.innerText = '🔴'; // Sem Internet do celular
+            return;
+        }
+
+        try {
+            if (db.filaRetentativaStatus && db.filaRetentativaStatus.length > 0) {
+                const payload = JSON.stringify({ 
+                    action: 'syncImpressoes', 
+                    data: db.filaRetentativaStatus 
+                });
+                
+                const res = await fetch(db.configs.urlAppScript, { 
+                    method: 'POST', 
+                    body: payload 
+                });
+                
+                if (res.ok) {
+                    db.filaRetentativaStatus = []; // Limpa fila
+                    salvarBancoLocal();
+                    indicador.innerText = '🟢';
+                } else {
+                    indicador.innerText = '🔴';
+                }
+            } else {
+                indicador.innerText = '🟢'; // Fila vazia, mas online e com URL configurada
+            }
+        } catch(e) {
+            indicador.innerText = '🔴'; // Erro no fetch (ex: script offline ou bloqueado)
+        }
+    }
+    // -----------------------------------------------
 
     function renderizarOperadores() {
         const seletor = document.getElementById('seletorOperador');
@@ -510,9 +542,7 @@
             document.getElementById('operadorAlvo').value = novoNome;
             document.getElementById('senhaTrocaOperador').value = '';
             document.getElementById('modalSenhaOperador').style.display = 'flex';
-            setTimeout(function() {
-                document.getElementById('senhaTrocaOperador').focus();
-            }, 100);
+            setTimeout(() => document.getElementById('senhaTrocaOperador').focus(), 100);
         } else {
             operadorAnteriorSelect = novoNome;
             localStorage.setItem('etiquetadora_operadorAtual', novoNome);
@@ -589,10 +619,6 @@
 
     function abrirGerenciar(tipo) {
         fecharModal('modalPainelUnificado');
-        fecharModal('modalFormProduto');
-        fecharModal('modalFormCategoria');
-        fecharModal('modalFormOperador');
-        
         const lista = document.getElementById('conteudoListagem');
         const btnNovo = document.getElementById('btnNovoListagem');
         const titulo = document.getElementById('tituloListagem');
@@ -754,6 +780,24 @@
         if(quantidadeAtual + valor > 0) { quantidadeAtual += valor; document.getElementById('imprimirQtd').innerText = quantidadeAtual; }
     }
 
+    // REGISTRO NO BANCO E PREPARAÇÃO PARA NUVEM
+    function registrarImpressaoLocal(produto, peso, dataMan, hora, dataVal, qtd, operador) {
+        const registro = {
+            id: Date.now(),
+            produto: produto.nome,
+            peso: peso,
+            dataManipulado: dataMan,
+            horaManipulado: hora,
+            validadeFinal: dataVal,
+            quantidade: qtd,
+            operador: operador
+        };
+        
+        db.historico.push(registro);
+        db.filaRetentativaStatus.push(registro);
+        salvarBancoLocal();
+    }
+
     function processarImpressao() {
         const btn = document.getElementById('btnProcessarImpressao');
         btn.innerText = "Aguarde...";
@@ -774,6 +818,13 @@
         const dataManipulacaoBR = `${String(hoje.getDate()).padStart(2, '0')}/${String(hoje.getMonth() + 1).padStart(2, '0')}/${hoje.getFullYear()}`;
         const horaBR = `${String(hoje.getHours()).padStart(2, '0')}:${String(hoje.getMinutes()).padStart(2, '0')}`;
 
+        // 1. Salvar offline-first (Fila + Histórico)
+        registrarImpressaoLocal(produto, pesoFormatado, dataManipulacaoBR, horaBR, dataValidadeBR, quantidadeAtual, operador);
+
+        // 2. Tocar Áudio de Sucesso
+        audioBeep.play().catch(()=>{});
+
+        // 3. Imprimir
         if(db.configs.modo === 'pdf') {
             fecharModal('modalImprimir');
             gerarEtiquetaPDF(produto, pesoFormatado, dataManipulacaoBR, horaBR, dataValidadeBR, quantidadeAtual, operador, estabelecimento);
@@ -809,18 +860,9 @@
                     <div class="etiqueta-header">${produto.nome}</div>
                     <div class="etiqueta-linha"></div>
                     <div class="etiqueta-body">
-                        <div class="etiqueta-row">
-                            <span class="etiqueta-label">Manipulado:</span>
-                            <span>${dataMan} - ${hora}</span>
-                        </div>
-                        <div class="etiqueta-row">
-                            <span class="etiqueta-label">Peso:</span>
-                            <span>${peso}</span>
-                        </div>
-                        <div class="etiqueta-val-container">
-                            <span class="etiqueta-val-label">VALIDADE:</span>
-                            <span class="etiqueta-val-destaque">${dataVal}</span>
-                        </div>
+                        <div class="etiqueta-row"><span class="etiqueta-label">Manipulado:</span><span>${dataMan} - ${hora}</span></div>
+                        <div class="etiqueta-row"><span class="etiqueta-label">Peso:</span><span>${peso}</span></div>
+                        <div class="etiqueta-val-container"><span class="etiqueta-val-label">VALIDADE:</span><span class="etiqueta-val-destaque">${dataVal}</span></div>
                     </div>
                     <div class="etiqueta-linha"></div>
                     <div class="etiqueta-footer">
@@ -836,7 +878,6 @@
     }
 
     function enviarParaRawBT(produto, peso, dataMan, hora, dataVal, qtd, operador, estabelecimento, btnElement) {
-        
         document.getElementById('viz-nome-produto').innerText = produto.nome;
         document.getElementById('viz-data-man').innerText = `${dataMan} - ${hora}`;
         document.getElementById('viz-peso').innerText = peso;
@@ -847,7 +888,6 @@
         const gabarito = document.getElementById('area-impressao-visual');
 
         html2canvas(gabarito, { scale: 2, backgroundColor: "#ffffff" }).then(canvas => {
-            
             const gap = 40; 
             const finalCanvas = document.createElement('canvas');
             finalCanvas.width = canvas.width;
@@ -856,14 +896,9 @@
             
             ctx.fillStyle = "#ffffff";
             ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
-            
-            for(let i = 0; i < qtd; i++) {
-                ctx.drawImage(canvas, 0, i * (canvas.height + gap));
-            }
+            for(let i = 0; i < qtd; i++) { ctx.drawImage(canvas, 0, i * (canvas.height + gap)); }
 
-            // A SOLUÇÃO: Mantém o "data:image/png;base64," na string para o RawBT reconhecer a foto
             const imgDataUrl = finalCanvas.toDataURL("image/png");
-            
             const intent = "intent:" + imgDataUrl + "#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;";
             
             btnElement.innerText = "🖨️ IMPRIMIR";
@@ -881,6 +916,5 @@
 
     iniciar();
 </script>
-
 </body>
 </html>
