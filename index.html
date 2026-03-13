@@ -80,7 +80,6 @@
             margin-left: 10px; 
         }
         
-        /* BARRA DE BUSCA E QR CODE NA MESMA LINHA */
         .search-box { 
             background: #E3F2FD; 
             padding: 15px; 
@@ -189,7 +188,6 @@
             font-size: 14px; 
         }
         
-        /* Modais */
         .modal-overlay { 
             display: none; 
             position: fixed; 
@@ -379,7 +377,7 @@
             transform: translateX(22px); 
         }
 
-        /* GABARITO DA ETIQUETA VISUAL REFORMULADO */
+        /* GABARITO DA ETIQUETA VISUAL */
         #area-impressao-visual { 
             position: absolute; 
             top: 0; 
@@ -421,7 +419,6 @@
             padding: 0; 
         }
         
-        /* Linha do meio que divide info textual e o QR Code */
         .etiqueta-meio { 
             display: flex; 
             justify-content: space-between; 
@@ -467,12 +464,13 @@
         }
         
         .destaque-box { 
-            background-color: black; 
-            color: white; 
+            background-color: black !important; 
+            color: white !important; 
             padding: 2px 8px; 
             border-radius: 4px; 
             font-weight: bold; 
             font-size: 13px; 
+            display: inline-block;
         }
         
         .etiqueta-footer { 
@@ -508,15 +506,16 @@
                     <span class="etiqueta-label" id="viz-label-acao">Manipulado:</span>
                     <span id="viz-data-man">00/00/0000 00:00</span>
                 </div>
-                <div class="etiqueta-row" id="viz-row-peso">
-                    <div><span class="etiqueta-label">Peso:</span> <span id="viz-peso">0g</span></div>
+                
+                <div class="etiqueta-row" id="viz-linha-opcionais" style="display:none; justify-content: flex-start; gap: 15px;">
+                    <div id="viz-box-peso" style="display:none;"><span class="etiqueta-label">Peso:</span> <span id="viz-peso">0g</span></div>
+                    <div id="viz-box-preco-container" style="display:none; font-weight: 900; font-size: 16px;">R$ <span id="viz-preco">0,00</span></div>
                 </div>
-                <div class="etiqueta-row" id="viz-row-lote">
+                
+                <div class="etiqueta-row" id="viz-row-lote" style="display:none;">
                     <div><span class="etiqueta-label">Lote:</span> <span id="viz-lote">---</span></div>
                 </div>
-                <div class="etiqueta-row" id="viz-box-preco-container" style="display:none;">
-                    <div style="font-weight: 900; font-size: 18px;">R$ <span id="viz-preco">0,00</span></div>
-                </div>
+                
                 <div class="etiqueta-val-container">
                     <span class="etiqueta-val-label">VAL:</span>
                     <span class="etiqueta-val-destaque" id="viz-data-val">00/00/0000</span>
@@ -568,7 +567,7 @@
         <div class="modal-title">Acesso ao Painel</div>
         <div class="form-group">
             <label>Senha:</label>
-            <input type="password" id="senhaAdmin" placeholder="Deixe em branco se não houver" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(this.value === '1999' || (db.configs.senhaAdmin !== '' && this.value === db.configs.senhaAdmin)){this.blur();fecharModal('modalLoginAdmin');abrirPainelUnificado();this.value='';}">
+            <input type="password" id="senhaAdmin" placeholder="Digite para entrar..." inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(this.value === '1999' || (db.configs.senhaAdmin !== '' && this.value === db.configs.senhaAdmin)){this.blur();fecharModal('modalLoginAdmin');abrirPainelUnificado();this.value='';}">
         </div>
         <div class="modal-actions">
             <button class="btn-cancel" onclick="fecharModal('modalLoginAdmin')">Cancelar</button>
@@ -587,6 +586,12 @@
         <button class="btn-outline" style="border-color:#f57f17; color:#f57f17;" onclick="abrirGerenciarEtiquetas()">🖨️ Gerenciar Etiquetas</button>
         <button class="btn-outline" style="border-color:#2e7d32; color:#2e7d32;" onclick="abrirEstoque()">📊 Relatório (Estoque)</button>
         
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+        <div class="form-group" style="text-align: left;">
+            <label>Senha das Configurações:</label>
+            <input type="password" id="cfgSenhaAdmin" placeholder="" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');" onchange="salvarSenhaPainel()">
+        </div>
+
         <h3 style="font-size: 16px; color: #d32f2f; margin-top: 25px;">Avançado</h3>
         <button class="btn-danger" onclick="abrirModalAvancado()">⚠️ Configurações Avançadas</button>
         
@@ -617,15 +622,10 @@
             <div class="form-group" style="flex:1;">
                 <label>Modo Impressão:</label>
                 <select id="cfgModo" onchange="salvarEtiquetaConfigs()">
-                    <option value="pdf">Ver PDF</option>
-                    <option value="rawbt">App RawBT</option>
+                    <option value="pdf">PDF</option>
+                    <option value="rawbt">RawBT</option>
                 </select>
             </div>
-        </div>
-
-        <div class="form-group">
-            <label>Senha de Acesso (Painel de Configurações):</label>
-            <input type="password" id="cfgSenhaAdmin" placeholder="Vazio = Livre. (1999 sempre entra)" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');" onchange="salvarEtiquetaConfigs()">
         </div>
 
         <h3 style="font-size: 14px; margin-bottom:5px;">Aparência Visual</h3>
@@ -684,8 +684,8 @@
             <label>URL Apps Script:</label>
             <input type="text" id="configUrlAppScript">
         </div>
-        <button class="btn-action" style="width:100%; margin-bottom:10px; background:#4CAF50;" onclick="salvarUrlEPuxar()">💾 Salvar URL e Puxar Dados</button>
-        <button class="btn-outline" style="border-color:#2e7d32; color:#2e7d32; justify-content:center;" onclick="salvarTudoNaNuvem()">⬆️ Salvar na Nuvem</button>
+        <button class="btn-action" style="width:100%; margin-bottom:10px; background:#4CAF50;" onclick="salvarUrlEPuxar(event)">💾 Salvar URL e Puxar Dados</button>
+        <button class="btn-outline" style="border-color:#2e7d32; color:#2e7d32; justify-content:center;" onclick="salvarTudoNaNuvem(event)">⬆️ Salvar na Nuvem</button>
         
         <h3 style="font-size: 15px; color: #333; margin-top: 10px; margin-bottom: 10px;">Físico</h3>
         <div style="display: flex; gap: 10px; margin-top:10px;">
@@ -1040,7 +1040,13 @@
     }
     
     function abrirPainelUnificado() { 
+        document.getElementById('cfgSenhaAdmin').value = db.configs.senhaAdmin || "";
         document.getElementById('modalPainelUnificado').style.display = 'flex'; 
+    }
+
+    function salvarSenhaPainel() {
+        db.configs.senhaAdmin = document.getElementById('cfgSenhaAdmin').value;
+        salvarBancoLocal();
     }
 
     function abrirGerenciarEtiquetas() {
@@ -1051,7 +1057,6 @@
         document.getElementById('cfgDestaqueProd').checked = db.configs.destaqueProd;
         document.getElementById('cfgDestaqueVal').checked = db.configs.destaqueVal;
         document.getElementById('cfgQRGlobal').checked = db.configs.controleQR;
-        document.getElementById('cfgSenhaAdmin').value = db.configs.senhaAdmin;
         document.getElementById('modalGerenciarEtiquetas').style.display = 'flex';
     }
 
@@ -1062,7 +1067,6 @@
         db.configs.destaqueProd = document.getElementById('cfgDestaqueProd').checked;
         db.configs.destaqueVal = document.getElementById('cfgDestaqueVal').checked;
         db.configs.controleQR = document.getElementById('cfgQRGlobal').checked;
-        db.configs.senhaAdmin = document.getElementById('cfgSenhaAdmin').value;
         
         salvarBancoLocal();
         
@@ -1082,16 +1086,67 @@
         document.getElementById('modalZonaRisco').style.display = 'flex'; 
     }
     
-    function salvarUrlEPuxar() { 
-        db.configs.urlAppScript = document.getElementById('configUrlAppScript').value.trim(); 
+    async function salvarUrlEPuxar(event) { 
+        const url = document.getElementById('configUrlAppScript').value.trim(); 
+        db.configs.urlAppScript = url; 
         salvarBancoLocal(); 
-        alert("URL salva!"); 
+        
+        if(!url) return alert("A URL do Google Apps Script está vazia!"); 
+        
+        const btn = event.target;
+        const textoOriginal = btn.innerText;
+        btn.innerText = "Puxando Dados...";
+        btn.disabled = true;
+
+        try {
+            // Chamada real para puxar (GET)
+            let resposta = await fetch(url);
+            let dados = await resposta.json();
+            
+            // Validação simples para ver se o JSON é mesmo o seu banco de dados
+            if(dados && dados.produtos && Array.isArray(dados.produtos)) {
+                db = dados;
+                salvarBancoLocal();
+                alert("Dados puxados e sincronizados com a Nuvem!");
+                location.reload();
+            } else {
+                alert("Os dados recebidos da nuvem não estão no formato correto.");
+            }
+        } catch(erro) {
+            alert("Erro de comunicação com a Nuvem: " + erro.message);
+        }
+
+        btn.innerText = textoOriginal;
+        btn.disabled = false;
     }
     
-    function salvarTudoNaNuvem() { 
-        db.configs.urlAppScript = document.getElementById('configUrlAppScript').value.trim(); 
+    async function salvarTudoNaNuvem(event) { 
+        const url = document.getElementById('configUrlAppScript').value.trim(); 
+        db.configs.urlAppScript = url; 
         salvarBancoLocal(); 
-        alert("Iniciando push!"); 
+        
+        if(!url) return alert("A URL do Google Apps Script está vazia!"); 
+        
+        const btn = event.target;
+        const textoOriginal = btn.innerText;
+        btn.innerText = "Enviando...";
+        btn.disabled = true;
+
+        try {
+            // Chamada real para enviar (POST). Usando text/plain para evitar problemas de CORS no Google Script
+            let resposta = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(db)
+            });
+            
+            alert("Backup enviado com sucesso para a Nuvem!");
+        } catch(erro) {
+            alert("Erro ao enviar para a Nuvem: " + erro.message);
+        }
+
+        btn.innerText = textoOriginal;
+        btn.disabled = false;
     }
     
     function excluirHistoricoSeguro() { 
@@ -1102,7 +1157,7 @@
             alert("Histórico apagado!"); 
             document.getElementById('inputConfirmarExclusao').value = '';
         } else { 
-            alert("Frase incorreta."); 
+            alert("Frase de exclusão incorreta."); 
         } 
     }
     
@@ -1132,13 +1187,35 @@
         window.location.href = window.location.pathname + '?t=' + Date.now(); 
     }
     
-    function exportarBancoTXT() { 
-        const blob = new Blob([JSON.stringify(db)], {type:"text/plain"}); 
+    async function exportarBancoTXT() { 
+        const dataStr = JSON.stringify(db);
+        const fileName = `backup_alo_etiqueta_${new Date().getTime()}.txt`; 
+        const blob = new Blob([dataStr], { type: "text/plain" }); 
+        
+        // Tenta usar a tela nativa de compartilhamento do celular
+        if (navigator.canShare) {
+            try {
+                const file = new File([blob], fileName, { type: "text/plain" });
+                if (navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        files: [file],
+                        title: 'Backup Alô_Etiqueta',
+                        text: 'Arquivo de backup do sistema.'
+                    });
+                    return; // Se o compartilhamento nativo der certo, a função termina aqui.
+                }
+            } catch (err) {
+                console.log("Compartilhamento nativo cancelado ou falhou. Caindo para download normal.", err);
+            }
+        }
+
+        // Plano B: Download direto (comportamento em PC ou navegadores antigos)
         const url = URL.createObjectURL(blob); 
         const a = document.createElement('a'); 
         a.href = url; 
-        a.download = `backup_${Date.now()}.txt`; 
+        a.download = fileName; 
         a.click(); 
+        URL.revokeObjectURL(url);
     }
     
     function importarBancoTXT(e) { 
@@ -1150,10 +1227,10 @@
             try { 
                 db = JSON.parse(evt.target.result); 
                 salvarBancoLocal(); 
-                alert("Backup Restaurado!"); 
+                alert("Backup Restaurado com Sucesso!"); 
                 location.reload(); 
             } catch(err) { 
-                alert("Arquivo corrompido."); 
+                alert("Arquivo corrompido ou inválido."); 
             } 
         }; 
         reader.readAsText(file); 
@@ -1791,7 +1868,7 @@
                 .etiqueta-val-label { font-weight: bold; font-size: 18px; margin-right: 8px; }
                 .etiqueta-val-destaque { font-size: 24px; font-weight: 900; }
                 .etiqueta-val-destaque.destaque { font-size: 36px; }
-                .destaque-box { background-color: black; color: white; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 13px; }
+                .destaque-box { background-color: black !important; color: white !important; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 13px; display: inline-block; }
                 .etiqueta-footer { text-align: center; display: flex; flex-direction: column; align-items: center; margin-top: auto; }
             </style>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script>
@@ -1815,6 +1892,9 @@
             }
             
             let displayPreco = valorCalc !== "" ? "flex" : "none";
+            
+            let displayOpcionais = (displayPeso === "flex" || displayPreco === "flex") ? "flex" : "none";
+            
             let displayArmaz = armaz !== "" ? "block" : "none";
             let showQR = (db.configs.controleQR && p.usaQR) ? "block" : "none";
             let idQR = `qr_${Date.now()}_${i}`;
@@ -1830,14 +1910,12 @@
                                     <span class="etiqueta-label">${acao}</span>
                                     <span>${manBR} ${hrBR}</span>
                                 </div>
-                                <div class="etiqueta-row" style="display: ${displayPeso};">
-                                    <div><span class="etiqueta-label">Peso:</span> <span>${pesoInput}g</span></div>
+                                <div class="etiqueta-row" style="display: ${displayOpcionais}; justify-content: flex-start; gap: 15px;">
+                                    <div style="display: ${displayPeso};"><span class="etiqueta-label">Peso:</span> <span>${pesoInput}g</span></div>
+                                    <div style="display: ${displayPreco}; font-weight: 900; font-size: 16px;">R$ <span>${valorCalc}</span></div>
                                 </div>
                                 <div class="etiqueta-row" style="display: ${displayLote};">
                                     <div><span class="etiqueta-label">Lote:</span> <span>${lote || '-'}</span></div>
-                                </div>
-                                <div class="etiqueta-row" style="display: ${displayPreco};">
-                                    <div style="font-weight: 900; font-size: 18px;">R$ <span>${valorCalc}</span></div>
                                 </div>
                                 <div class="etiqueta-val-container">
                                     <span class="etiqueta-val-label">VAL:</span>
@@ -1895,10 +1973,12 @@
         document.getElementById('viz-label-acao').innerText = acao; 
         document.getElementById('viz-data-man').innerText = `${manBR} ${hrBR}`;
         
-        const rowPeso = document.getElementById('viz-row-peso');
+        const rowPeso = document.getElementById('viz-box-peso');
+        let hasPeso = false;
         if(pesoInput !== "") { 
-            rowPeso.style.display = "flex"; 
+            rowPeso.style.display = "block"; 
             document.getElementById('viz-peso').innerText = `${pesoInput}g`; 
+            hasPeso = true;
         } else { 
             rowPeso.style.display = "none"; 
         }
@@ -1923,11 +2003,20 @@
         }
         
         const bxPrecoCont = document.getElementById('viz-box-preco-container');
+        let hasPreco = false;
         if(calcPreco !== "") { 
-            bxPrecoCont.style.display = "flex"; 
+            bxPrecoCont.style.display = "block"; 
             document.getElementById('viz-preco').innerText = calcPreco; 
+            hasPreco = true;
         } else { 
             bxPrecoCont.style.display = "none"; 
+        }
+        
+        const rowOpcionais = document.getElementById('viz-linha-opcionais');
+        if(hasPeso || hasPreco) {
+            rowOpcionais.style.display = "flex";
+        } else {
+            rowOpcionais.style.display = "none";
         }
         
         let arm = p.armazenamento === "resfriado" ? "Manter Resfriado" : (p.armazenamento === "congelado" ? "Manter Congelado" : "");
@@ -1993,7 +2082,7 @@
         html5QrCode = new Html5Qrcode("reader");
         
         html5QrCode.start(
-            { facingMode: "environment" }, // Força a câmera traseira
+            { facingMode: "environment" }, 
             { fps: 10, qrbox: { width: 250, height: 250 } },
             onScanSuccess,
             onScanFailure
@@ -2040,12 +2129,12 @@
             
             audioBeep.play().catch(()=>{}); 
             alert("✅ Baixa realizada com sucesso no Estoque!\nItem: " + item.produto);
-            fecharLeitorQR(); // Fecha a câmera após dar baixa com sucesso
+            fecharLeitorQR();
         }
     }
     
     function onScanFailure(error) { 
-        // Silencia os erros contínuos de quando a câmera não encontra um QR Code
+        // Silenciado propositalmente
     }
     
     iniciar();
