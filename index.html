@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô_Etiqueta</title>
+    <title>Alô_Etiqueta v1.1</title>
     <link rel="icon" sizes="192x192" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
 
@@ -26,13 +26,16 @@
         body { font-family: Arial, sans-serif; background-color: #f0f2f5; margin: 0; padding: 0; display: flex; justify-content: center; }
         .app-container { width: 100%; max-width: 500px; background-color: #ffffff; min-height: 100vh; box-shadow: 0 0 10px rgba(0,0,0,0.1); position: relative; display: flex; flex-direction: column; }
         
-        /* CABEÇALHO EM LINHA ÚNICA */
+        /* CABEÇALHO EM LINHA ÚNICA (OPERADOR AJUSTADO) */
         .header { background-color: #1565C0; color: white; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-        .header select { padding: 8px; border-radius: 5px; border: none; font-weight: bold; background: white; color: #1565C0; font-size: 14px; max-width: 150px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
-        .status-conexao { font-size: 14px; cursor: help; background: rgba(0,0,0,0.2); padding: 4px 8px; border-radius: 12px; }
-        .header-actions button { background: none; border: none; color: white; font-size: 24px; cursor: pointer; padding: 0; margin-left: auto; }
+        .header-op-container { display: flex; align-items: center; gap: 8px; flex: 1; }
+        .header-op-container span { font-size: 14px; font-weight: bold; white-space: nowrap; }
+        .header select { height: 32px; border-radius: 4px; border: none; font-weight: bold; background: #ffffff; color: #1565C0; font-size: 14px; width: 100%; max-width: 160px; padding: 0 8px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); }
         
-        /* BARRA DE BUSCA CORRIGIDA */
+        .status-conexao { font-size: 14px; cursor: help; background: rgba(0,0,0,0.2); padding: 4px 8px; border-radius: 12px; margin-left: auto; }
+        .header-actions button { background: none; border: none; color: white; font-size: 24px; cursor: pointer; padding: 0; margin-left: 10px; }
+        
+        /* BARRA DE BUSCA */
         .search-box { background-color: #E3F2FD; padding: 15px; display: flex; gap: 10px; box-sizing: border-box; width: 100%; }
         .search-box input { flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; box-sizing: border-box; min-width: 0; }
         .search-box button { background-color: #1976D2; color: white; border: none; padding: 0 20px; border-radius: 5px; cursor: pointer; font-size: 16px; white-space: nowrap; flex-shrink: 0; }
@@ -72,26 +75,24 @@
         .gerenciar-info { flex: 1; font-size: 14px; min-width: 0; }
         .gerenciar-actions button { background: #eee; border: none; cursor: pointer; font-size: 16px; margin-left: 5px; padding: 8px; border-radius: 4px; }
         
-        /* GABARITO DA ETIQUETA VISUAL (REFORMULADO) */
-        #area-impressao-visual { position: absolute; top: 0; left: -2000px; width: 384px; height: 384px; background: white; color: black; font-family: 'Arial', sans-serif; box-sizing: border-box; border: 4px solid black; padding: 12px; display: flex; flex-direction: column; }
-        .etiqueta-header { text-align: center; font-weight: 900; font-size: 24px; text-transform: uppercase; line-height: 1.1; margin-bottom: 5px; }
-        .etiqueta-linha { border-top: 3px solid black; margin: 8px 0; }
-        .etiqueta-body { flex: 1; display: flex; flex-direction: column; justify-content: space-around; font-size: 18px; padding: 0 2px; }
+        /* GABARITO DA ETIQUETA VISUAL (DINÂMICO PELO JS) */
+        #area-impressao-visual { position: absolute; top: 0; left: -2000px; background: white; color: black; font-family: 'Arial', sans-serif; box-sizing: border-box; border: 4px solid black; padding: 10px; display: flex; flex-direction: column; overflow: hidden; }
+        .etiqueta-header { text-align: center; font-weight: 900; font-size: 22px; text-transform: uppercase; line-height: 1.1; margin-bottom: 4px; }
+        .etiqueta-linha { border-top: 3px solid black; margin: 4px 0; }
+        .etiqueta-body { flex: 1; display: flex; flex-direction: column; justify-content: space-between; font-size: 16px; padding: 0; }
         .etiqueta-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px; }
-        .etiqueta-row-start { justify-content: flex-start; gap: 8px; }
+        .etiqueta-row-start { justify-content: flex-start; gap: 6px; }
         .etiqueta-label { font-weight: bold; }
         
-        /* Alinhamento corrigido da Validade */
-        .etiqueta-val-container { display: flex; align-items: center; margin-top: auto; padding-top: 5px; border-top: 2px dashed #000; }
-        .etiqueta-val-label { font-weight: bold; font-size: 20px; margin-right: 10px; line-height: 1; }
-        .etiqueta-val-destaque { font-size: 28px; font-weight: 900; line-height: 1; }
+        .etiqueta-val-container { display: flex; align-items: center; margin-top: auto; padding-top: 4px; border-top: 2px dashed #000; }
+        .etiqueta-val-label { font-weight: bold; font-size: 18px; margin-right: 8px; line-height: 1; }
+        .etiqueta-val-destaque { font-size: 26px; font-weight: 900; line-height: 1; }
         
-        /* Rodapé Rebaixado */
         .etiqueta-footer { text-align: center; display: flex; flex-direction: column; align-items: center; margin-top: auto; }
-        .etiqueta-restaurante { font-size: 16px; font-weight: bold; }
-        .etiqueta-operador { font-size: 14px; font-weight: normal; margin-top: 2px; }
+        .etiqueta-restaurante { font-size: 14px; font-weight: bold; }
+        .etiqueta-operador { font-size: 12px; font-weight: normal; margin-top: 2px; }
         
-        .destaque-box { background-color: black; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 14px; }
+        .destaque-box { background-color: black; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -113,7 +114,7 @@
 
         <div class="etiqueta-row" id="viz-box-extra" style="display: none;">
             <div id="viz-armazenamento" class="destaque-box">Resfriado</div>
-            <div id="viz-box-preco" style="display: none; font-weight: 900; font-size: 20px;">R$ <span id="viz-preco">0,00</span></div>
+            <div id="viz-box-preco" style="display: none; font-weight: 900; font-size: 18px;">R$ <span id="viz-preco">0,00</span></div>
         </div>
 
         <div class="etiqueta-val-container">
@@ -132,15 +133,13 @@
 
 <div class="app-container">
     <div class="header">
-        <div style="display: flex; align-items: center; gap: 5px;">
-            <span style="font-size: 12px; font-weight: bold; opacity: 0.9;">Op:</span>
+        <div class="header-op-container">
+            <span>Operador(a):</span>
             <select id="seletorOperador" onchange="verificarTrocaOperador(this)"></select>
         </div>
-        <div style="display: flex; align-items: center; gap: 15px;">
-            <div id="indicadorConexao" class="status-conexao" title="Status de Sincronização">⚪</div>
-            <div class="header-actions">
-                <button onclick="abrirLoginAdmin()" title="Painel e Configurações">⚙️</button>
-            </div>
+        <div id="indicadorConexao" class="status-conexao" title="Status de Sincronização">⚪</div>
+        <div class="header-actions">
+            <button onclick="abrirLoginAdmin()" title="Painel e Configurações">⚙️</button>
         </div>
     </div>
 
@@ -169,12 +168,11 @@
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
         <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 20px;">
-            Alô_Etiqueta - vT10
+            Alô_Etiqueta - v1.1
         </div>
 
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
-        <button class="btn-outline" onclick="abrirGerenciar('marcas')">🏢 Gerenciar Marcas</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores(as)</button>
         
         <button class="btn-outline" style="border-color:#2e7d32; color:#2e7d32;" onclick="abrirEstoque()">📊 Relatório de Impressões (Estoque)</button>
@@ -183,15 +181,25 @@
         
         <div class="form-group">
             <label>Nome do Estabelecimento (Etiqueta):</label>
-            <input type="text" id="configNomeEstabelecimento" placeholder="Ex: Restaurante Central" onchange="salvarNomeEstabelecimento(this.value)">
+            <input type="text" id="configNomeEstabelecimento" placeholder="Ex: Restaurante Central" onchange="salvarConfigsRapidas()">
         </div>
 
-        <div class="form-group">
-            <label>Destino da Impressão:</label>
-            <select id="configModo" onchange="salvarModoRapido()">
-                <option value="pdf">Visualizar no Ecrã (Gerar PDF)</option>
-                <option value="rawbt">App Externo (Imprimir via RawBT)</option>
-            </select>
+        <div style="display: flex; gap: 10px;">
+            <div class="form-group" style="flex: 1;">
+                <label>Tamanho Etiqueta:</label>
+                <select id="configTamanhoEtiqueta" onchange="salvarConfigsRapidas()">
+                    <option value="60x40">60x40 mm</option>
+                    <option value="50x50">50x50 mm</option>
+                    <option value="40x40">40x40 mm</option>
+                </select>
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label>Modo Impressão:</label>
+                <select id="configModo" onchange="salvarConfigsRapidas()">
+                    <option value="pdf">Visualizar Ecrã (PDF)</option>
+                    <option value="rawbt">App Externo (RawBT)</option>
+                </select>
+            </div>
         </div>
         
         <h3 style="font-size: 16px; color: #d32f2f; margin-top: 25px; margin-bottom: 10px;">Avançado</h3>
@@ -318,6 +326,11 @@
         <div class="form-group"><label>Nome do Produto:</label><input type="text" id="prodNome"></div>
         <div class="form-group"><label>Categoria:</label><select id="prodCategoria"></select></div>
         
+        <div class="form-group">
+            <label>Marcas (Separe por vírgula):</label>
+            <input type="text" id="prodMarcas" placeholder="Ex: Seara, Sadia, Friboi">
+        </div>
+
         <div style="display: flex; gap:10px;">
             <div class="form-group" style="flex: 1;">
                 <label>Conservação:</label>
@@ -349,18 +362,6 @@
         <div class="modal-actions">
             <button class="btn-cancel" onclick="fecharModal('modalFormCategoria'); abrirGerenciar('categorias')">Cancelar</button>
             <button class="btn-action" onclick="salvarCategoria()">Salvar</button>
-        </div>
-    </div>
-</div>
-
-<div class="modal-overlay" id="modalFormMarca">
-    <div class="modal">
-        <div class="modal-title">Marca</div>
-        <input type="hidden" id="marcaNomeOriginal">
-        <div class="form-group"><label>Nome da Marca:</label><input type="text" id="marcaNome"></div>
-        <div class="modal-actions">
-            <button class="btn-cancel" onclick="fecharModal('modalFormMarca'); abrirGerenciar('marcas')">Cancelar</button>
-            <button class="btn-action" onclick="salvarMarca()">Salvar</button>
         </div>
     </div>
 </div>
@@ -403,7 +404,7 @@
         </div>
         
         <div style="display:flex; gap:10px;">
-            <div class="form-group" style="flex:1;"><label>Marca (Opcional):</label><select id="imprimirMarca" onchange="toggleLote()"></select></div>
+            <div class="form-group" style="flex:1;" id="boxMarcaSelect"><label>Marca (Opcional):</label><select id="imprimirMarca" onchange="toggleLote()"></select></div>
             <div class="form-group" style="flex:1; display:none;" id="boxLote"><label>Lote:</label><input type="text" id="imprimirLote" placeholder="Ex: A123"></div>
         </div>
 
@@ -431,11 +432,10 @@
 
     function carregarBanco() {
         let defaultDB = {
-            produtos: [{ codigo: 1, nome: "Hambúrguer Bovino", categoria: "Carnes", validadeDias: 5, armazenamento: "congelado", precoPadrao: "" }],
+            produtos: [{ codigo: 1, nome: "Hambúrguer Bovino", categoria: "Carnes", validadeDias: 5, armazenamento: "congelado", precoPadrao: "", marcas: [] }],
             categorias: [{ nome: "Carnes", cor: "#ffcccc", corTexto: "#000000" }],
             operadores: [{ nome: "Cozinha 1", senha: "" }],
-            marcas: [],
-            configs: { modo: "pdf", estabelecimento: "Alô_Etiqueta", urlAppScript: "" },
+            configs: { modo: "pdf", estabelecimento: "Alô_Etiqueta", urlAppScript: "", tamanhoEtiqueta: "50x50" },
             historico: [],
             filaRetentativaStatus: []
         };
@@ -443,14 +443,17 @@
         
         if (local) {
             if (!local.configs.urlAppScript) local.configs.urlAppScript = "";
+            if (!local.configs.tamanhoEtiqueta) local.configs.tamanhoEtiqueta = "50x50";
             if (!local.historico) local.historico = [];
             if (!local.filaRetentativaStatus) local.filaRetentativaStatus = [];
-            if (!local.marcas) local.marcas = [];
             
-            // Corrige produtos antigos sem as novas chaves
+            // Apaga "marcas" globais que existiam antes e arruma produtos
+            if(local.marcas) delete local.marcas;
+
             local.produtos.forEach(p => {
                 if(!p.armazenamento) p.armazenamento = "ambiente";
                 if(typeof p.precoPadrao === 'undefined') p.precoPadrao = "";
+                if(!p.marcas) p.marcas = [];
             });
 
             return local;
@@ -488,18 +491,17 @@
     function abrirPainelUnificado() {
         document.getElementById('configNomeEstabelecimento').value = db.configs.estabelecimento;
         document.getElementById('configModo').value = db.configs.modo;
+        document.getElementById('configTamanhoEtiqueta').value = db.configs.tamanhoEtiqueta;
         document.getElementById('modalPainelUnificado').style.display = 'flex';
     }
 
-    function salvarNomeEstabelecimento(novoNome) {
-        if(novoNome && novoNome.trim() !== "") {
-            db.configs.estabelecimento = novoNome.trim();
-            salvarBancoLocal();
-        }
-    }
-
-    function salvarModoRapido() {
+    function salvarConfigsRapidas() {
+        const novoNome = document.getElementById('configNomeEstabelecimento').value;
+        if(novoNome && novoNome.trim() !== "") { db.configs.estabelecimento = novoNome.trim(); }
+        
         db.configs.modo = document.getElementById('configModo').value;
+        db.configs.tamanhoEtiqueta = document.getElementById('configTamanhoEtiqueta').value;
+        
         salvarBancoLocal();
     }
 
@@ -518,82 +520,54 @@
 
     function salvarUrlEPuxar() {
         db.configs.urlAppScript = document.getElementById('configUrlAppScript').value.trim();
-        salvarBancoLocal();
-        alert("URL salva. No Apps Script, ela fará o Puxar/Salvar.");
+        salvarBancoLocal(); alert("URL salva. No Apps Script, ela fará o Puxar/Salvar.");
     }
 
     function salvarTudoNaNuvem() {
         db.configs.urlAppScript = document.getElementById('configUrlAppScript').value.trim();
-        salvarBancoLocal();
-        alert("URL salva. Iniciando push total via script.");
+        salvarBancoLocal(); alert("URL salva. Iniciando push total via script.");
     }
 
     function excluirHistoricoSeguro() {
         const confirmacao = document.getElementById('inputConfirmarExclusao').value;
         if (confirmacao === "quero excluir todo o histórico") {
-            db.historico = [];
-            db.filaRetentativaStatus = [];
-            salvarBancoLocal();
-            alert("Histórico apagado com sucesso!");
-            document.getElementById('inputConfirmarExclusao').value = "";
+            db.historico = []; db.filaRetentativaStatus = []; salvarBancoLocal(); alert("Histórico apagado com sucesso!"); document.getElementById('inputConfirmarExclusao').value = "";
         } else { alert("Frase de segurança incorreta."); }
     }
     
     function excluirHistoricoSeguroDireto() {
         if(confirm("Isso apagará a contagem de estoque atual. Continuar?")) {
             let s = prompt("Digite: quero excluir todo o histórico");
-            if(s === "quero excluir todo o histórico") {
-                db.historico = [];
-                salvarBancoLocal();
-                abrirEstoque(); // recarrega a tela
-            } else { alert("Cancelado."); }
+            if(s === "quero excluir todo o histórico") { db.historico = []; salvarBancoLocal(); abrirEstoque(); } 
+            else { alert("Cancelado."); }
         }
     }
 
     async function forcarAtualizacao() {
         sessionStorage.clear();
-        if ('caches' in window) {
-            const names = await caches.keys();
-            await Promise.all(names.map(name => caches.delete(name)));
-        }
-        if ('serviceWorker' in navigator) {
-            const registrations = await navigator.serviceWorker.getRegistrations();
-            for (let registration of registrations) { await registration.unregister(); }
-        }
+        if ('caches' in window) { const names = await caches.keys(); await Promise.all(names.map(name => caches.delete(name))); }
+        if ('serviceWorker' in navigator) { const registrations = await navigator.serviceWorker.getRegistrations(); for (let registration of registrations) { await registration.unregister(); } }
         window.location.href = window.location.pathname + '?t=' + new Date().getTime();
     }
 
     async function exportarBancoTXT() {
-        const dataStr = JSON.stringify(db);
-        const fileName = `backup_alo_etiqueta_${new Date().getTime()}.txt`; 
+        const dataStr = JSON.stringify(db); const fileName = `backup_alo_etiqueta_${new Date().getTime()}.txt`; 
         const blob = new Blob([dataStr], { type: "text/plain" });
         if (navigator.canShare) {
-            try {
-                const file = new File([blob], fileName, { type: "text/plain" });
-                if (navigator.canShare({ files: [file] })) {
-                    await navigator.share({ files: [file], title: 'Backup Alô_Etiqueta', text: 'Arquivo de backup.' });
-                    return; 
-                }
+            try { const file = new File([blob], fileName, { type: "text/plain" });
+                if (navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: 'Backup Alô_Etiqueta', text: 'Arquivo de backup.' }); return; }
             } catch (err) {}
         }
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url; a.download = fileName; a.click(); URL.revokeObjectURL(url);
+        const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = fileName; a.click(); URL.revokeObjectURL(url);
     }
 
     function importarBancoTXT(event) {
-        const file = event.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
+        const file = event.target.files[0]; if (!file) return; const reader = new FileReader();
         reader.onload = function(e) {
-            try {
-                const novoDB = JSON.parse(e.target.result);
-                if(novoDB.produtos) {
-                    db = novoDB; salvarBancoLocal(); alert("Restaurado com sucesso!"); location.reload();
-                } else { alert("Arquivo inválido."); }
+            try { const novoDB = JSON.parse(e.target.result);
+                if(novoDB.produtos) { db = novoDB; salvarBancoLocal(); alert("Restaurado com sucesso!"); location.reload(); } else { alert("Arquivo inválido."); }
             } catch (err) { alert("Erro ao ler o arquivo."); }
-        };
-        reader.readAsText(file);
+        }; reader.readAsText(file);
     }
 
     async function syncGeral() {
@@ -605,9 +579,7 @@
             if (db.filaRetentativaStatus && db.filaRetentativaStatus.length > 0) {
                 const payload = JSON.stringify({ action: 'syncImpressoes', data: db.filaRetentativaStatus });
                 const res = await fetch(db.configs.urlAppScript, { method: 'POST', body: payload });
-                if (res.ok) {
-                    db.filaRetentativaStatus = []; salvarBancoLocal(); indicador.innerText = '🟢';
-                } else { indicador.innerText = '🔴'; }
+                if (res.ok) { db.filaRetentativaStatus = []; salvarBancoLocal(); indicador.innerText = '🟢'; } else { indicador.innerText = '🔴'; }
             } else { indicador.innerText = '🟢'; }
         } catch(e) { indicador.innerText = '🔴'; }
     }
@@ -618,115 +590,64 @@
         db.operadores.forEach(op => { seletor.innerHTML += `<option value="${op.nome}">${op.nome}</option>`; });
         
         const ultimoOperador = localStorage.getItem('etiquetadora_operadorAtual');
-        if(ultimoOperador && db.operadores.find(o => o.nome === ultimoOperador)) {
-            seletor.value = ultimoOperador; operadorAnteriorSelect = ultimoOperador;
-        }
+        if(ultimoOperador && db.operadores.find(o => o.nome === ultimoOperador)) { seletor.value = ultimoOperador; operadorAnteriorSelect = ultimoOperador; }
     }
 
     function verificarTrocaOperador(selectElement) {
-        const novoNome = selectElement.value;
-        if(novoNome === "") return;
+        const novoNome = selectElement.value; if(novoNome === "") return;
         const op = db.operadores.find(o => o.nome === novoNome);
         
         if(op && op.senha !== "") {
-            document.getElementById('operadorAlvo').value = novoNome;
-            document.getElementById('senhaTrocaOperador').value = '';
-            document.getElementById('modalSenhaOperador').style.display = 'flex';
-            setTimeout(() => document.getElementById('senhaTrocaOperador').focus(), 100);
-        } else {
-            operadorAnteriorSelect = novoNome;
-            localStorage.setItem('etiquetadora_operadorAtual', novoNome);
-        }
+            document.getElementById('operadorAlvo').value = novoNome; document.getElementById('senhaTrocaOperador').value = ''; document.getElementById('modalSenhaOperador').style.display = 'flex'; setTimeout(() => document.getElementById('senhaTrocaOperador').focus(), 100);
+        } else { operadorAnteriorSelect = novoNome; localStorage.setItem('etiquetadora_operadorAtual', novoNome); }
     }
 
     function confirmarTrocaOperador() {
-        const nomeAlvo = document.getElementById('operadorAlvo').value;
-        const senhaDigitada = document.getElementById('senhaTrocaOperador').value;
-        const op = db.operadores.find(o => o.nome === nomeAlvo);
+        const nomeAlvo = document.getElementById('operadorAlvo').value; const senhaDigitada = document.getElementById('senhaTrocaOperador').value; const op = db.operadores.find(o => o.nome === nomeAlvo);
 
-        if(op && op.senha === senhaDigitada) {
-            operadorAnteriorSelect = nomeAlvo;
-            localStorage.setItem('etiquetadora_operadorAtual', nomeAlvo);
-            fecharModal('modalSenhaOperador');
-        } else { 
-            alert("Senha incorreta!"); document.getElementById('senhaTrocaOperador').value = ''; document.getElementById('senhaTrocaOperador').focus();
-        }
+        if(op && op.senha === senhaDigitada) { operadorAnteriorSelect = nomeAlvo; localStorage.setItem('etiquetadora_operadorAtual', nomeAlvo); fecharModal('modalSenhaOperador'); } else { alert("Senha incorreta!"); document.getElementById('senhaTrocaOperador').value = ''; document.getElementById('senhaTrocaOperador').focus(); }
     }
 
-    function cancelarTrocaOperador() {
-        document.getElementById('seletorOperador').value = operadorAnteriorSelect || '';
-        fecharModal('modalSenhaOperador');
-    }
+    function cancelarTrocaOperador() { document.getElementById('seletorOperador').value = operadorAnteriorSelect || ''; fecharModal('modalSenhaOperador'); }
 
     function renderizarFiltros() {
         let html = `<div class="chip ${categoriaAtual === null ? 'active' : ''}" style="${categoriaAtual === null ? 'background:#ccc; color:#000;' : ''}" onclick="filtrarCategoria(null)">TODOS</div>`;
-        db.categorias.forEach(cat => { 
-            const isActive = categoriaAtual === cat.nome; const corTxt = cat.corTexto || '#000000';
-            html += `<div class="chip ${isActive ? 'active' : ''}" style="background-color: ${cat.cor}; color: ${corTxt};" onclick="filtrarCategoria('${cat.nome}')">${cat.nome}</div>`; 
-        });
+        db.categorias.forEach(cat => { const isActive = categoriaAtual === cat.nome; const corTxt = cat.corTexto || '#000000'; html += `<div class="chip ${isActive ? 'active' : ''}" style="background-color: ${cat.cor}; color: ${corTxt};" onclick="filtrarCategoria('${cat.nome}')">${cat.nome}</div>`; });
         document.getElementById('containerFiltros').innerHTML = html;
     }
 
     function filtrarCategoria(cat) { categoriaAtual = cat; renderizarFiltros(); renderizarLista(); }
 
     function renderizarLista() {
-        const lista = document.getElementById('listaProdutos');
-        lista.innerHTML = '';
+        const lista = document.getElementById('listaProdutos'); lista.innerHTML = '';
         let filtrados = categoriaAtual === null ? db.produtos : db.produtos.filter(p => p.categoria === categoriaAtual);
         filtrados.sort((a, b) => a.codigo - b.codigo);
         filtrados.forEach(p => {
-            const catObj = db.categorias.find(c => c.nome === p.categoria);
-            const cor = catObj ? catObj.cor : '#eee'; const corTxt = catObj && catObj.corTexto ? catObj.corTexto : '#333';
-            lista.innerHTML += `
-                <li class="item" onclick="abrirModalImprimir(${p.codigo})">
-                    <div class="item-avatar" style="background-color: ${cor}; color: ${corTxt};">${p.codigo}</div>
-                    <div class="item-info">
-                        <div class="item-title">${p.nome}</div>
-                        <div class="item-subtitle">${p.categoria} • Validade: ${p.validadeDias} dias</div>
-                    </div>
-                    <div class="print-icon">🖨️</div>
-                </li>
-            `;
+            const catObj = db.categorias.find(c => c.nome === p.categoria); const cor = catObj ? catObj.cor : '#eee'; const corTxt = catObj && catObj.corTexto ? catObj.corTexto : '#333';
+            lista.innerHTML += `<li class="item" onclick="abrirModalImprimir(${p.codigo})"><div class="item-avatar" style="background-color: ${cor}; color: ${corTxt};">${p.codigo}</div><div class="item-info"><div class="item-title">${p.nome}</div><div class="item-subtitle">${p.categoria} • Validade: ${p.validadeDias} dias</div></div><div class="print-icon">🖨️</div></li>`;
         });
     }
 
     function buscarPorCodigo() {
-        const cod = parseInt(document.getElementById('buscaCodigo').value);
-        if(isNaN(cod)) return;
+        const cod = parseInt(document.getElementById('buscaCodigo').value); if(isNaN(cod)) return;
         const produto = db.produtos.find(p => p.codigo === cod);
-        if(produto) { 
-            abrirModalImprimir(produto.codigo); document.getElementById('buscaCodigo').value = ''; document.getElementById('buscaCodigo').blur(); 
-        } else { alert("Produto não encontrado!"); }
+        if(produto) { abrirModalImprimir(produto.codigo); document.getElementById('buscaCodigo').value = ''; document.getElementById('buscaCodigo').blur(); } else { alert("Produto não encontrado!"); }
     }
 
     function abrirGerenciar(tipo) {
         fecharModal('modalPainelUnificado');
-        const lista = document.getElementById('conteudoListagem'); const btnNovo = document.getElementById('btnNovoListagem'); const titulo = document.getElementById('tituloListagem');
-        lista.innerHTML = '';
+        const lista = document.getElementById('conteudoListagem'); const btnNovo = document.getElementById('btnNovoListagem'); const titulo = document.getElementById('tituloListagem'); lista.innerHTML = '';
 
         if(tipo === 'produtos') {
             titulo.innerText = "Gerenciar Produtos"; btnNovo.onclick = () => abrirFormProduto(null);
             let ordenados = [...db.produtos].sort((a, b) => a.codigo - b.codigo);
-            ordenados.forEach(p => {
-                lista.innerHTML += `<div class="gerenciar-item"><div class="gerenciar-info"><strong>${p.codigo} - ${p.nome}</strong><br><span style="color:#666">${p.categoria} | ${p.validadeDias} dias</span></div><div class="gerenciar-actions"><button onclick="abrirFormProduto(${p.codigo})">✏️</button><button onclick="excluirItem('produtos', ${p.codigo})">🗑️</button></div></div>`;
-            });
+            ordenados.forEach(p => { lista.innerHTML += `<div class="gerenciar-item"><div class="gerenciar-info"><strong>${p.codigo} - ${p.nome}</strong><br><span style="color:#666">${p.categoria} | ${p.validadeDias} dias</span></div><div class="gerenciar-actions"><button onclick="abrirFormProduto(${p.codigo})">✏️</button><button onclick="excluirItem('produtos', ${p.codigo})">🗑️</button></div></div>`; });
         } else if (tipo === 'categorias') {
             titulo.innerText = "Gerenciar Categorias"; btnNovo.onclick = () => abrirFormCategoria(null);
-            db.categorias.forEach(c => {
-                const corTxt = c.corTexto || '#000000';
-                lista.innerHTML += `<div class="gerenciar-item"><div class="gerenciar-info"><span class="color-preview" style="background:${c.cor}; color:${corTxt}">${c.nome}</span></div><div class="gerenciar-actions"><button onclick="abrirFormCategoria('${c.nome}')">✏️</button><button onclick="excluirItem('categorias', '${c.nome}')">🗑️</button></div></div>`;
-            });
-        } else if (tipo === 'marcas') {
-            titulo.innerText = "Gerenciar Marcas"; btnNovo.onclick = () => abrirFormMarca(null);
-            db.marcas.forEach(m => {
-                lista.innerHTML += `<div class="gerenciar-item"><div class="gerenciar-info"><strong>${m}</strong></div><div class="gerenciar-actions"><button onclick="excluirItem('marcas', '${m}')">🗑️</button></div></div>`;
-            });
+            db.categorias.forEach(c => { const corTxt = c.corTexto || '#000000'; lista.innerHTML += `<div class="gerenciar-item"><div class="gerenciar-info"><span class="color-preview" style="background:${c.cor}; color:${corTxt}">${c.nome}</span></div><div class="gerenciar-actions"><button onclick="abrirFormCategoria('${c.nome}')">✏️</button><button onclick="excluirItem('categorias', '${c.nome}')">🗑️</button></div></div>`; });
         } else if (tipo === 'operadores') {
             titulo.innerText = "Gerenciar Operadores(as)"; btnNovo.onclick = () => abrirFormOperador(null);
-            db.operadores.forEach(o => {
-                let statusSenha = o.senha === "" ? "Sem Senha" : "Com Senha";
-                lista.innerHTML += `<div class="gerenciar-item"><div class="gerenciar-info"><strong>${o.nome}</strong><br><span style="color:#666">${statusSenha}</span></div><div class="gerenciar-actions"><button onclick="abrirFormOperador('${o.nome}')">✏️</button><button onclick="excluirItem('operadores', '${o.nome}')">🗑️</button></div></div>`;
-            });
+            db.operadores.forEach(o => { let statusSenha = o.senha === "" ? "Sem Senha" : "Com Senha"; lista.innerHTML += `<div class="gerenciar-item"><div class="gerenciar-info"><strong>${o.nome}</strong><br><span style="color:#666">${statusSenha}</span></div><div class="gerenciar-actions"><button onclick="abrirFormOperador('${o.nome}')">✏️</button><button onclick="excluirItem('operadores', '${o.nome}')">🗑️</button></div></div>`; });
         }
         document.getElementById('modalListagem').style.display = 'flex';
     }
@@ -736,7 +657,6 @@
         if(tipo === 'produtos') db.produtos = db.produtos.filter(i => i.codigo !== id);
         if(tipo === 'categorias') db.categorias = db.categorias.filter(i => i.nome !== id);
         if(tipo === 'operadores') db.operadores = db.operadores.filter(i => i.nome !== id);
-        if(tipo === 'marcas') db.marcas = db.marcas.filter(i => i !== id);
         salvarBancoLocal(); iniciar(); abrirGerenciar(tipo);
     }
 
@@ -748,168 +668,99 @@
 
         if(codigoOriginal) {
             const p = db.produtos.find(x => x.codigo === codigoOriginal);
-            document.getElementById('prodCodigoOriginal').value = p.codigo;
-            document.getElementById('prodCodigo').value = p.codigo;
-            document.getElementById('prodNome').value = p.nome;
-            document.getElementById('prodCategoria').value = p.categoria;
-            document.getElementById('prodValidade').value = p.validadeDias;
-            document.getElementById('prodArmazenamento').value = p.armazenamento || "ambiente";
-            document.getElementById('prodPreco').value = p.precoPadrao || "";
+            document.getElementById('prodCodigoOriginal').value = p.codigo; document.getElementById('prodCodigo').value = p.codigo; document.getElementById('prodNome').value = p.nome; document.getElementById('prodCategoria').value = p.categoria; document.getElementById('prodValidade').value = p.validadeDias; document.getElementById('prodArmazenamento').value = p.armazenamento || "ambiente"; document.getElementById('prodPreco').value = p.precoPadrao || "";
+            document.getElementById('prodMarcas').value = p.marcas ? p.marcas.join(', ') : "";
         } else {
-            document.getElementById('prodCodigoOriginal').value = ''; document.getElementById('prodCodigo').value = ''; document.getElementById('prodNome').value = ''; document.getElementById('prodValidade').value = ''; document.getElementById('prodArmazenamento').value = 'ambiente'; document.getElementById('prodPreco').value = '';
+            document.getElementById('prodCodigoOriginal').value = ''; document.getElementById('prodCodigo').value = ''; document.getElementById('prodNome').value = ''; document.getElementById('prodValidade').value = ''; document.getElementById('prodArmazenamento').value = 'ambiente'; document.getElementById('prodPreco').value = ''; document.getElementById('prodMarcas').value = "";
         }
         document.getElementById('modalFormProduto').style.display = 'flex';
     }
 
     function salvarProduto() {
-        const codOriginal = document.getElementById('prodCodigoOriginal').value;
-        const cod = parseInt(document.getElementById('prodCodigo').value);
-        const nome = document.getElementById('prodNome').value.trim();
-        const cat = document.getElementById('prodCategoria').value;
-        const val = parseInt(document.getElementById('prodValidade').value);
-        const armaz = document.getElementById('prodArmazenamento').value;
-        const preco = document.getElementById('prodPreco').value;
+        const codOriginal = document.getElementById('prodCodigoOriginal').value; const cod = parseInt(document.getElementById('prodCodigo').value); const nome = document.getElementById('prodNome').value.trim(); const cat = document.getElementById('prodCategoria').value; const val = parseInt(document.getElementById('prodValidade').value); const armaz = document.getElementById('prodArmazenamento').value; const preco = document.getElementById('prodPreco').value;
+        const marcasInput = document.getElementById('prodMarcas').value.trim();
+        let marcasArray = marcasInput === "" ? [] : marcasInput.split(',').map(m => m.trim()).filter(m => m !== "");
 
         if(!cod || !nome || !cat || isNaN(val)) return alert("Preencha código, nome, categoria e validade!");
         if(codOriginal === "" && db.produtos.find(p => p.codigo === cod)) return alert("Código já existe!");
         if(codOriginal !== "" && parseInt(codOriginal) !== cod && db.produtos.find(p => p.codigo === cod)) return alert("Código já existe!");
 
-        let obj = { codigo: cod, nome: nome, categoria: cat, validadeDias: val, armazenamento: armaz, precoPadrao: preco };
-        if(codOriginal !== "") {
-            const idx = db.produtos.findIndex(p => p.codigo === parseInt(codOriginal));
-            db.produtos[idx] = obj;
-        } else { db.produtos.push(obj); }
-        salvarBancoLocal(); iniciar(); abrirGerenciar('produtos');
+        let obj = { codigo: cod, nome: nome, categoria: cat, validadeDias: val, armazenamento: armaz, precoPadrao: preco, marcas: marcasArray };
+        if(codOriginal !== "") { const idx = db.produtos.findIndex(p => p.codigo === parseInt(codOriginal)); db.produtos[idx] = obj; } else { db.produtos.push(obj); }
+        salvarBancoLocal(); 
+        fecharModal('modalFormProduto'); // <--- AQUI (PONTO 3 SOLICITADO)
+        abrirGerenciar('produtos');
     }
 
     function abrirFormCategoria(nomeOriginal) {
         fecharModal('modalListagem');
-        if(nomeOriginal) {
-            const c = db.categorias.find(x => x.nome === nomeOriginal);
-            document.getElementById('catNomeOriginal').value = c.nome; document.getElementById('catNome').value = c.nome; document.getElementById('catCor').value = c.cor; document.getElementById('catCorTexto').value = c.corTexto || '#000000';
-        } else {
-            document.getElementById('catNomeOriginal').value = ''; document.getElementById('catNome').value = ''; document.getElementById('catCor').value = '#1976D2'; document.getElementById('catCorTexto').value = '#ffffff';
-        }
+        if(nomeOriginal) { const c = db.categorias.find(x => x.nome === nomeOriginal); document.getElementById('catNomeOriginal').value = c.nome; document.getElementById('catNome').value = c.nome; document.getElementById('catCor').value = c.cor; document.getElementById('catCorTexto').value = c.corTexto || '#000000'; } else { document.getElementById('catNomeOriginal').value = ''; document.getElementById('catNome').value = ''; document.getElementById('catCor').value = '#1976D2'; document.getElementById('catCorTexto').value = '#ffffff'; }
         document.getElementById('modalFormCategoria').style.display = 'flex';
     }
 
     function salvarCategoria() {
-        const nomeOrig = document.getElementById('catNomeOriginal').value;
-        const nome = document.getElementById('catNome').value.trim();
-        const cor = document.getElementById('catCor').value; const corTexto = document.getElementById('catCorTexto').value;
-
-        if(!nome) return alert("Preencha o nome!");
-        if(nomeOrig === "" && db.categorias.find(c => c.nome.toLowerCase() === nome.toLowerCase())) return alert("Categoria já existe!");
-
-        if(nomeOrig !== "") {
-            const idx = db.categorias.findIndex(c => c.nome === nomeOrig);
-            db.categorias[idx] = { nome, cor, corTexto };
-            db.produtos.forEach(p => { if(p.categoria === nomeOrig) p.categoria = nome; });
-        } else { db.categorias.push({ nome, cor, corTexto }); }
-        salvarBancoLocal(); iniciar(); abrirGerenciar('categorias');
-    }
-
-    function abrirFormMarca(nomeOriginal) {
-        fecharModal('modalListagem');
-        document.getElementById('marcaNomeOriginal').value = ''; document.getElementById('marcaNome').value = '';
-        document.getElementById('modalFormMarca').style.display = 'flex';
-    }
-
-    function salvarMarca() {
-        const nome = document.getElementById('marcaNome').value.trim();
-        if(!nome) return alert("Preencha o nome da marca!");
-        if(db.marcas.includes(nome)) return alert("Marca já cadastrada!");
-        db.marcas.push(nome);
-        salvarBancoLocal(); iniciar(); abrirGerenciar('marcas');
+        const nomeOrig = document.getElementById('catNomeOriginal').value; const nome = document.getElementById('catNome').value.trim(); const cor = document.getElementById('catCor').value; const corTexto = document.getElementById('catCorTexto').value;
+        if(!nome) return alert("Preencha o nome!"); if(nomeOrig === "" && db.categorias.find(c => c.nome.toLowerCase() === nome.toLowerCase())) return alert("Categoria já existe!");
+        if(nomeOrig !== "") { const idx = db.categorias.findIndex(c => c.nome === nomeOrig); db.categorias[idx] = { nome, cor, corTexto }; db.produtos.forEach(p => { if(p.categoria === nomeOrig) p.categoria = nome; }); } else { db.categorias.push({ nome, cor, corTexto }); }
+        salvarBancoLocal(); 
+        fecharModal('modalFormCategoria');
+        abrirGerenciar('categorias');
     }
 
     function abrirFormOperador(nomeOriginal) {
         fecharModal('modalListagem');
-        if(nomeOriginal) {
-            const o = db.operadores.find(x => x.nome === nomeOriginal);
-            document.getElementById('opNomeOriginal').value = o.nome; document.getElementById('opNome').value = o.nome; document.getElementById('opSenha').value = o.senha;
-        } else {
-            document.getElementById('opNomeOriginal').value = ''; document.getElementById('opNome').value = ''; document.getElementById('opSenha').value = '';
-        }
+        if(nomeOriginal) { const o = db.operadores.find(x => x.nome === nomeOriginal); document.getElementById('opNomeOriginal').value = o.nome; document.getElementById('opNome').value = o.nome; document.getElementById('opSenha').value = o.senha; } else { document.getElementById('opNomeOriginal').value = ''; document.getElementById('opNome').value = ''; document.getElementById('opSenha').value = ''; }
         document.getElementById('modalFormOperador').style.display = 'flex';
     }
 
     function salvarOperador() {
-        const nomeOrig = document.getElementById('opNomeOriginal').value;
-        const nome = document.getElementById('opNome').value.trim(); const senha = document.getElementById('opSenha').value.trim();
-
-        if(!nome) return alert("Preencha o nome!");
-        if(nomeOrig === "" && db.operadores.find(o => o.nome.toLowerCase() === nome.toLowerCase())) return alert("Operador(a) já existe!");
-
-        if(nomeOrig !== "") {
-            const idx = db.operadores.findIndex(o => o.nome === nomeOrig);
-            db.operadores[idx] = { nome, senha };
-            if(localStorage.getItem('etiquetadora_operadorAtual') === nomeOrig) localStorage.setItem('etiquetadora_operadorAtual', nome);
-        } else { db.operadores.push({ nome, senha }); }
-        salvarBancoLocal(); iniciar(); abrirGerenciar('operadores');
+        const nomeOrig = document.getElementById('opNomeOriginal').value; const nome = document.getElementById('opNome').value.trim(); const senha = document.getElementById('opSenha').value.trim();
+        if(!nome) return alert("Preencha o nome!"); if(nomeOrig === "" && db.operadores.find(o => o.nome.toLowerCase() === nome.toLowerCase())) return alert("Operador(a) já existe!");
+        if(nomeOrig !== "") { const idx = db.operadores.findIndex(o => o.nome === nomeOrig); db.operadores[idx] = { nome, senha }; if(localStorage.getItem('etiquetadora_operadorAtual') === nomeOrig) localStorage.setItem('etiquetadora_operadorAtual', nome); } else { db.operadores.push({ nome, senha }); }
+        salvarBancoLocal(); 
+        fecharModal('modalFormOperador');
+        abrirGerenciar('operadores');
     }
 
     // --- ESTOQUE / IMPRESSÃO ---
     function abrirEstoque() {
         fecharModal('modalPainelUnificado');
         const lista = document.getElementById('listaEstoque'); lista.innerHTML = '';
-        
         let stats = {}; let totalGeral = 0;
-        db.historico.forEach(reg => {
-            if(!stats[reg.produto]) stats[reg.produto] = 0;
-            stats[reg.produto] += reg.quantidade;
-            totalGeral += reg.quantidade;
-        });
-
+        db.historico.forEach(reg => { if(!stats[reg.produto]) stats[reg.produto] = 0; stats[reg.produto] += reg.quantidade; totalGeral += reg.quantidade; });
         document.getElementById('estoqueTotal').innerText = totalGeral;
+        let arrayStats = Object.keys(stats).map(k => ({ nome: k, qtd: stats[k] })); arrayStats.sort((a, b) => b.qtd - a.qtd);
 
-        let arrayStats = Object.keys(stats).map(k => ({ nome: k, qtd: stats[k] }));
-        arrayStats.sort((a, b) => b.qtd - a.qtd);
-
-        if(arrayStats.length === 0) {
-            lista.innerHTML = '<li style="padding: 15px; text-align: center; color: #999;">Nenhuma etiqueta impressa.</li>';
-        } else {
-            arrayStats.forEach(item => {
-                lista.innerHTML += `
-                    <li style="display: flex; justify-content: space-between; padding: 12px 10px; border-bottom: 1px solid #eee;">
-                        <strong style="color: #333;">${item.nome}</strong>
-                        <span style="background:#e0e0e0; padding: 2px 8px; border-radius: 12px; font-weight: bold;">${item.qtd}x</span>
-                    </li>
-                `;
-            });
-        }
+        if(arrayStats.length === 0) { lista.innerHTML = '<li style="padding: 15px; text-align: center; color: #999;">Nenhuma etiqueta impressa.</li>'; } else { arrayStats.forEach(item => { lista.innerHTML += `<li style="display: flex; justify-content: space-between; padding: 12px 10px; border-bottom: 1px solid #eee;"><strong style="color: #333;">${item.nome}</strong><span style="background:#e0e0e0; padding: 2px 8px; border-radius: 12px; font-weight: bold;">${item.qtd}x</span></li>`; }); }
         document.getElementById('modalEstoque').style.display = 'flex';
     }
 
     function abrirModalImprimir(codigo) {
-        if(!document.getElementById('seletorOperador').value) {
-            alert("Por favor, selecione um Operador(a) no cabeçalho primeiro!"); return;
-        }
+        if(!document.getElementById('seletorOperador').value) { alert("Por favor, selecione um Operador(a) no cabeçalho primeiro!"); return; }
 
         const produto = db.produtos.find(p => p.codigo === codigo);
-        quantidadeAtual = 1;
-        let dataValidade = new Date(); dataValidade.setDate(dataValidade.getDate() + produto.validadeDias);
+        quantidadeAtual = 1; let dataValidade = new Date(); dataValidade.setDate(dataValidade.getDate() + produto.validadeDias);
         
-        document.getElementById('imprimirCodigoProduto').value = produto.codigo;
-        document.getElementById('imprimirNomeProduto').innerText = produto.nome;
-        document.getElementById('imprimirQtd').innerText = quantidadeAtual;
-        document.getElementById('imprimirAcao').value = "Manipulado em:";
-        document.getElementById('imprimirPeso').value = '';
-        document.getElementById('imprimirPreco').value = produto.precoPadrao || '';
-        document.getElementById('imprimirValidade').value = dataValidade.toISOString().split('T')[0];
+        document.getElementById('imprimirCodigoProduto').value = produto.codigo; document.getElementById('imprimirNomeProduto').innerText = produto.nome; document.getElementById('imprimirQtd').innerText = quantidadeAtual; document.getElementById('imprimirAcao').value = "Manipulado em:"; document.getElementById('imprimirPeso').value = ''; document.getElementById('imprimirPreco').value = produto.precoPadrao || ''; document.getElementById('imprimirValidade').value = dataValidade.toISOString().split('T')[0];
         
-        // MARCAS
+        // MARCAS (Dinâmico para o Produto)
         const selMarca = document.getElementById('imprimirMarca');
-        selMarca.innerHTML = '<option value="">Sem Marca</option>';
-        db.marcas.forEach(m => selMarca.innerHTML += `<option value="${m}">${m}</option>`);
+        const boxMarca = document.getElementById('boxMarcaSelect');
+        if(produto.marcas && produto.marcas.length > 0) {
+            boxMarca.style.display = 'block';
+            selMarca.innerHTML = '<option value="">Sem Marca</option>';
+            produto.marcas.forEach(m => selMarca.innerHTML += `<option value="${m}">${m}</option>`);
+        } else {
+            boxMarca.style.display = 'none';
+            selMarca.innerHTML = '<option value="">Sem Marca</option>';
+        }
         toggleLote();
 
         document.getElementById('modalImprimir').style.display = 'flex';
     }
 
     function toggleLote() {
-        const marca = document.getElementById('imprimirMarca').value;
-        const box = document.getElementById('boxLote');
+        const marca = document.getElementById('imprimirMarca').value; const box = document.getElementById('boxLote');
         if(marca !== "") { box.style.display = 'block'; } else { box.style.display = 'none'; document.getElementById('imprimirLote').value = ''; }
     }
 
@@ -917,47 +768,35 @@
 
     function registrarImpressaoLocal(produto, acao, peso, dataMan, hora, dataVal, qtd, operador, preco, marca, lote) {
         const registro = { id: Date.now(), produto: produto.nome, acao: acao, peso: peso, marca: marca, lote: lote, preco: preco, dataManipulado: dataMan, horaManipulado: hora, validadeFinal: dataVal, quantidade: qtd, operador: operador };
-        db.historico.push(registro);
-        db.filaRetentativaStatus.push(registro);
-        salvarBancoLocal();
+        db.historico.push(registro); db.filaRetentativaStatus.push(registro); salvarBancoLocal();
     }
 
-    function formatarDinheiro(valor) {
-        return parseFloat(valor).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    function formatarDinheiro(valor) { return parseFloat(valor).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+
+    // --- PONTO 4: GERAÇÃO DA ETIQUETA COM DIMENSÕES ---
+    function aplicarTamanhoEtiqueta(gabarito) {
+        // Baseado em ~8 pixels por mm (Impressora Térmica 203 dpi)
+        const tamanhoConfig = db.configs.tamanhoEtiqueta || "50x50";
+        if(tamanhoConfig === "60x40") { gabarito.style.width = "480px"; gabarito.style.height = "320px"; }
+        else if(tamanhoConfig === "50x50") { gabarito.style.width = "400px"; gabarito.style.height = "400px"; }
+        else if(tamanhoConfig === "40x40") { gabarito.style.width = "320px"; gabarito.style.height = "320px"; }
     }
 
     function processarImpressao() {
         const btn = document.getElementById('btnProcessarImpressao');
         btn.innerText = "Aguarde..."; btn.disabled = true;
 
-        const codigo = parseInt(document.getElementById('imprimirCodigoProduto').value);
-        const produto = db.produtos.find(p => p.codigo === codigo);
-        
-        const acao = document.getElementById('imprimirAcao').value;
-        const inputPeso = document.getElementById('imprimirPeso').value.trim();
-        const inputPreco = document.getElementById('imprimirPreco').value.trim();
-        const dataValidadeInput = document.getElementById('imprimirValidade').value;
-        const operador = document.getElementById('seletorOperador').value;
-        const estabelecimento = db.configs.estabelecimento;
-        const marca = document.getElementById('imprimirMarca').value;
-        const lote = document.getElementById('imprimirLote').value.trim();
-        
-        const pesoFormatado = inputPeso === "" ? "-" : `${inputPeso} g`;
-        const precoFormatado = inputPreco === "" ? "" : formatarDinheiro(inputPreco);
-        
-        const partesData = dataValidadeInput.split('-');
-        const dataValidadeBR = `${partesData[2]}/${partesData[1]}/${partesData[0]}`;
-        
-        const hoje = new Date();
-        const dataManipulacaoBR = `${String(hoje.getDate()).padStart(2, '0')}/${String(hoje.getMonth() + 1).padStart(2, '0')}/${hoje.getFullYear()}`;
-        const horaBR = `${String(hoje.getHours()).padStart(2, '0')}:${String(hoje.getMinutes()).padStart(2, '0')}`;
+        const codigo = parseInt(document.getElementById('imprimirCodigoProduto').value); const produto = db.produtos.find(p => p.codigo === codigo);
+        const acao = document.getElementById('imprimirAcao').value; const inputPeso = document.getElementById('imprimirPeso').value.trim(); const inputPreco = document.getElementById('imprimirPreco').value.trim(); const dataValidadeInput = document.getElementById('imprimirValidade').value; const operador = document.getElementById('seletorOperador').value; const estabelecimento = db.configs.estabelecimento; const marca = document.getElementById('imprimirMarca').value; const lote = document.getElementById('imprimirLote').value.trim();
+        const pesoFormatado = inputPeso === "" ? "-" : `${inputPeso} g`; const precoFormatado = inputPreco === "" ? "" : formatarDinheiro(inputPreco);
+        const partesData = dataValidadeInput.split('-'); const dataValidadeBR = `${partesData[2]}/${partesData[1]}/${partesData[0]}`;
+        const hoje = new Date(); const dataManipulacaoBR = `${String(hoje.getDate()).padStart(2, '0')}/${String(hoje.getMonth() + 1).padStart(2, '0')}/${hoje.getFullYear()}`; const horaBR = `${String(hoje.getHours()).padStart(2, '0')}:${String(hoje.getMinutes()).padStart(2, '0')}`;
 
         registrarImpressaoLocal(produto, acao, pesoFormatado, dataManipulacaoBR, horaBR, dataValidadeBR, quantidadeAtual, operador, precoFormatado, marca, lote);
         audioBeep.play().catch(()=>{});
 
         if(db.configs.modo === 'pdf') {
-            fecharModal('modalImprimir');
-            gerarEtiquetaPDF(produto, acao, pesoFormatado, dataManipulacaoBR, horaBR, dataValidadeBR, quantidadeAtual, operador, estabelecimento, precoFormatado, marca, lote);
+            fecharModal('modalImprimir'); gerarEtiquetaPDF(produto, acao, pesoFormatado, dataManipulacaoBR, horaBR, dataValidadeBR, quantidadeAtual, operador, estabelecimento, precoFormatado, marca, lote);
             btn.innerText = "🖨️ IMPRIMIR"; btn.disabled = false;
         } else {
             enviarParaRawBT(produto, acao, pesoFormatado, dataManipulacaoBR, horaBR, dataValidadeBR, quantidadeAtual, operador, estabelecimento, precoFormatado, marca, lote, btn);
@@ -966,38 +805,35 @@
 
     function gerarEtiquetaPDF(produto, acao, peso, dataMan, hora, dataVal, qtd, operador, estabelecimento, preco, marca, lote) {
         let printWindow = window.open('', '', 'width=450,height=600');
+        let armaz = ""; if(produto.armazenamento === "resfriado") armaz = "Manter Resfriado"; if(produto.armazenamento === "congelado") armaz = "Manter Congelado";
         
-        let armaz = "";
-        if(produto.armazenamento === "resfriado") armaz = "Manter Resfriado";
-        if(produto.armazenamento === "congelado") armaz = "Manter Congelado";
+        let dimensaoCSS = "";
+        const tam = db.configs.tamanhoEtiqueta || "50x50";
+        if(tam === "60x40") { dimensaoCSS = "width: 480px; height: 320px;"; }
+        else if(tam === "50x50") { dimensaoCSS = "width: 400px; height: 400px;"; }
+        else if(tam === "40x40") { dimensaoCSS = "width: 320px; height: 320px;"; }
 
         let htmlContent = `
             <html><head><style>
                 body { font-family: 'Arial', sans-serif; padding: 20px; display: flex; flex-direction: column; align-items: center; background: #e0e0e0; margin: 0; }
-                .etiqueta { background: white; border: 4px solid black; padding: 12px; margin-bottom: 20px; width: 384px; height: 384px; box-sizing: border-box; display: flex; flex-direction: column; }
-                .etiqueta-header { text-align: center; font-weight: 900; font-size: 24px; text-transform: uppercase; line-height: 1.1; margin-bottom: 5px; }
-                .etiqueta-linha { border-top: 3px solid black; margin: 8px 0; }
-                .etiqueta-body { flex: 1; display: flex; flex-direction: column; justify-content: space-around; font-size: 18px; padding: 0 2px; }
+                .etiqueta { background: white; border: 4px solid black; padding: 10px; margin-bottom: 20px; box-sizing: border-box; display: flex; flex-direction: column; ${dimensaoCSS} overflow: hidden; }
+                .etiqueta-header { text-align: center; font-weight: 900; font-size: 22px; text-transform: uppercase; line-height: 1.1; margin-bottom: 4px; }
+                .etiqueta-linha { border-top: 3px solid black; margin: 4px 0; }
+                .etiqueta-body { flex: 1; display: flex; flex-direction: column; justify-content: space-around; font-size: 16px; padding: 0; }
                 .etiqueta-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px; }
-                .etiqueta-row-start { justify-content: flex-start; gap: 8px; }
+                .etiqueta-row-start { justify-content: flex-start; gap: 6px; }
                 .etiqueta-label { font-weight: bold; }
-                .etiqueta-val-container { display: flex; align-items: center; margin-top: auto; padding-top: 5px; border-top: 2px dashed #000; }
-                .etiqueta-val-label { font-weight: bold; font-size: 20px; margin-right: 10px; line-height: 1; }
-                .etiqueta-val-destaque { font-size: 28px; font-weight: 900; line-height: 1; }
+                .etiqueta-val-container { display: flex; align-items: center; margin-top: auto; padding-top: 4px; border-top: 2px dashed #000; }
+                .etiqueta-val-label { font-weight: bold; font-size: 18px; margin-right: 8px; line-height: 1; }
+                .etiqueta-val-destaque { font-size: 26px; font-weight: 900; line-height: 1; }
                 .etiqueta-footer { text-align: center; display: flex; flex-direction: column; align-items: center; margin-top: auto; }
-                .etiqueta-restaurante { font-size: 16px; font-weight: bold; }
-                .etiqueta-operador { font-size: 14px; font-weight: normal; margin-top: 2px; }
-                .destaque-box { background-color: black; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 14px; }
+                .etiqueta-restaurante { font-size: 14px; font-weight: bold; }
+                .etiqueta-operador { font-size: 12px; font-weight: normal; margin-top: 2px; }
+                .destaque-box { background-color: black; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 12px; }
             </style></head><body>
         `;
         for(let i = 0; i < qtd; i++) {
-            
-            let displayExtra = (armaz !== "" || preco !== "") ? "flex" : "none";
-            let displayArmaz = armaz !== "" ? "block" : "none";
-            let displayPreco = preco !== "" ? "block" : "none";
-            let displayLote = marca !== "" ? "block" : "none";
-            
-            let headerNome = marca !== "" ? `${produto.nome} (${marca})` : produto.nome;
+            let displayExtra = (armaz !== "" || preco !== "") ? "flex" : "none"; let displayArmaz = armaz !== "" ? "block" : "none"; let displayPreco = preco !== "" ? "block" : "none"; let displayLote = marca !== "" ? "block" : "none"; let headerNome = marca !== "" ? `${produto.nome} (${marca})` : produto.nome;
 
             htmlContent += `
                 <div class="etiqueta">
@@ -1005,21 +841,12 @@
                     <div class="etiqueta-linha"></div>
                     <div class="etiqueta-body">
                         <div class="etiqueta-row etiqueta-row-start"><span class="etiqueta-label">${acao}</span><span>${dataMan} - ${hora}</span></div>
-                        <div class="etiqueta-row">
-                            <div><span class="etiqueta-label">Peso:</span> <span>${peso}</span></div>
-                            <div style="display: ${displayLote};"><span class="etiqueta-label">Lote:</span> <span>${lote || '-'}</span></div>
-                        </div>
-                        <div class="etiqueta-row" style="display: ${displayExtra};">
-                            <div class="destaque-box" style="display: ${displayArmaz};">${armaz}</div>
-                            <div style="display: ${displayPreco}; font-weight: 900; font-size: 20px;">R$ <span>${preco}</span></div>
-                        </div>
+                        <div class="etiqueta-row"><div><span class="etiqueta-label">Peso:</span> <span>${peso}</span></div><div style="display: ${displayLote};"><span class="etiqueta-label">Lote:</span> <span>${lote || '-'}</span></div></div>
+                        <div class="etiqueta-row" style="display: ${displayExtra};"><div class="destaque-box" style="display: ${displayArmaz};">${armaz}</div><div style="display: ${displayPreco}; font-weight: 900; font-size: 18px;">R$ <span>${preco}</span></div></div>
                         <div class="etiqueta-val-container"><span class="etiqueta-val-label">VALIDADE:</span><span class="etiqueta-val-destaque">${dataVal}</span></div>
                     </div>
                     <div class="etiqueta-linha"></div>
-                    <div class="etiqueta-footer">
-                        <div class="etiqueta-restaurante">${estabelecimento}</div>
-                        <div class="etiqueta-operador">Op: <span style="font-weight: bold;">${operador}</span></div>
-                    </div>
+                    <div class="etiqueta-footer"><div class="etiqueta-restaurante">${estabelecimento}</div><div class="etiqueta-operador">Op: <span style="font-weight: bold;">${operador}</span></div></div>
                 </div>
             `;
         }
@@ -1028,10 +855,8 @@
     }
 
     function enviarParaRawBT(produto, acao, peso, dataMan, hora, dataVal, qtd, operador, estabelecimento, preco, marca, lote, btnElement) {
-        
         let headerNome = marca !== "" ? `${produto.nome} (${marca})` : produto.nome;
         document.getElementById('viz-nome-produto').innerText = headerNome;
-        
         document.getElementById('viz-label-acao').innerText = acao;
         document.getElementById('viz-data-man').innerText = `${dataMan} - ${hora}`;
         document.getElementById('viz-peso').innerText = peso;
@@ -1040,43 +865,27 @@
         document.getElementById('viz-operador').innerText = operador;
 
         let armaz = "";
-        if(produto.armazenamento === "resfriado") armaz = "Manter Resfriado";
-        if(produto.armazenamento === "congelado") armaz = "Manter Congelado";
+        if(produto.armazenamento === "resfriado") armaz = "Manter Resfriado"; if(produto.armazenamento === "congelado") armaz = "Manter Congelado";
         
         let boxLote = document.getElementById('viz-box-lote');
-        if(marca !== "") { boxLote.style.display = 'block'; document.getElementById('viz-lote').innerText = lote || '-'; } 
-        else { boxLote.style.display = 'none'; }
+        if(marca !== "") { boxLote.style.display = 'block'; document.getElementById('viz-lote').innerText = lote || '-'; } else { boxLote.style.display = 'none'; }
 
         let boxExtra = document.getElementById('viz-box-extra');
-        if(armaz !== "" || preco !== "") {
-            boxExtra.style.display = 'flex';
-            document.getElementById('viz-armazenamento').style.display = armaz !== "" ? 'block' : 'none';
-            document.getElementById('viz-armazenamento').innerText = armaz;
-            document.getElementById('viz-box-preco').style.display = preco !== "" ? 'block' : 'none';
-            document.getElementById('viz-preco').innerText = preco;
-        } else {
-            boxExtra.style.display = 'none';
-        }
+        if(armaz !== "" || preco !== "") { boxExtra.style.display = 'flex'; document.getElementById('viz-armazenamento').style.display = armaz !== "" ? 'block' : 'none'; document.getElementById('viz-armazenamento').innerText = armaz; document.getElementById('viz-box-preco').style.display = preco !== "" ? 'block' : 'none'; document.getElementById('viz-preco').innerText = preco; } else { boxExtra.style.display = 'none'; }
 
         const gabarito = document.getElementById('area-impressao-visual');
+        
+        // Aplica as proporções em pixel no gabarito antes do print
+        aplicarTamanhoEtiqueta(gabarito);
 
         html2canvas(gabarito, { scale: 2, backgroundColor: "#ffffff" }).then(canvas => {
-            const gap = 40; const finalCanvas = document.createElement('canvas');
-            finalCanvas.width = canvas.width; finalCanvas.height = (canvas.height + gap) * qtd;
-            const ctx = finalCanvas.getContext('2d');
-            
+            const gap = 40; const finalCanvas = document.createElement('canvas'); finalCanvas.width = canvas.width; finalCanvas.height = (canvas.height + gap) * qtd; const ctx = finalCanvas.getContext('2d');
             ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
             for(let i = 0; i < qtd; i++) { ctx.drawImage(canvas, 0, i * (canvas.height + gap)); }
 
-            const imgDataUrl = finalCanvas.toDataURL("image/png");
-            const intent = "intent:" + imgDataUrl + "#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;";
-            
-            btnElement.innerText = "🖨️ IMPRIMIR"; btnElement.disabled = false;
-            fecharModal('modalImprimir');
-            window.location.href = intent;
-        }).catch(err => {
-            alert("Erro ao gerar a imagem da etiqueta."); btnElement.innerText = "🖨️ IMPRIMIR"; btnElement.disabled = false;
-        });
+            const imgDataUrl = finalCanvas.toDataURL("image/png"); const intent = "intent:" + imgDataUrl + "#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;";
+            btnElement.innerText = "🖨️ IMPRIMIR"; btnElement.disabled = false; fecharModal('modalImprimir'); window.location.href = intent;
+        }).catch(err => { alert("Erro ao gerar a imagem da etiqueta."); btnElement.innerText = "🖨️ IMPRIMIR"; btnElement.disabled = false; });
     }
 
     iniciar();
