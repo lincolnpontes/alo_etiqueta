@@ -45,25 +45,30 @@
         .item-title { font-weight: bold; font-size: 18px; margin-bottom: 4px; }
         .item-subtitle { color: #666; font-size: 14px; }
         .print-icon { color: #1976D2; font-size: 24px; }
+        
+        /* ESTILOS DE MODAIS BASEADOS NO ALÔ COZINHA */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; z-index: 1000; }
-        .modal { background: white; padding: 20px; border-radius: 10px; width: 90%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
-        .modal-title { font-size: 20px; font-weight: bold; margin-bottom: 20px; color: #333; border-bottom: 2px solid #1976D2; padding-bottom: 10px; }
+        .modal { background: white; padding: 20px; border-radius: 10px; width: 90%; max-width: 450px; max-height: 90vh; overflow-y: auto; }
+        .modal-title { font-size: 20px; font-weight: bold; margin-bottom: 20px; color: #333; border-bottom: 2px solid #1976D2; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; color: #555; font-weight: bold; font-size: 14px; }
         .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; }
-        .form-group input[type="color"] { height: 45px; padding: 2px; cursor: pointer; width: 100%; }
+        .form-group input[type="color"] { height: 45px; padding: 0; cursor: pointer; }
+        .form-group input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+        .form-group input[type="color"]::-webkit-color-swatch { border: none; border-radius: 4px; }
+
         .qtd-control { display: flex; align-items: center; gap: 15px; }
         .qtd-btn { background: #e0e0e0; border: none; width: 35px; height: 35px; border-radius: 50%; font-size: 20px; cursor: pointer; }
+        
         .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
-        .btn-cancel { background: #eee; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; color: #333; font-weight: bold; flex: 1; }
-        .btn-action { background: #1976D2; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; color: white; font-weight: bold; flex: 1; }
-        .btn-danger { background: #d32f2f; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; color: white; font-weight: bold; width: 100%; margin-top: 10px; }
-        .btn-warning { background: #FF9800; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; color: white; font-weight: bold; width: 100%; margin-top: 10px; }
+        .btn-cancel { background: #eee; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; color: #333; font-weight: bold; }
+        .btn-action { background: #1976D2; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; color: white; font-weight: bold; }
+        .btn-danger { background: #d32f2f; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 10px; }
         .btn-outline { background: #E3F2FD; color: #1976D2; border: 1px solid #1976D2; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 10px; display: flex; align-items: center; justify-content: flex-start; gap: 15px; }
-        .btn-outline-icon { font-size: 28px; }
-        .gerenciar-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; }
+        
+        .gerenciar-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
         .gerenciar-info { flex: 1; font-size: 14px; }
-        .gerenciar-actions button { background: none; border: none; cursor: pointer; font-size: 20px; margin-left: 10px; }
+        .gerenciar-actions button { background: #eee; border: none; cursor: pointer; font-size: 16px; margin-left: 5px; padding: 8px; border-radius: 4px; }
         .color-preview { display: inline-block; padding: 2px 8px; border-radius: 12px; margin-right: 5px; vertical-align: middle; border: 1px solid #ccc; font-weight: bold; font-size: 12px; }
 
         /* GABARITO DA ETIQUETA VISUAL (RAWBT) */
@@ -122,13 +127,13 @@
 </div>
 
 <div class="modal-overlay" id="modalLoginAdmin">
-    <div class="modal" style="text-align: center;">
-        <div class="modal-title">Acesso Restrito</div>
+    <div class="modal">
+        <div class="modal-title">Painel de Controle</div>
         <div class="form-group">
-            <label>Senha do Administrador:</label>
-            <input type="password" id="senhaAdmin" placeholder="Digite a senha" inputmode="numeric" pattern="[0-9]*" style="text-align: center; font-size: 24px; letter-spacing: 5px;">
+            <label>Digite a senha de acesso:</label>
+            <input type="password" id="senhaAdmin" placeholder="Senha" inputmode="numeric" pattern="[0-9]*" oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(this.value === '1999') { this.blur(); fecharModal('modalLoginAdmin'); abrirPainelUnificado(); this.value = ''; }">
         </div>
-        <div class="modal-actions" style="justify-content: center;">
+        <div class="modal-actions">
             <button class="btn-cancel" onclick="fecharModal('modalLoginAdmin')">Cancelar</button>
         </div>
     </div>
@@ -136,20 +141,21 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 5px;">
-            Alô_Etiqueta - vT8 (Offline-First)
-        </div>
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #1976D2; padding-bottom: 10px; margin-bottom: 20px;">
-            <h2 id="displayEstabelecimento" style="margin: 0; font-size: 18px; color: #333;"></h2>
-            <button onclick="editarEstabelecimento()" title="Editar Nome" style="background: none; border: none; font-size: 20px; cursor: pointer; color: #1976D2;">✏️</button>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 20px;">
+            Alô_Etiqueta - vT9
         </div>
 
-        <h3 style="font-size: 16px; color: #555; margin-bottom: 10px;">Painel de Gestão</h3>
-        <button class="btn-outline" onclick="abrirGerenciar('produtos')"><span class="btn-outline-icon">📦</span> Gerenciar Produtos</button>
-        <button class="btn-outline" onclick="abrirGerenciar('categorias')"><span class="btn-outline-icon">🏷️</span> Gerenciar Categorias</button>
-        <button class="btn-outline" onclick="abrirGerenciar('operadores')"><span class="btn-outline-icon">👥</span> Gerenciar Operadores(as)</button>
+        <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
+        <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
+        <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores(as)</button>
 
-        <h3 style="font-size: 16px; color: #555; margin-top: 25px; margin-bottom: 10px;">Configurações</h3>
+        <h3 style="font-size: 16px; color: #555; margin-top: 25px; margin-bottom: 10px;">Configurações Básicas</h3>
+        
+        <div class="form-group">
+            <label>Nome do Estabelecimento:</label>
+            <input type="text" id="configNomeEstabelecimento" placeholder="Ex: Restaurante Central" onchange="salvarNomeEstabelecimento(this.value)">
+        </div>
+
         <div class="form-group">
             <label>Destino da Impressão:</label>
             <select id="configModo" onchange="salvarModoRapido()">
@@ -158,7 +164,8 @@
             </select>
         </div>
         
-        <button class="btn-warning" onclick="abrirZonaRisco()">⚠️ ZONA DE RISCO (Avançado)</button>
+        <h3 style="font-size: 16px; color: #d32f2f; margin-top: 25px; margin-bottom: 10px;">Avançado</h3>
+        <button class="btn-danger" onclick="solicitarAcessoAvancado()">⚠️ Configurações Avançadas</button>
 
         <div class="modal-actions">
             <button class="btn-cancel" onclick="fecharModal('modalPainelUnificado')">Fechar Painel</button>
@@ -166,32 +173,55 @@
     </div>
 </div>
 
-<div class="modal-overlay" id="modalZonaRisco">
+<div class="modal-overlay" id="modalSenhaAvancada">
     <div class="modal">
-        <div class="modal-title" style="color: #d32f2f; border-bottom: 2px solid #d32f2f;">Zona de Risco</div>
+        <div class="modal-title" style="color:#d32f2f;">Acesso Restrito</div>
+        <div class="form-group">
+            <label>Senha do Administrador:</label>
+            <input type="password" id="senhaAvancada" placeholder="digite a senha mestra" inputmode="numeric" pattern="[0-9]*" oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(this.value === '1999') { this.blur(); fecharModal('modalSenhaAvancada'); abrirZonaRisco(); this.value = ''; }">
+        </div>
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="fecharModal('modalSenhaAvancada')">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="modalZonaRisco">
+    <div class="modal" style="max-height: 90vh; overflow-y: auto;">
+        <div class="modal-title" style="color:#d32f2f;">Zona de Risco</div>
         
+        <h3 style="font-size: 15px; color: #333; margin-top: 0; margin-bottom: 10px;">Sincronização e Nuvem</h3>
         <div class="form-group">
             <label>URL do Google Apps Script:</label>
-            <input type="text" id="configUrlAppScript" placeholder="https://script.google.com/macros/s/.../exec">
+            <input type="text" id="configUrlAppScript" placeholder="https://script.google.com/macros/s/...">
+            <button class="btn-action" style="width: 100%; margin-top: 10px; background-color: #4CAF50;" onclick="salvarUrlEPuxar()">💾 Salvar URL e Puxar Dados</button>
         </div>
         
-        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-            <button class="btn-action" onclick="salvarUrlEPuxar()"><small>Salvar URL e Puxar Dados</small></button>
-            <button class="btn-action" style="background-color: #388E3C;" onclick="salvarTudoNaNuvem()"><small>Salvar Tudo na Nuvem</small></button>
+        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <button class="btn-outline" style="margin: 0; flex: 1; justify-content: center; font-size: 13px; border-color:#2e7d32; color:#2e7d32;" onclick="salvarTudoNaNuvem()">⬆️ Salvar Tudo na Nuvem</button>
         </div>
 
-        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-            <button class="btn-outline" style="margin: 0; flex: 1; justify-content: center;" onclick="exportarBancoTXT()">⬇️ Exportar Backup TXT</button>
-            <button class="btn-outline" style="margin: 0; flex: 1; justify-content: center;" onclick="document.getElementById('fileImport').click()">⬆️ Importar TXT</button>
+        <h3 style="font-size: 15px; color: #333; margin-top: 0; margin-bottom: 10px;">Backup Físico do Aparelho</h3>
+        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <button class="btn-outline" style="margin: 0; flex: 1; justify-content: center; font-size: 13px;" onclick="exportarBancoTXT()">📤 Exportar (TXT)</button>
+            <button class="btn-outline" style="margin: 0; flex: 1; justify-content: center; font-size: 13px;" onclick="document.getElementById('fileImport').click()">📥 Importar</button>
             <input type="file" id="fileImport" style="display: none;" accept=".txt" onchange="importarBancoTXT(event)">
         </div>
 
-        <button class="btn-warning" onclick="forcarAtualizacao()">🔄 Atualizar Aplicativo (Limpar Cache)</button>
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
 
-        <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #ccc;">
-            <label style="color:#d32f2f; font-weight:bold; font-size:14px; margin-bottom: 5px; display:block;">Excluir Histórico (Digite "quero excluir todo o histórico"):</label>
-            <input type="text" id="inputConfirmarExclusao" placeholder='Digite a frase aqui' style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; margin-bottom: 10px;">
-            <button class="btn-danger" onclick="excluirHistoricoSeguro()" style="margin-top: 0;">🗑️ APAGAR HISTÓRICO LOCAL</button>
+        <p style="font-size: 13px; color: #555; margin-bottom: 5px;">Atenção: A ação abaixo é irreversível.</p>
+        <div class="form-group">
+            <label>Para apagar o histórico, digite: <b>quero excluir todo o histórico</b></label>
+            <input type="text" id="inputConfirmarExclusao" placeholder="digite a frase exata">
+            <button class="btn-danger" style="margin-top: 10px;" onclick="excluirHistoricoSeguro()">🗑️ Apagar Histórico Local</button>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+
+        <div class="form-group">
+            <label>Problemas de Cache ou Atualização?</label>
+            <button class="btn-outline" style="border-color:#fbc02d; color:#fbc02d; justify-content:center;" onclick="forcarAtualizacao()">🔄 Atualizar Aplicativo</button>
         </div>
 
         <div class="modal-actions">
@@ -207,7 +237,7 @@
         <input type="hidden" id="operadorAlvo">
         <div class="form-group">
             <label>Senha:</label>
-            <input type="password" id="senhaTrocaOperador" inputmode="numeric" pattern="[0-9]*">
+            <input type="password" id="senhaTrocaOperador" inputmode="numeric" pattern="[0-9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
         </div>
         <div class="modal-actions">
             <button class="btn-cancel" onclick="cancelarTrocaOperador()">Cancelar</button>
@@ -263,7 +293,7 @@
         <div class="modal-title">Operador(a)</div>
         <input type="hidden" id="opNomeOriginal">
         <div class="form-group"><label>Nome:</label><input type="text" id="opNome"></div>
-        <div class="form-group"><label>Senha (Vazio = sem senha):</label><input type="text" id="opSenha" placeholder="Opcional" inputmode="numeric" pattern="[0-9]*"></div>
+        <div class="form-group"><label>Senha (Vazio = sem senha):</label><input type="text" id="opSenha" placeholder="Opcional" inputmode="numeric" pattern="[0-9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '');"></div>
         <div class="modal-actions">
             <button class="btn-cancel" onclick="fecharModal('modalFormOperador'); abrirGerenciar('operadores')">Cancelar</button>
             <button class="btn-action" onclick="salvarOperador()">Salvar</button>
@@ -313,7 +343,6 @@
         let local = JSON.parse(localStorage.getItem('etiquetadora_db'));
         
         if (local) {
-            // Garantir que novas chaves existam em bancos antigos
             if (!local.configs.urlAppScript) local.configs.urlAppScript = "";
             if (!local.historico) local.historico = [];
             if (!local.filaRetentativaStatus) local.filaRetentativaStatus = [];
@@ -331,16 +360,6 @@
         renderizarOperadores();
         renderizarFiltros();
         renderizarLista();
-        
-        // AUTO-SUBMIT SENHA
-        document.getElementById('senhaAdmin').addEventListener('input', function(e) {
-            if(this.value === "1999") { 
-                this.blur(); 
-                fecharModal('modalLoginAdmin'); 
-                abrirPainelUnificado();
-                this.value = ''; 
-            }
-        });
         
         document.getElementById('senhaTrocaOperador').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') confirmarTrocaOperador();
@@ -367,18 +386,16 @@
     }
 
     function abrirPainelUnificado() {
-        document.getElementById('displayEstabelecimento').innerText = db.configs.estabelecimento;
+        document.getElementById('configNomeEstabelecimento').value = db.configs.estabelecimento;
         document.getElementById('configModo').value = db.configs.modo;
         document.getElementById('modalPainelUnificado').style.display = 'flex';
     }
 
-    function editarEstabelecimento() {
-        let novoNome = prompt("Nome do estabelecimento:", db.configs.estabelecimento);
+    function salvarNomeEstabelecimento(novoNome) {
         if(novoNome && novoNome.trim() !== "") {
             db.configs.estabelecimento = novoNome.trim();
             atualizarTituloAplicativo();
             salvarBancoLocal();
-            abrirPainelUnificado();
         }
     }
 
@@ -387,9 +404,14 @@
         salvarBancoLocal();
     }
 
-    // --- ZONA DE RISCO ---
-    function abrirZonaRisco() {
+    function solicitarAcessoAvancado() {
         fecharModal('modalPainelUnificado');
+        document.getElementById('senhaAvancada').value = '';
+        document.getElementById('modalSenhaAvancada').style.display = 'flex';
+        setTimeout(() => document.getElementById('senhaAvancada').focus(), 100);
+    }
+
+    function abrirZonaRisco() {
         document.getElementById('configUrlAppScript').value = db.configs.urlAppScript || "";
         document.getElementById('inputConfirmarExclusao').value = "";
         document.getElementById('modalZonaRisco').style.display = 'flex';
@@ -477,18 +499,16 @@
         };
         reader.readAsText(file);
     }
-    // -----------------------
 
-    // --- LÓGICA DE SINCRONIZAÇÃO (OFFLINE-FIRST) ---
     async function syncGeral() {
         const indicador = document.getElementById('indicadorConexao');
         
         if (!db.configs.urlAppScript) {
-            indicador.innerText = '⚪'; // Sem URL configurada
+            indicador.innerText = '⚪'; 
             return;
         }
         if (!navigator.onLine) {
-            indicador.innerText = '🔴'; // Sem Internet do celular
+            indicador.innerText = '🔴'; 
             return;
         }
 
@@ -499,26 +519,22 @@
                     data: db.filaRetentativaStatus 
                 });
                 
-                const res = await fetch(db.configs.urlAppScript, { 
-                    method: 'POST', 
-                    body: payload 
-                });
+                const res = await fetch(db.configs.urlAppScript, { method: 'POST', body: payload });
                 
                 if (res.ok) {
-                    db.filaRetentativaStatus = []; // Limpa fila
+                    db.filaRetentativaStatus = []; 
                     salvarBancoLocal();
                     indicador.innerText = '🟢';
                 } else {
                     indicador.innerText = '🔴';
                 }
             } else {
-                indicador.innerText = '🟢'; // Fila vazia, mas online e com URL configurada
+                indicador.innerText = '🟢';
             }
         } catch(e) {
-            indicador.innerText = '🔴'; // Erro no fetch (ex: script offline ou bloqueado)
+            indicador.innerText = '🔴'; 
         }
     }
-    // -----------------------------------------------
 
     function renderizarOperadores() {
         const seletor = document.getElementById('seletorOperador');
@@ -780,19 +796,8 @@
         if(quantidadeAtual + valor > 0) { quantidadeAtual += valor; document.getElementById('imprimirQtd').innerText = quantidadeAtual; }
     }
 
-    // REGISTRO NO BANCO E PREPARAÇÃO PARA NUVEM
     function registrarImpressaoLocal(produto, peso, dataMan, hora, dataVal, qtd, operador) {
-        const registro = {
-            id: Date.now(),
-            produto: produto.nome,
-            peso: peso,
-            dataManipulado: dataMan,
-            horaManipulado: hora,
-            validadeFinal: dataVal,
-            quantidade: qtd,
-            operador: operador
-        };
-        
+        const registro = { id: Date.now(), produto: produto.nome, peso: peso, dataManipulado: dataMan, horaManipulado: hora, validadeFinal: dataVal, quantidade: qtd, operador: operador };
         db.historico.push(registro);
         db.filaRetentativaStatus.push(registro);
         salvarBancoLocal();
@@ -818,13 +823,9 @@
         const dataManipulacaoBR = `${String(hoje.getDate()).padStart(2, '0')}/${String(hoje.getMonth() + 1).padStart(2, '0')}/${hoje.getFullYear()}`;
         const horaBR = `${String(hoje.getHours()).padStart(2, '0')}:${String(hoje.getMinutes()).padStart(2, '0')}`;
 
-        // 1. Salvar offline-first (Fila + Histórico)
         registrarImpressaoLocal(produto, pesoFormatado, dataManipulacaoBR, horaBR, dataValidadeBR, quantidadeAtual, operador);
-
-        // 2. Tocar Áudio de Sucesso
         audioBeep.play().catch(()=>{});
 
-        // 3. Imprimir
         if(db.configs.modo === 'pdf') {
             fecharModal('modalImprimir');
             gerarEtiquetaPDF(produto, pesoFormatado, dataManipulacaoBR, horaBR, dataValidadeBR, quantidadeAtual, operador, estabelecimento);
@@ -906,7 +907,6 @@
             fecharModal('modalImprimir');
             
             window.location.href = intent;
-            
         }).catch(err => {
             alert("Erro ao gerar a imagem da etiqueta.");
             btnElement.innerText = "🖨️ IMPRIMIR";
