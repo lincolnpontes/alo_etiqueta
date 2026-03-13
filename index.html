@@ -1099,8 +1099,8 @@
         btn.disabled = true;
 
         try {
-            // Chamada real para puxar (GET)
-            let resposta = await fetch(url);
+            // Chamada real para puxar (GET) - o Apps Script envia o JSON que está na célula A1
+            let resposta = await fetch(url, { redirect: 'follow' });
             let dados = await resposta.json();
             
             // Validação simples para ver se o JSON é mesmo o seu banco de dados
@@ -1110,7 +1110,7 @@
                 alert("Dados puxados e sincronizados com a Nuvem!");
                 location.reload();
             } else {
-                alert("Os dados recebidos da nuvem não estão no formato correto.");
+                alert("Os dados recebidos da nuvem não estão no formato correto (ou a célula A1 está vazia).");
             }
         } catch(erro) {
             alert("Erro de comunicação com a Nuvem: " + erro.message);
@@ -1133,11 +1133,18 @@
         btn.disabled = true;
 
         try {
+            // Formatando o pacote EXATAMENTE como o seu Apps Script pede
+            let pacote = {
+                action: 'salvar_banco',
+                dados: db
+            };
+
             // Chamada real para enviar (POST). Usando text/plain para evitar problemas de CORS no Google Script
             let resposta = await fetch(url, {
                 method: 'POST',
+                redirect: 'follow',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify(db)
+                body: JSON.stringify(pacote)
             });
             
             alert("Backup enviado com sucesso para a Nuvem!");
@@ -1249,12 +1256,17 @@
         
         try { 
             if(db.filaRetentativaStatus.length > 0) { 
+                // Monta o pacote no formato exato que a ROTA 1 do seu Apps Script pede
+                const pacote = {
+                    action: 'syncImpressoes',
+                    data: db.filaRetentativaStatus
+                };
+                
                 const res = await fetch(db.configs.urlAppScript, { 
                     method: 'POST', 
-                    body: JSON.stringify({
-                        action: 'syncImpressoes', 
-                        data: db.filaRetentativaStatus
-                    }) 
+                    redirect: 'follow',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(pacote) 
                 }); 
                 
                 if(res.ok) { 
@@ -1892,9 +1904,7 @@
             }
             
             let displayPreco = valorCalc !== "" ? "flex" : "none";
-            
             let displayOpcionais = (displayPeso === "flex" || displayPreco === "flex") ? "flex" : "none";
-            
             let displayArmaz = armaz !== "" ? "block" : "none";
             let showQR = (db.configs.controleQR && p.usaQR) ? "block" : "none";
             let idQR = `qr_${Date.now()}_${i}`;
