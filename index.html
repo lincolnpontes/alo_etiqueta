@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô_Etiqueta v1.0.2</title>
+    <title>Alô_Etiqueta v1.0.3</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -75,7 +75,7 @@
         .bg-green { background: #388E3C; }
 
         /* ============================================================
-           GABARITO v1.0.2 - VISUAL AJUSTADO
+           GABARITO v1.0.3 - VISUAL AJUSTADO (Linhas grossas, layout centralizado)
            ============================================================ */
         #area-impressao-visual {
             position: fixed; top: 0; left: -3000px;
@@ -97,27 +97,33 @@
 
 <div id="area-impressao-visual">
     
-    <div style="text-align: center; border-bottom: 2px solid black; padding-bottom: 4px;">
+    <div style="text-align: center; border-bottom: 4px solid black; padding-bottom: 4px;">
         <div id="viz-nome-produto" class="item-nome">PRODUTO</div>
     </div>
     
     <div style="flex: 1; padding-top: 6px; display: flex; flex-direction: column;">
-        <div style="font-size: 16px; font-weight: bold; word-wrap: break-word; line-height: 1.2;">
-            <span id="viz-label-acao">AÇÃO:</span> <span id="viz-data-man">00/00/0000 00:00</span>
-        </div>
-        
-        <div id="viz-linha-opcionais" style="font-size: 13px; display: none; gap: 10px; font-weight: bold; margin-top: 4px;">
-            <div id="viz-box-peso" style="display: none;">Peso: <span id="viz-peso">0g</span></div>
-            <div id="viz-row-lote" style="display: none;">Lote: <span id="viz-lote">---</span></div>
-        </div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%;">
+            
+            <div style="flex: 1; min-width: 0;">
+                <div style="font-size: 16px; font-weight: bold; word-wrap: break-word; line-height: 1.2;">
+                    <span id="viz-label-acao">AÇÃO:</span> <span id="viz-data-man">00/00/0000 00:00</span>
+                </div>
+                
+                <div id="viz-linha-opcionais" style="font-size: 13px; display: none; gap: 10px; font-weight: bold; margin-top: 4px;">
+                    <div id="viz-box-peso" style="display: none;">Peso: <span id="viz-peso">0g</span></div>
+                    <div id="viz-row-lote" style="display: none;">Lote: <span id="viz-lote">---</span></div>
+                </div>
 
-        <div id="viz-box-preco-container" style="font-size: 17px; font-weight: bold; text-transform: uppercase; margin-top: 4px; display: none;">
-            TOTAL: R$ <span id="viz-preco">0,00</span>
-        </div>
-        
-        <div id="viz-qrcode-container" style="display: none; flex-direction: column; align-items: flex-start; margin-top: 6px; margin-left: 2px;">
-            <div id="viz-qrcode"></div>
-            <div id="viz-sku" style="font-size: 10px; margin-top: 2px; font-weight: bold; padding-left: 15px;">SKU</div>
+                <div id="viz-box-preco-container" style="font-size: 17px; font-weight: bold; text-transform: uppercase; margin-top: 4px; display: none;">
+                    TOTAL: R$ <span id="viz-preco">0,00</span>
+                </div>
+            </div>
+
+            <div id="viz-qrcode-container" style="display: none; flex-direction: column; align-items: center; justify-content: flex-start; width: 85px; flex-shrink: 0; margin-left: 10px;">
+                <div id="viz-qrcode"></div>
+                <div id="viz-sku" style="font-size: 11px; margin-top: 2px; font-weight: bold;">SKU</div>
+            </div>
+            
         </div>
     </div>
     
@@ -127,18 +133,16 @@
     
     <div style="margin-top: auto;">
         
-        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4px;">
-            <div id="viz-container-validade">
-                <span class="val-label" style="font-size: 20px; font-weight: 900;">VAL:</span> 
-                <span class="val-data" id="viz-data-val" style="font-size: 20px; font-weight: 900;">00/00/0000</span>
-            </div>
-            
-            <div id="viz-linha-armazenamento" style="display: none;">
-                <span id="viz-armazenamento" style="font-size: 13px; font-weight: bold; text-transform: uppercase; border: 2px solid black; padding: 2px 4px; border-radius: 4px;">MANTER CONGELADO</span>
-            </div>
+        <div id="viz-container-validade" style="text-align: center; margin-bottom: 4px; white-space: nowrap;">
+            <span class="val-label" style="font-size: 22px; font-weight: 900;">VAL:</span> 
+            <span class="val-data" id="viz-data-val" style="font-size: 22px; font-weight: 900;">00/00/0000</span>
         </div>
         
-        <div style="border-top: 2px solid black; width: 100%; margin-bottom: 4px;"></div>
+        <div id="viz-linha-armazenamento" style="text-align: center; margin-bottom: 6px; display: none;">
+            <span id="viz-armazenamento" style="font-size: 14px; font-weight: bold; text-transform: uppercase; border: 2px solid black; padding: 2px 6px; border-radius: 4px; white-space: nowrap; display: inline-block;">MANTER CONGELADO</span>
+        </div>
+        
+        <div style="border-top: 4px solid black; width: 100%; margin-bottom: 4px;"></div>
         
         <div id="viz-estabelecimento" style="font-weight: bold; font-size: 16px; white-space: nowrap; overflow: hidden; margin-bottom: 2px; text-align: center;">Estabelecimento</div>
         <div style="font-size: 14px; text-align: center;">Operador(a): <span id="viz-operador" style="font-weight: bold;">Nome</span></div>
@@ -188,7 +192,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.2</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.3</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
@@ -1608,8 +1612,8 @@
         if(p.armazenamento && p.armazenamento !== "ambiente") {
             let textoArm = p.armazenamento === "resfriado" ? "MANTER RESFRIADO" : "MANTER CONGELADO";
             armazHTML = `
-                <div>
-                    <span style="background: white; border: 2px solid black; padding: 2px 4px; font-weight: bold; font-size: 13px; text-transform: uppercase; border-radius: 4px;">${textoArm}</span>
+                <div style="text-align: center; margin-bottom: 6px;">
+                    <span style="background: white; border: 2px solid black; padding: 2px 6px; font-weight: bold; font-size: 14px; text-transform: uppercase; border-radius: 4px; white-space: nowrap; display: inline-block;">${textoArm}</span>
                 </div>`;
         }
 
@@ -1654,27 +1658,31 @@
 
             htmlContent += `
             <div class="etiqueta-print">
-                <div style="text-align: center; border-bottom: 2px solid black; padding-bottom: 4px;">
+                <div style="text-align: center; border-bottom: 4px solid black; padding-bottom: 4px;">
                     <div class="${classeHeader}">${nomeDisplay}</div>
                 </div>
                 
                 <div style="flex: 1; padding-top: 6px; display: flex; flex-direction: column;">
-                    <div style="font-size: 16px; font-weight: bold; word-wrap: break-word; line-height: 1.2;">
-                        <span>${acaoImpressao}</span> <span>${manBR}</span>
-                    </div>
-                    
-                    <div style="font-size: 13px; display: ${displayOpcionais}; gap: 10px; font-weight: bold; margin-top: 4px;">
-                        <div style="display: ${displayPeso};">Peso: <span>${pesoInput}g</span></div>
-                        <div style="display: ${displayLote};">Lote: <span>${lote || '-'}</span></div>
-                    </div>
-                    
-                    <div style="font-size: 17px; font-weight: bold; text-transform: uppercase; margin-top: 4px; display: ${displayPreco};">
-                        TOTAL: R$ <span>${valorCalc}</span>
-                    </div>
-                    
-                    <div style="display: ${showQR}; flex-direction: column; align-items: flex-start; margin-top: 6px; margin-left: 2px;">
-                        <div id="${idQR}"></div>
-                        <div style="font-size: 10px; margin-top: 2px; font-weight: bold; padding-left: 15px;">${skus[i].slice(-5)}</div>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%;">
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="font-size: 16px; font-weight: bold; word-wrap: break-word; line-height: 1.2;">
+                                <span>${acaoImpressao}</span> <span>${manBR}</span>
+                            </div>
+                            
+                            <div style="font-size: 13px; display: ${displayOpcionais}; gap: 10px; font-weight: bold; margin-top: 4px;">
+                                <div style="display: ${displayPeso};">Peso: <span>${pesoInput}g</span></div>
+                                <div style="display: ${displayLote};">Lote: <span>${lote || '-'}</span></div>
+                            </div>
+                            
+                            <div style="font-size: 17px; font-weight: bold; text-transform: uppercase; margin-top: 4px; display: ${displayPreco};">
+                                TOTAL: R$ <span>${valorCalc}</span>
+                            </div>
+                        </div>
+                        
+                        <div style="display: ${showQR}; flex-direction: column; align-items: center; justify-content: flex-start; width: 85px; flex-shrink: 0; margin-left: 10px;">
+                            <div id="${idQR}"></div>
+                            <div style="font-size: 11px; margin-top: 2px; font-weight: bold;">${skus[i].slice(-5)}</div>
+                        </div>
                     </div>
                 </div>
                 
@@ -1683,15 +1691,14 @@
                 </div>
                 
                 <div style="margin-top: auto;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4px;">
-                        <div class="${classeValidadeGrande}">
-                            <span class="val-label" style="font-size: 20px; font-weight: 900;">VAL:</span> 
-                            <span class="val-data" style="font-size: 20px; font-weight: 900;">${valBR}</span>
-                        </div>
-                        ${armazHTML}
+                    <div class="${classeValidadeGrande}" style="text-align: center; margin-bottom: 4px; white-space: nowrap;">
+                        <span class="val-label" style="font-size: 22px; font-weight: 900;">VAL:</span> 
+                        <span class="val-data" style="font-size: 22px; font-weight: 900;">${valBR}</span>
                     </div>
                     
-                    <div style="border-top: 2px solid black; width: 100%; margin-bottom: 4px;"></div>
+                    ${armazHTML}
+                    
+                    <div style="border-top: 4px solid black; width: 100%; margin-bottom: 4px;"></div>
                     
                     <div style="font-weight: bold; font-size: 16px; white-space: nowrap; overflow: hidden; margin-bottom: 2px; text-align: center;">${est}</div>
                     <div style="font-size: 14px; text-align: center;">Operador(a): <span style="font-weight: bold;">${op}</span></div>
@@ -1703,7 +1710,7 @@
             </div>
             <script>
                 if("${showQR}" === "flex") { 
-                    new QRCode(document.getElementById("${idQR}"), { text: "${skus[i]}", width: 70, height: 70 }); 
+                    new QRCode(document.getElementById("${idQR}"), { text: "${skus[i]}", width: 85, height: 85 }); 
                 }
             <\/script>`;
         }
@@ -1800,7 +1807,7 @@
         for(let i = 0; i < qtd; i++) {
             if(usaQR) {
                 document.getElementById('viz-qrcode').innerHTML = ''; 
-                new QRCode(document.getElementById('viz-qrcode'), { text: skus[i], width: 70, height: 70 }); 
+                new QRCode(document.getElementById('viz-qrcode'), { text: skus[i], width: 85, height: 85 }); 
                 document.getElementById('viz-sku').innerText = skus[i].slice(-5); 
                 await new Promise(r => setTimeout(r, 100)); 
             }
