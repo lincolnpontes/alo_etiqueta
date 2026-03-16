@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô_Etiqueta v1.0.11</title>
+    <title>Alô_Etiqueta v1.0.12</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -90,20 +90,21 @@
         .bg-green { background: #388E3C; }
 
         /* ============================================================
-           GABARITO v1.0.11 - Altura cravada em 40mm
+           GABARITO v1.0.12 - Cravado em 320x320 pixels (40mm)
            ============================================================ */
         #area-impressao-visual {
             position: fixed; top: 0; left: -3000px;
             background: white; color: black; font-family: 'Arial', sans-serif;
             box-sizing: border-box; 
-            padding: 4px; 
+            padding: 4px; /* margem interna de segurança */
             display: flex; flex-direction: column; justify-content: space-between;
-            width: 304px; height: 320px; min-width: 304px; min-height: 320px; margin: 0;
+            width: 320px; height: 320px; min-width: 320px; min-height: 320px; margin: 0;
+            overflow: hidden; /* impede conteúdo de vazar e deslocar tudo */
         }
 
-        .item-nome { font-weight: 900; font-size: 20px; text-transform: uppercase; margin: 0; }
-        .item-nome.destaque { font-size: 28px !important; }
-        .validade-grande .val-label, .validade-grande .val-data { font-size: 30px !important; }
+        .item-nome { font-weight: 900; font-size: 20px; text-transform: uppercase; margin: 0; line-height: 1.1; }
+        .item-nome.destaque { font-size: 24px !important; }
+        .validade-grande .val-label, .validade-grande .val-data { font-size: 26px !important; }
         
         #reader { width: 100%; background: #000; border-radius: 8px; overflow: hidden; }
         .detalhes-estoque-lista li:last-child { border-bottom: none !important; }
@@ -115,59 +116,55 @@
     <img src="icon.png" class="splash-icon" alt="Alô Etiqueta" onerror="this.style.display='none'; document.getElementById('splash-emoji').style.display='block';">
     <div id="splash-emoji" class="splash-emoji">🏷️</div>
     <div class="splash-title">Alô_Etiqueta</div>
-    <div class="splash-version">v1.0.11</div>
+    <div class="splash-version">v1.0.12</div>
 </div>
 
 <div id="area-impressao-visual">
     
-    <div style="text-align: center; border-bottom: 4px solid black; padding-bottom: 4px;">
+    <div style="text-align: center; border-bottom: 4px solid black; padding-bottom: 3px; max-height: 60px; overflow: hidden;">
         <div id="viz-nome-produto" class="item-nome">PRODUTO</div>
     </div>
     
-    <div style="flex: 1; padding-top: 6px; display: flex; flex-direction: column;">
-        <div style="font-size: 16px; font-weight: bold; word-wrap: break-word; line-height: 1.2; text-align: left; width: 100%;">
+    <div style="flex: 1; padding-top: 4px; display: flex; flex-direction: column; justify-content: start; overflow: hidden;">
+        <div style="font-size: 15px; font-weight: bold; word-wrap: break-word; line-height: 1.1; text-align: left; width: 100%;">
             <span id="viz-label-acao">AÇÃO:</span> <span id="viz-data-man">00/00/0000 00:00</span>
         </div>
         
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; margin-top: 6px;">
-            <div style="flex: 1; min-width: 0;">
-                <div id="viz-linha-opcionais" style="font-size: 13px; display: none; flex-direction: column; gap: 4px; font-weight: bold;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; margin-top: 4px; gap: 3px;">
+            <div style="flex: 1; min-width: 0; overflow: hidden;">
+                <div id="viz-linha-opcionais" style="font-size: 12px; display: none; flex-direction: column; gap: 2px; font-weight: bold; line-height: 1.1;">
                     <div id="viz-box-peso" style="display: none;">Peso: <span id="viz-peso">0g</span></div>
                     <div id="viz-row-lote" style="display: none;">Lote: <span id="viz-lote">---</span></div>
                 </div>
 
-                <div id="viz-box-preco-container" style="font-size: 17px; font-weight: bold; text-transform: uppercase; margin-top: 8px; display: none;">
+                <div id="viz-box-preco-container" style="font-size: 16px; font-weight: bold; text-transform: uppercase; margin-top: 5px; display: none; line-height: 1.1;">
                     TOTAL: R$ <span id="viz-preco">0,00</span>
                 </div>
             </div>
 
-            <div id="viz-qrcode-container" style="display: none; flex-direction: column; align-items: center; justify-content: flex-start; width: 85px; flex-shrink: 0; margin-left: 5px;">
+            <div id="viz-qrcode-container" style="display: none; flex-direction: column; align-items: center; justify-content: flex-start; width: 90px; flex-shrink: 0; border: 1px solid black; padding: 1px;">
                 <div id="viz-qrcode"></div>
-                <div id="viz-sku" style="font-size: 11px; margin-top: 2px; font-weight: bold;">SKU</div>
+                <div id="viz-sku" style="font-size: 10px; margin-top: 1px; font-weight: bold;">SKU</div>
             </div>
         </div>
     </div>
     
-    <div style="flex-grow: 1; color: transparent; font-size: 10px; line-height: 10px; user-select: none;">
-        .<br>.<br>.
-    </div>
-    
-    <div style="margin-top: auto;">
-        <div id="viz-container-validade" style="text-align: center; margin-bottom: 4px; white-space: nowrap;">
-            <span class="val-label" style="font-size: 22px; font-weight: 900;">VAL:</span> 
-            <span class="val-data" id="viz-data-val" style="font-size: 22px; font-weight: 900;">00/00/0000</span>
+    <div style="margin-top: auto; border-top: 2px solid #eee; padding-top: 2px;">
+        <div id="viz-container-validade" style="text-align: center; margin-bottom: 3px; white-space: nowrap; line-height: 1.1;">
+            <span class="val-label" style="font-size: 20px; font-weight: 900;">VAL:</span> 
+            <span class="val-data" id="viz-data-val" style="font-size: 20px; font-weight: 900;">00/00/0000</span>
         </div>
         
-        <div id="viz-linha-armazenamento" style="text-align: center; margin-bottom: 6px; display: none;">
-            <span id="viz-armazenamento" style="font-size: 14px; font-weight: bold; text-transform: uppercase; border: 2px solid black; padding: 2px 6px; border-radius: 4px; white-space: nowrap; display: inline-block;">MANTER CONGELADO</span>
+        <div id="viz-linha-armazenamento" style="text-align: center; margin-bottom: 4px; display: none; line-height: 1.0;">
+            <span id="viz-armazenamento" style="font-size: 12px; font-weight: bold; text-transform: uppercase; border: 2px solid black; padding: 1px 5px; border-radius: 4px; white-space: nowrap; display: inline-block;">MANTER CONGELADO</span>
         </div>
         
-        <div style="border-top: 4px solid black; width: 100%; margin-bottom: 4px;"></div>
+        <div style="border-top: 4px solid black; width: 100%; margin-bottom: 3px;"></div>
         
-        <div id="viz-estabelecimento" style="font-weight: bold; font-size: 16px; white-space: nowrap; overflow: hidden; margin-bottom: 2px; text-align: center;">Estabelecimento</div>
-        <div style="font-size: 14px; text-align: center;">Operador(a): <span id="viz-operador" style="font-weight: bold;">Nome</span></div>
+        <div id="viz-estabelecimento" style="font-weight: bold; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 1px; text-align: center; line-height: 1.1;">Estabelecimento</div>
+        <div style="font-size: 13px; text-align: center; line-height: 1.1;">Operador(a): <span id="viz-operador" style="font-weight: bold;">Nome</span></div>
         
-        <div style="display: flex; justify-content: space-between; font-size: 1px; line-height: 1px; color: #010101; margin-top: 2px;">
+        <div style="display: flex; justify-content: space-between; font-size: 1px; line-height: 1px; color: #010101; margin-top: 1px;">
             <span>.</span><span>.</span>
         </div>
     </div>
@@ -211,7 +208,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.11</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.12</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
@@ -629,6 +626,7 @@
             if(typeof local.configs.senhaAdmin === 'undefined') local.configs.senhaAdmin = "";
             if(typeof local.configs.ultimoWipe === 'undefined') local.configs.ultimoWipe = 0;
             
+            // Corrige gap antigo para px (v1.0.10+)
             if(typeof local.configs.gapEtiquetaPx === 'undefined') {
                 local.configs.gapEtiquetaPx = (local.configs.gapEtiqueta !== undefined) ? local.configs.gapEtiqueta * 8 : 16;
             }
@@ -1653,30 +1651,33 @@
         if(p.armazenamento && p.armazenamento !== "ambiente") {
             let textoArm = p.armazenamento === "resfriado" ? "MANTER RESFRIADO" : "MANTER CONGELADO";
             armazHTML = `
-                <div style="text-align: center; margin-bottom: 6px;">
-                    <span style="background: white; border: 2px solid black; padding: 2px 6px; font-weight: bold; font-size: 14px; text-transform: uppercase; border-radius: 4px; white-space: nowrap; display: inline-block;">${textoArm}</span>
+                <div style="text-align: center; margin-bottom: 4px; line-height: 1.0;">
+                    <span style="background: white; border: 2px solid black; padding: 1px 5px; font-weight: bold; font-size: 12px; text-transform: uppercase; border-radius: 4px; white-space: nowrap; display: inline-block;">${textoArm}</span>
                 </div>`;
         }
 
-        let dimensaoCSS = "width: 304px; height: 320px;"; 
+        let dimensaoCSS = "width: 320px; height: 320px;"; 
         const tam = db.configs.tamanhoEtiqueta || "40x40"; 
-        if(tam === "60x40") dimensaoCSS = "width: 464px; height: 320px;"; 
-        if(tam === "50x50") dimensaoCSS = "width: 384px; height: 400px;";
+        if(tam === "60x40") dimensaoCSS = "width: 480px; height: 320px;"; 
+        if(tam === "50x50") dimensaoCSS = "width: 400px; height: 400px;";
         
         let classeHeader = db.configs.destaqueProd ? "item-nome destaque" : "item-nome"; 
         let classeValidadeGrande = db.configs.destaqueVal ? "validade-grande" : "";
         
+        let gapPx = db.configs.gapEtiquetaPx || 0;
+        let marginGap = gapPx > 0 ? `margin-bottom: ${gapPx}px;` : "";
+
         let htmlContent = `
         <html>
         <head>
             <style>
-                @page { margin: 0; size: auto; } /* REMOVE O CABEÇALHO/RODAPÉ INJETADO PELO NAVEGADOR */
+                @page { margin: 0; size: auto; }
                 body { font-family: 'Arial', sans-serif; padding: 0; margin: 0; background: #fff; display:flex; flex-direction:column; align-items:center; } 
-                .etiqueta-print { background: white; margin-top: 5px; margin-bottom: 5px; box-sizing: border-box; ${dimensaoCSS} display: flex; flex-direction: column; padding: 4px; justify-content: space-between; page-break-after: always; } 
+                .etiqueta-print { background: white; ${marginGap} box-sizing: border-box; ${dimensaoCSS} display: flex; flex-direction: column; padding: 4px; justify-content: space-between; page-break-after: always; overflow: hidden;} 
                 
-                .item-nome { font-weight: 900; font-size: 20px; text-transform: uppercase; margin: 0; }
-                .item-nome.destaque { font-size: 28px !important; }
-                .validade-grande .val-label, .validade-grande .val-data { font-size: 30px !important; }
+                .item-nome { font-weight: 900; font-size: 20px; text-transform: uppercase; margin: 0; line-height: 1.1; }
+                .item-nome.destaque { font-size: 24px !important; }
+                .validade-grande .val-label, .validade-grande .val-data { font-size: 26px !important; }
             </style>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script>
         </head>
@@ -1700,59 +1701,55 @@
 
             htmlContent += `
             <div class="etiqueta-print">
-                <div style="text-align: center; border-bottom: 4px solid black; padding-bottom: 4px;">
+                <div style="text-align: center; border-bottom: 4px solid black; padding-bottom: 3px; max-height: 60px; overflow: hidden;">
                     <div class="${classeHeader}">${nomeDisplay}</div>
                 </div>
                 
-                <div style="flex: 1; padding-top: 6px; display: flex; flex-direction: column;">
-                    <div style="font-size: 16px; font-weight: bold; word-wrap: break-word; line-height: 1.2; text-align: left; width: 100%;">
+                <div style="flex: 1; padding-top: 4px; display: flex; flex-direction: column; justify-content: start; overflow: hidden;">
+                    <div style="font-size: 15px; font-weight: bold; word-wrap: break-word; line-height: 1.1; text-align: left; width: 100%;">
                         <span>${acaoImpressao}</span> <span>${manBR}</span>
                     </div>
                     
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; margin-top: 6px;">
-                        <div style="flex: 1; min-width: 0;">
-                            <div style="font-size: 13px; display: ${displayOpcionais}; flex-direction: column; gap: 4px; font-weight: bold;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; margin-top: 4px; gap: 3px;">
+                        <div style="flex: 1; min-width: 0; overflow: hidden;">
+                            <div style="font-size: 12px; display: ${displayOpcionais}; flex-direction: column; gap: 2px; font-weight: bold; line-height: 1.1;">
                                 <div style="display: ${displayPeso};">Peso: <span>${pesoInput}g</span></div>
                                 <div style="display: ${displayLote};">Lote: <span>${lote || '-'}</span></div>
                             </div>
                             
-                            <div style="font-size: 17px; font-weight: bold; text-transform: uppercase; margin-top: 8px; display: ${displayPreco};">
+                            <div style="font-size: 16px; font-weight: bold; text-transform: uppercase; margin-top: 5px; display: ${displayPreco}; line-height: 1.1;">
                                 TOTAL: R$ <span>${valorCalc}</span>
                             </div>
                         </div>
                         
-                        <div style="display: ${showQR}; flex-direction: column; align-items: center; justify-content: flex-start; width: 85px; flex-shrink: 0; margin-left: 5px;">
+                        <div style="display: ${showQR}; flex-direction: column; align-items: center; justify-content: flex-start; width: 90px; flex-shrink: 0; border: 1px solid black; padding: 1px;">
                             <div id="${idQR}"></div>
-                            <div style="font-size: 11px; margin-top: 2px; font-weight: bold;">${skus[i].slice(-5)}</div>
+                            <div style="font-size: 10px; margin-top: 1px; font-weight: bold;">${skus[i].slice(-5)}</div>
                         </div>
                     </div>
                 </div>
                 
-                <div style="flex-grow: 1; color: transparent; font-size: 10px; line-height: 10px; user-select: none;">
-                    .<br>.<br>.
-                </div>
-                
-                <div style="margin-top: auto;">
-                    <div class="${classeValidadeGrande}" style="text-align: center; margin-bottom: 4px; white-space: nowrap;">
-                        <span class="val-label" style="font-size: 22px; font-weight: 900;">VAL:</span> 
-                        <span class="val-data" style="font-size: 22px; font-weight: 900;">${valBR}</span>
+                <div style="margin-top: auto; border-top: 2px solid #eee; padding-top: 2px;">
+                    <div class="${classeValidadeGrande}" style="text-align: center; margin-bottom: 3px; white-space: nowrap; line-height: 1.1;">
+                        <span class="val-label" style="font-size: 20px; font-weight: 900;">VAL:</span> 
+                        <span class="val-data" style="font-size: 20px; font-weight: 900;">${valBR}</span>
                     </div>
                     
                     ${armazHTML}
                     
-                    <div style="border-top: 4px solid black; width: 100%; margin-bottom: 4px;"></div>
+                    <div style="border-top: 4px solid black; width: 100%; margin-bottom: 3px;"></div>
                     
-                    <div style="font-weight: bold; font-size: 16px; white-space: nowrap; overflow: hidden; margin-bottom: 2px; text-align: center;">${est}</div>
-                    <div style="font-size: 14px; text-align: center;">Operador(a): <span style="font-weight: bold;">${op}</span></div>
+                    <div style="font-weight: bold; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 1px; text-align: center; line-height: 1.1;">${est}</div>
+                    <div style="font-size: 13px; text-align: center; line-height: 1.1;">Operador(a): <span style="font-weight: bold;">${op}</span></div>
                     
-                    <div style="display: flex; justify-content: space-between; font-size: 1px; line-height: 1px; color: #010101; margin-top: 2px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 1px; line-height: 1px; color: #010101; margin-top: 1px;">
                         <span>.</span><span>.</span>
                     </div>
                 </div>
             </div>
             <script>
                 if("${showQR}" === "flex") { 
-                    new QRCode(document.getElementById("${idQR}"), { text: "${skus[i]}", width: 85, height: 85 }); 
+                    new QRCode(document.getElementById("${idQR}"), { text: "${skus[i]}", width: 90, height: 90 }); 
                 }
             <\/script>`;
         }
@@ -1771,6 +1768,7 @@
     async function gerarRawBT(p, acaoImpressao, pesoInput, manBR, valBR, qtd, op, est, precoInput, marca, lote, skus, btn) {
         const gab = document.getElementById('area-impressao-visual'); 
         
+        // Aplica textos no gabarito oculto
         document.getElementById('viz-nome-produto').innerText = marca !== "" ? `${p.nome} (${marca})` : p.nome;
         document.getElementById('viz-label-acao').innerText = acaoImpressao; 
         document.getElementById('viz-data-man').innerText = manBR; 
@@ -1825,43 +1823,47 @@
 
         aplicarDestaquesVisuais();
 
+        // Canvas final onde juntaremos todas as etiquetas
         const finalCanvas = document.createElement('canvas'); 
         const ctx = finalCanvas.getContext('2d'); 
         
         const tam = db.configs.tamanhoEtiqueta || "40x40";
         
-        let htmlWidth = 304; 
+        let htmlWidth = 320; // Padrão 40mm
         let dotsW = 320; 
         let dotsH = 320; 
-        let gapPx = db.configs.gapEtiquetaPx;
+        let gapPx = db.configs.gapEtiquetaPx || 0;
         
         if(tam === "60x40") { 
-            htmlWidth = 464; 
+            htmlWidth = 480; 
             dotsW = 480; 
             dotsH = 320; 
         } else if(tam === "50x50") { 
-            htmlWidth = 384; 
+            htmlWidth = 400; 
             dotsW = 400; 
             dotsH = 400; 
         }
         
+        // Prepara gabarito para captura
         gab.style.left = "0px";
         gab.style.width = htmlWidth + "px";
         gab.style.height = dotsH + "px";
 
         let currentY = 0; 
-        window.scrollTo(0, 0);
+        window.scrollTo(0, 0); // Garante que scroll não atrapalhe captura
         
         for(let i = 0; i < qtd; i++) {
+            // Gera QR Code específico desta etiqueta (se ativo)
             if(usaQR) {
                 document.getElementById('viz-qrcode').innerHTML = ''; 
-                new QRCode(document.getElementById('viz-qrcode'), { text: skus[i], width: 85, height: 85 }); 
+                new QRCode(document.getElementById('viz-qrcode'), { text: skus[i], width: 90, height: 90 }); 
                 document.getElementById('viz-sku').innerText = skus[i].slice(-5); 
-                await new Promise(r => setTimeout(r, 100)); 
+                await new Promise(r => setTimeout(r, 100)); // Espera renderizar QR
             }
             
+            // Captura o gabarito como imagem
             let c = await html2canvas(gab, { 
-                scale: 2, 
+                scale: 2, // Aumenta densidade para impressora térmica
                 backgroundColor: "#ffffff", 
                 logging: false,
                 useCORS: true,
@@ -1869,27 +1871,34 @@
                 height: dotsH 
             });
             
+            // Define tamanho do canvas final na primeira volta
             if(i === 0) { 
                 finalCanvas.width = dotsW; 
+                // Altura total = (altura etiqueta * qtd) + (gaps entre elas)
                 finalCanvas.height = (dotsH * qtd) + (gapPx > 0 ? (gapPx * (qtd - 1)) : 0); 
                 ctx.fillStyle = "#ffffff"; 
                 ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height); 
             }
             
+            // Desenha a captura no canvas final na posição Y correta
             ctx.imageSmoothingEnabled = true;
             ctx.drawImage(c, 0, 0, c.width, c.height, 0, currentY, htmlWidth, dotsH); 
 
+            // Incrementa Y para próxima etiqueta (altura + gap)
             currentY += dotsH + gapPx;
         }
         
+        // Converte canvas final para Intent RawBT
         const intent = "intent:" + finalCanvas.toDataURL("image/png") + "#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;";
         
+        // Restaura UI
         btn.innerText = "🖨️ IMPRIMIR"; 
         btn.disabled = false; 
         fecharModal('modalImprimir'); 
         
-        gab.style.left = "-3000px";
+        gab.style.left = "-3000px"; // Esconde gabarito novamente
 
+        // Envia para o app RawBT
         window.location.href = intent;
     }
 
