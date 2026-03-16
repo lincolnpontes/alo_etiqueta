@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô_Etiqueta v1.0.5</title>
+    <title>Alô_Etiqueta v1.0.6</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -74,26 +74,28 @@
         .bg-yellow { background: #fbc02d; color: #333; }
         .bg-green { background: #388E3C; }
 
-        /* GABARITO DA ETIQUETA VISUAL - v1.0.5 - MAIS RIGIDO */
-        #area-impressao-visual { position: absolute; top: 0; left: -2000px; background: white; color: black; font-family: 'Arial', sans-serif; box-sizing: border-box; border: 4px solid black; padding: 4px 6px; display: flex; flex-direction: column; overflow: hidden; }
+        /* GABARITO DA ETIQUETA VISUAL - v1.0.6 - SIMPLES E BLINDADO */
+        #area-impressao-visual { position: fixed; top: 0; left: -3000px; background: white; color: black; font-family: 'Arial', sans-serif; box-sizing: border-box; padding: 8px; display: flex; flex-direction: column; }
         
-        .etiqueta-header { text-align: center; font-weight: 900; font-size: 19px; text-transform: uppercase; line-height: 1.1; margin-bottom: 2px; flex-shrink: 0; }
-        .etiqueta-header.destaque { font-size: 26px !important; }
+        .etiqueta-borda-interna { border: 4px solid black; flex: 1; display: flex; flex-direction: column; padding: 4px 6px; box-sizing: border-box; }
         
-        .etiqueta-linha { border-top: 4px solid black; margin: 3px 0; width: 100%; display: block; flex-shrink: 0; height: 0; }
+        .etiqueta-header { text-align: center; font-weight: 900; font-size: 20px; text-transform: uppercase; line-height: 1.1; margin-bottom: 2px; }
+        .etiqueta-header.destaque { font-size: 30px !important; }
         
-        .etiqueta-body { flex: 1; display: flex; flex-direction: column; justify-content: space-between; font-size: 15px; padding: 0; overflow: hidden; }
-        .etiqueta-meio { display: flex; justify-content: space-between; align-items: center; flex: 1; overflow: hidden; }
+        .etiqueta-linha { border-bottom: 4px solid black; margin: 4px 0; width: 100%; display: block; }
         
-        .etiqueta-info-textual { display: flex; flex-direction: column; justify-content: center; gap: 4px; flex: 1; padding-right: 4px; height: 100%; overflow: hidden; }
-        .etiqueta-row { display: flex; align-items: center; justify-content: flex-start; line-height: 1.2; }
-        .etiqueta-label { font-weight: bold; margin-right: 4px; }
+        .etiqueta-body { flex: 1; display: flex; flex-direction: column; justify-content: space-between; font-size: 16px; padding: 0; }
+        .etiqueta-meio { display: flex; justify-content: space-between; align-items: center; flex: 1; }
         
-        .etiqueta-val-container { display: flex; align-items: center; margin-top: 2px; gap: 4px; }
-        .etiqueta-val-destaque { font-size: 22px; font-weight: 900; }
-        .etiqueta-val-destaque.destaque { font-size: 32px !important; }
+        .etiqueta-info-textual { display: flex; flex-direction: column; justify-content: space-around; flex: 1; padding-right: 5px; height: 100%; }
+        .etiqueta-row { display: flex; align-items: center; justify-content: flex-start; margin-bottom: 4px; }
+        .etiqueta-label { font-weight: bold; margin-right: 5px; }
         
-        .etiqueta-footer { text-align: center; display: flex; flex-direction: column; align-items: center; margin-top: auto; flex-shrink: 0; }
+        .etiqueta-val-container { display: flex; align-items: center; margin-top: 4px; gap: 5px; }
+        .etiqueta-val-destaque { font-size: 24px; font-weight: 900; }
+        .etiqueta-val-destaque.destaque { font-size: 36px !important; }
+        
+        .etiqueta-footer { text-align: center; display: flex; flex-direction: column; align-items: center; margin-top: auto; }
         #reader { width: 100%; background: #000; border-radius: 8px; overflow: hidden; }
         .detalhes-estoque-lista li:last-child { border-bottom: none !important; }
     </style>
@@ -101,47 +103,49 @@
 <body>
 
 <div id="area-impressao-visual">
-    <div class="etiqueta-header" id="viz-nome-produto">PRODUTO</div>
-    <div class="etiqueta-linha"></div>
-    <div class="etiqueta-body">
-        <div class="etiqueta-meio">
-            <div class="etiqueta-info-textual">
-                <div class="etiqueta-row">
-                    <span class="etiqueta-label" id="viz-label-acao">Manipulado em:</span>
-                    <span id="viz-data-man">00/00/0000 - 00:00</span>
-                </div>
-                
-                <div class="etiqueta-row" id="viz-linha-opcionais" style="display:none; justify-content: flex-start; gap: 12px;">
-                    <div id="viz-box-peso" style="display:none;"><span class="etiqueta-label">Peso:</span> <span id="viz-peso" style="font-weight:bold;">0g</span></div>
-                    <div id="viz-box-preco-container" style="display:none; font-weight: bold; font-size: 13px;">
-                        <span id="viz-label-preco">Total:</span> R$ <span id="viz-preco">0,00</span>
+    <div class="etiqueta-borda-interna">
+        <div class="etiqueta-header" id="viz-nome-produto">PRODUTO</div>
+        <div class="etiqueta-linha"></div>
+        <div class="etiqueta-body">
+            <div class="etiqueta-meio">
+                <div class="etiqueta-info-textual">
+                    <div class="etiqueta-row">
+                        <span class="etiqueta-label" id="viz-label-acao">Manipulado em:</span>
+                        <span id="viz-data-man">00/00/0000 - 00:00</span>
+                    </div>
+                    
+                    <div class="etiqueta-row" id="viz-linha-opcionais" style="display:none; justify-content: flex-start; gap: 15px;">
+                        <div id="viz-box-peso" style="display:none;"><span class="etiqueta-label">Peso:</span> <span id="viz-peso" style="font-weight:bold;">0g</span></div>
+                        <div id="viz-box-preco-container" style="display:none; font-weight: bold; font-size: 14px;">
+                            <span id="viz-label-preco">Total:</span> R$ <span id="viz-preco">0,00</span>
+                        </div>
+                    </div>
+                    
+                    <div class="etiqueta-row" id="viz-row-lote" style="display:none;">
+                        <div><span class="etiqueta-label">Lote:</span> <span id="viz-lote">---</span></div>
+                    </div>
+                    
+                    <div class="etiqueta-val-container">
+                        <span class="etiqueta-val-destaque" id="viz-label-val">VAL:</span>
+                        <span class="etiqueta-val-destaque" id="viz-data-val">00/00/0000</span>
                     </div>
                 </div>
                 
-                <div class="etiqueta-row" id="viz-row-lote" style="display:none;">
-                    <div><span class="etiqueta-label">Lote:</span> <span id="viz-lote">---</span></div>
-                </div>
-                
-                <div class="etiqueta-val-container">
-                    <span class="etiqueta-val-destaque" id="viz-label-val">VAL:</span>
-                    <span class="etiqueta-val-destaque" id="viz-data-val">00/00/0000</span>
+                <div id="viz-qrcode-container" style="display:none; text-align: center; flex-shrink: 0; padding-left: 2px;">
+                    <div id="viz-qrcode"></div>
+                    <div id="viz-sku" style="font-size: 9px; margin-top: 2px; font-weight: bold;">SKU</div>
                 </div>
             </div>
             
-            <div id="viz-qrcode-container" style="display:none; text-align: center; flex-shrink: 0; width: 70px; padding-left: 2px;">
-                <div id="viz-qrcode" style="width: 65px; height: 65px; margin: 0 auto;"></div>
-                <div id="viz-sku" style="font-size: 9px; margin-top: 1px; font-weight: bold;">SKU</div>
+            <div id="viz-linha-armazenamento" style="text-align: center; margin-top: 4px; display: none;">
+                <span id="viz-armazenamento" style="background-color: black !important; color: white !important; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 13px; display: inline-block;">Resfriado</span>
             </div>
         </div>
-        
-        <div id="viz-linha-armazenamento" style="text-align: center; margin-top: 2px; display: none;">
-            <span id="viz-armazenamento" style="background-color: black !important; color: white !important; padding: 1px 6px; border-radius: 4px; font-weight: bold; font-size: 12px; display: inline-block;">Resfriado</span>
+        <div class="etiqueta-linha"></div>
+        <div class="etiqueta-footer">
+            <div id="viz-estabelecimento" style="font-weight: bold; font-size:15px;">Estabelecimento</div>
+            <div style="font-size:13px; margin-top: 2px;">Op: <span id="viz-operador" style="font-weight:bold;">Nome</span></div>
         </div>
-    </div>
-    <div class="etiqueta-linha"></div>
-    <div class="etiqueta-footer">
-        <div id="viz-estabelecimento" style="font-weight: bold; font-size:14px;">Estabelecimento</div>
-        <div style="font-size:12px;">Op: <span id="viz-operador" style="font-weight:bold;">Nome</span></div>
     </div>
 </div>
 
@@ -181,7 +185,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.5</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.6</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
@@ -1239,7 +1243,7 @@
         let classeHeader = db.configs.destaqueProd ? "etiqueta-header destaque" : "etiqueta-header"; 
         let classeVal = db.configs.destaqueVal ? "etiqueta-val-destaque destaque" : "etiqueta-val-destaque";
         
-        let htmlContent = `<html><head><style>body { font-family: 'Arial', sans-serif; padding: 20px; display: flex; flex-direction: column; align-items: center; background: #e0e0e0; margin: 0; } .etiqueta { background: white; border: 4px solid black; padding: 8px 10px; margin-bottom: 20px; box-sizing: border-box; display: flex; flex-direction: column; ${dimensaoCSS} overflow: hidden; } .etiqueta-header { text-align: center; font-weight: 900; font-size: 20px; text-transform: uppercase; line-height: 1.1; margin-bottom: 4px; } .etiqueta-header.destaque { font-size: 30px; } .etiqueta-linha { border-bottom: 4px solid black; margin: 4px 0; width: 100%; display: block; } .etiqueta-body { flex: 1; display: flex; flex-direction: column; justify-content: space-between; font-size: 16px; padding: 0; } .etiqueta-meio { display: flex; justify-content: space-between; align-items: center; flex: 1; } .etiqueta-info-textual { display: flex; flex-direction: column; justify-content: space-around; flex: 1; padding-right: 5px; height: 100%; } .etiqueta-row { display: flex; align-items: center; justify-content: flex-start; margin-bottom: 4px; } .etiqueta-label { font-weight: bold; margin-right: 5px; } .etiqueta-val-container { display: flex; align-items: center; margin-top: 4px; gap: 5px; } .etiqueta-val-destaque { font-size: 24px; font-weight: 900; } .etiqueta-val-destaque.destaque { font-size: 36px; } .etiqueta-footer { text-align: center; display: flex; flex-direction: column; align-items: center; margin-top: auto; }</style><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script></head><body>`;
+        let htmlContent = `<html><head><style>body { font-family: 'Arial', sans-serif; padding: 20px; display: flex; flex-direction: column; align-items: center; background: #e0e0e0; margin: 0; } .etiqueta { background: white; padding: 8px; margin-bottom: 20px; box-sizing: border-box; display: flex; flex-direction: column; ${dimensaoCSS} overflow: hidden; } .etiqueta-borda-interna { border: 4px solid black; flex: 1; display: flex; flex-direction: column; padding: 4px 6px; box-sizing: border-box; } .etiqueta-header { text-align: center; font-weight: 900; font-size: 20px; text-transform: uppercase; line-height: 1.1; margin-bottom: 4px; } .etiqueta-header.destaque { font-size: 30px; } .etiqueta-linha { border-bottom: 4px solid black; margin: 4px 0; width: 100%; display: block; } .etiqueta-body { flex: 1; display: flex; flex-direction: column; justify-content: space-between; font-size: 16px; padding: 0; } .etiqueta-meio { display: flex; justify-content: space-between; align-items: center; flex: 1; } .etiqueta-info-textual { display: flex; flex-direction: column; justify-content: space-around; flex: 1; padding-right: 5px; height: 100%; } .etiqueta-row { display: flex; align-items: center; justify-content: flex-start; margin-bottom: 4px; } .etiqueta-label { font-weight: bold; margin-right: 5px; } .etiqueta-val-container { display: flex; align-items: center; margin-top: 4px; gap: 5px; } .etiqueta-val-destaque { font-size: 24px; font-weight: 900; } .etiqueta-val-destaque.destaque { font-size: 36px; } .etiqueta-footer { text-align: center; display: flex; flex-direction: column; align-items: center; margin-top: auto; }</style><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script></head><body>`;
         
         for(let i = 0; i < qtd; i++) {
             let nomeDisplay = marca !== "" ? `${p.nome} (${marca})` : p.nome;
@@ -1264,7 +1268,7 @@
             let showQR = (db.configs.controleQR && p.usaQR) ? "block" : "none";
             let idQR = `qr_${Date.now()}_${i}`;
 
-            htmlContent += `<div class="etiqueta"><div class="${classeHeader}">${nomeDisplay}</div><div class="etiqueta-linha"></div><div class="etiqueta-body"><div class="etiqueta-meio"><div class="etiqueta-info-textual"><div class="etiqueta-row"><span class="etiqueta-label">${acao}</span><span>${manBR} - ${hrBR}</span></div><div class="etiqueta-row" style="display: ${displayOpcionais}; justify-content: flex-start; gap: 15px;"><div style="display: ${displayPeso};"><span class="etiqueta-label">Peso:</span> <span style="font-weight:bold;">${pesoInput}g</span></div><div style="display: ${displayPreco}; font-weight: bold; font-size: 14px;"><span>${rotuloPreco}</span> R$ <span>${valorCalc}</span></div></div><div class="etiqueta-row" style="display: ${displayLote};"><div><span class="etiqueta-label">Lote:</span> <span>${lote || '-'}</span></div></div><div class="etiqueta-val-container"><span class="${classeVal}">VAL:</span><span class="${classeVal}">${valBR}</span></div></div><div style="display: ${showQR}; text-align: center; flex-shrink: 0; padding-left: 5px;"><div id="${idQR}"></div><div style="font-size: 9px; margin-top: 2px; font-weight: bold;">${skus[i].slice(-5)}</div></div></div><div style="text-align: center; margin-top: 4px; margin-bottom: 2px; display: ${displayArmaz};"><span style="background-color: black !important; color: white !important; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 13px; display: inline-block;">${armaz}</span></div></div><div class="etiqueta-linha"></div><div class="etiqueta-footer"><div style="font-weight: bold; font-size:15px;">${est}</div><div style="font-size:13px; margin-top: 2px;">Operador(a): <span style="font-weight: bold;">${op}</span></div></div></div><script>if("${showQR}" === "block") { new QRCode(document.getElementById("${idQR}"), { text: "${skus[i]}", width: 85, height: 85 }); }<\/script>`;
+            htmlContent += `<div class="etiqueta"><div class="etiqueta-borda-interna"><div class="${classeHeader}">${nomeDisplay}</div><div class="etiqueta-linha"></div><div class="etiqueta-body"><div class="etiqueta-meio"><div class="etiqueta-info-textual"><div class="etiqueta-row"><span class="etiqueta-label">${acao}</span><span>${manBR} - ${hrBR}</span></div><div class="etiqueta-row" style="display: ${displayOpcionais}; justify-content: flex-start; gap: 15px;"><div style="display: ${displayPeso};"><span class="etiqueta-label">Peso:</span> <span style="font-weight:bold;">${pesoInput}g</span></div><div style="display: ${displayPreco}; font-weight: bold; font-size: 14px;"><span>${rotuloPreco}</span> R$ <span>${valorCalc}</span></div></div><div class="etiqueta-row" style="display: ${displayLote};"><div><span class="etiqueta-label">Lote:</span> <span>${lote || '-'}</span></div></div><div class="etiqueta-val-container"><span class="${classeVal}">VAL:</span><span class="${classeVal}">${valBR}</span></div></div><div style="display: ${showQR}; text-align: center; flex-shrink: 0; padding-left: 5px;"><div id="${idQR}"></div><div style="font-size: 9px; margin-top: 2px; font-weight: bold;">${skus[i].slice(-5)}</div></div></div><div style="text-align: center; margin-top: 4px; margin-bottom: 2px; display: ${displayArmaz};"><span style="background-color: black !important; color: white !important; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 13px; display: inline-block;">${armaz}</span></div></div><div class="etiqueta-linha"></div><div class="etiqueta-footer"><div style="font-weight: bold; font-size:15px;">${est}</div><div style="font-size:13px; margin-top: 2px;">Operador(a): <span style="font-weight: bold;">${op}</span></div></div></div></div><script>if("${showQR}" === "block") { new QRCode(document.getElementById("${idQR}"), { text: "${skus[i]}", width: 65, height: 65 }); }<\/script>`;
         }
         
         htmlContent += `<script> setTimeout(function() { window.print(); window.close(); }, 600); <\/script></body></html>`;
@@ -1337,17 +1341,24 @@
         
         let currentY = 0; 
         
+        // IMPORTANT: Hack para o html2canvas nao se perder no scroll e gerar linhas brancas cortando a imagem
+        window.scrollTo(0, 0);
+        
         for(let i = 0; i < qtd; i++) {
             if(db.configs.controleQR && p.usaQR) {
                 document.getElementById('viz-qrcode').innerHTML = ''; 
-                // QR reduzido e travado v1.0.5
                 new QRCode(document.getElementById('viz-qrcode'), { text: skus[i], width: 65, height: 65 }); 
                 document.getElementById('viz-sku').innerText = skus[i].slice(-5); 
                 await new Promise(r => setTimeout(r, 60)); 
             }
             
-            // scale: 1 travado com width e height absolutos pra nao dar margem de erro
-            let c = await html2canvas(gab, { scale: 1, backgroundColor: "#ffffff", logging: false, width: dotsW, height: dotsH });
+            let c = await html2canvas(gab, { 
+                scale: 2, // de volta pra escala 2 pra ficar bonitão
+                backgroundColor: "#ffffff", 
+                logging: false,
+                scrollX: 0,
+                scrollY: 0
+            });
             
             if(i === 0) { 
                 finalCanvas.width = dotsW; 
@@ -1356,7 +1367,7 @@
                 ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height); 
             }
             
-            ctx.imageSmoothingEnabled = false;
+            ctx.imageSmoothingEnabled = true;
             
             ctx.drawImage(c, 0, 0, c.width, c.height, 0, currentY, dotsW, dotsH); 
             currentY += dotsH;
