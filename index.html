@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô_Etiqueta v1.0.6</title>
+    <title>Alô_Etiqueta v1.0.7</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -26,7 +26,7 @@
         }
         #splash-screen.hidden { opacity: 0; pointer-events: none; }
         .splash-icon { width: 90px; height: 90px; object-fit: contain; margin-bottom: 15px; animation: pulse 1.5s infinite; border-radius: 15px; }
-        .splash-emoji { font-size: 70px; margin-bottom: 15px; animation: pulse 1.5s infinite; display: none; } /* Backup caso a img falhe */
+        .splash-emoji { font-size: 70px; margin-bottom: 15px; animation: pulse 1.5s infinite; display: none; } 
         .splash-title { font-size: 26px; font-weight: 900; margin-bottom: 5px; letter-spacing: 1px; }
         .splash-version { font-size: 14px; font-weight: bold; opacity: 0.8; background: rgba(0,0,0,0.2); padding: 4px 10px; border-radius: 12px; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
@@ -90,7 +90,7 @@
         .bg-green { background: #388E3C; }
 
         /* ============================================================
-           GABARITO v1.0.6 - Recuo de 38mm p/ dar margem na direita
+           GABARITO v1.0.7 - Recuo de 38mm p/ dar margem na direita
            ============================================================ */
         #area-impressao-visual {
             position: fixed; top: 0; left: -3000px;
@@ -98,7 +98,6 @@
             box-sizing: border-box; 
             padding: 4px; 
             display: flex; flex-direction: column; justify-content: space-between;
-            /* LARGURA 38mm (304px) - Força os elementos a recuarem da borda direita */
             width: 304px; height: 320px; min-width: 304px; min-height: 320px;
         }
 
@@ -116,7 +115,7 @@
     <img src="icon.png" class="splash-icon" alt="Alô Etiqueta" onerror="this.style.display='none'; document.getElementById('splash-emoji').style.display='block';">
     <div id="splash-emoji" class="splash-emoji">🏷️</div>
     <div class="splash-title">Alô_Etiqueta</div>
-    <div class="splash-version">v1.0.6</div>
+    <div class="splash-version">v1.0.7</div>
 </div>
 
 <div id="area-impressao-visual">
@@ -217,7 +216,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.6</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.7</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
@@ -643,7 +642,6 @@
     }
 
     function iniciar() {
-        // Logica do Splash Screen
         setTimeout(() => {
             const splash = document.getElementById('splash-screen');
             if (splash) {
@@ -844,7 +842,6 @@
                 for(let reg of regs) { await reg.unregister(); } 
             } 
             
-            // Injeta número aleatório pra forçar o navegador a pegar os arquivos novos
             const novaUrl = window.location.href.split('?')[0] + '?v=' + new Date().getTime();
             window.location.replace(novaUrl); 
         } catch(e) {
@@ -1654,7 +1651,6 @@
                 </div>`;
         }
 
-        // PDF ajustado para o recuo de 304px
         let dimensaoCSS = "width: 304px; height: 320px;"; 
         const tam = db.configs.tamanhoEtiqueta || "40x40"; 
         if(tam === "60x40") dimensaoCSS = "width: 464px; height: 320px;"; 
@@ -1826,11 +1822,10 @@
         
         const tam = db.configs.tamanhoEtiqueta || "40x40";
         
-        // Setup das larguras: HTML menorzinho (304) colado dentro da lona da impressora (320)
         let htmlWidth = 304; 
         let dotsW = 320; 
         let dotsH = 320; 
-        let gapPx = 16; // 2mm de espaço em branco físico na bobina (ajustado na v1.0.6)
+        let gapPx = 16; 
         
         if(tam === "60x40") { 
             htmlWidth = 464; 
@@ -1868,17 +1863,15 @@
             
             if(i === 0) { 
                 finalCanvas.width = dotsW; 
-                // Altura Total = (Altura * Quantidade) + (Gap * (Quantidade - 1))
-                finalCanvas.height = (dotsH * qtd) + (gapPx * (qtd - 1)); 
+                // AQUI TÁ A MÁGICA DA v1.0.7: O gap entra em TODAS as gerações, inclusive na individual
+                finalCanvas.height = (dotsH + gapPx) * qtd; 
                 ctx.fillStyle = "#ffffff"; 
                 ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height); 
             }
             
             ctx.imageSmoothingEnabled = true;
-            // Desenha a imagem (htmlWidth) no canvas da impressora (dotsW), deixando um espaço branco na direita
             ctx.drawImage(c, 0, 0, c.width, c.height, 0, currentY, htmlWidth, dotsH); 
 
-            // Pula a altura da etiqueta + o espaço de buraco do picote pro próximo laço
             currentY += dotsH + gapPx;
         }
         
