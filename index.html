@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô_Etiqueta v1.0.3</title>
+    <title>Alô_Etiqueta v1.0.4</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -74,13 +74,14 @@
         .bg-yellow { background: #fbc02d; color: #333; }
         .bg-green { background: #388E3C; }
 
-        /* GABARITO DA ETIQUETA VISUAL - DIMENSÕES RÍGIDAS v1.0.3 */
-        #area-impressao-visual { position: absolute; top: 0; left: -2000px; background: white; color: black; font-family: 'Arial', sans-serif; box-sizing: border-box; border: 4px solid black; padding: 6px; display: flex; flex-direction: column; overflow: hidden; /* Garante que nada transborde fisicamente */ }
+        /* GABARITO DA ETIQUETA VISUAL - DIMENSÕES RÍGIDAS v1.0.4 */
+        #area-impressao-visual { position: absolute; top: 0; left: -2000px; background: white; color: black; font-family: 'Arial', sans-serif; box-sizing: border-box; border: 4px solid black; padding: 6px; display: flex; flex-direction: column; overflow: hidden; }
         
-        .etiqueta-header { text-align: center; font-weight: 900; font-size: 19px; text-transform: uppercase; line-height: 1.1; margin-bottom: 2px; flex-shrink: 0; /* Impede encolhimento */ }
+        .etiqueta-header { text-align: center; font-weight: 900; font-size: 19px; text-transform: uppercase; line-height: 1.1; margin-bottom: 2px; flex-shrink: 0; }
         .etiqueta-header.destaque { font-size: 28px !important; }
         
-        .etiqueta-linha { background-color: black; height: 4px; margin: 3px 0; width: 100%; flex-shrink: 0; }
+        /* Modificado para borda, evita bug do gerador */
+        .etiqueta-linha { border-bottom: 4px solid black; margin: 3px 0; width: 100%; display: block; flex-shrink: 0; height: 0; }
         
         .etiqueta-body { flex: 1; display: flex; flex-direction: column; justify-content: space-between; font-size: 15px; padding: 0; overflow: hidden; }
         .etiqueta-meio { display: flex; justify-content: space-between; align-items: center; flex: 1; overflow: hidden; }
@@ -181,7 +182,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.3</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.4</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
@@ -504,25 +505,25 @@
             let textoBruto = await resposta.text();
             
             try {
-                let dadosNouvem = JSON.parse(textoBruto);
-                if(dadosNouvem && dadosNouvem.produtos && Array.isArray(dadosNouvem.produtos)) { 
-                    if (dadosNouvem.configs && dadosNouvem.configs.ultimoWipe > (db.configs.ultimoWipe || 0)) {
+                let dadosNuvem = JSON.parse(textoBruto);
+                if(dadosNuvem && dadosNuvem.produtos && Array.isArray(dadosNuvem.produtos)) { 
+                    if (dadosNuvem.configs && dadosNuvem.configs.ultimoWipe > (db.configs.ultimoWipe || 0)) {
                         db.historico = [];
-                        db.configs.ultimoWipe = dadosNouvem.configs.ultimoWipe;
+                        db.configs.ultimoWipe = dadosNuvem.configs.ultimoWipe;
                     }
 
                     let mapaProd = {};
-                    dadosNouvem.produtos.forEach(p => mapaProd[p.codigo] = p);
+                    dadosNuvem.produtos.forEach(p => mapaProd[p.codigo] = p);
                     db.produtos.forEach(p => mapaProd[p.codigo] = p); 
                     db.produtos = Object.values(mapaProd);
 
                     let mapaHist = {};
-                    dadosNouvem.historico.forEach(h => mapaHist[h.id] = h);
+                    dadosNuvem.historico.forEach(h => mapaHist[h.id] = h);
                     db.historico.forEach(h => mapaHist[h.id] = h); 
                     db.historico = Object.values(mapaHist);
 
-                    db.categorias = dadosNouvem.categorias;
-                    db.operadores = dadosNouvem.operadores;
+                    db.categorias = dadosNuvem.categorias;
+                    db.operadores = dadosNuvem.operadores;
 
                     salvarBancoLocal(); 
                     alert("✅ Banco de Dados mesclado com a Nuvem de forma segura!"); 
@@ -1239,7 +1240,7 @@
         let classeHeader = db.configs.destaqueProd ? "etiqueta-header destaque" : "etiqueta-header"; 
         let classeVal = db.configs.destaqueVal ? "etiqueta-val-destaque destaque" : "etiqueta-val-destaque";
         
-        let htmlContent = `<html><head><style>body { font-family: 'Arial', sans-serif; padding: 20px; display: flex; flex-direction: column; align-items: center; background: #e0e0e0; margin: 0; } .etiqueta { background: white; border: 4px solid black; padding: 8px 10px; margin-bottom: 20px; box-sizing: border-box; display: flex; flex-direction: column; ${dimensaoCSS} overflow: hidden; } .etiqueta-header { text-align: center; font-weight: 900; font-size: 20px; text-transform: uppercase; line-height: 1.1; margin-bottom: 4px; } .etiqueta-header.destaque { font-size: 30px; } .etiqueta-linha { background-color: black; height: 4px; margin: 4px 0; width: 100%; display: block; } .etiqueta-body { flex: 1; display: flex; flex-direction: column; justify-content: space-between; font-size: 16px; padding: 0; } .etiqueta-meio { display: flex; justify-content: space-between; align-items: center; flex: 1; } .etiqueta-info-textual { display: flex; flex-direction: column; justify-content: space-around; flex: 1; padding-right: 5px; height: 100%; } .etiqueta-row { display: flex; align-items: center; justify-content: flex-start; margin-bottom: 4px; } .etiqueta-label { font-weight: bold; margin-right: 5px; } .etiqueta-val-container { display: flex; align-items: center; margin-top: 4px; gap: 5px; } .etiqueta-val-destaque { font-size: 24px; font-weight: 900; } .etiqueta-val-destaque.destaque { font-size: 36px; } .etiqueta-footer { text-align: center; display: flex; flex-direction: column; align-items: center; margin-top: auto; }</style><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script></head><body>`;
+        let htmlContent = `<html><head><style>body { font-family: 'Arial', sans-serif; padding: 20px; display: flex; flex-direction: column; align-items: center; background: #e0e0e0; margin: 0; } .etiqueta { background: white; border: 4px solid black; padding: 8px 10px; margin-bottom: 20px; box-sizing: border-box; display: flex; flex-direction: column; ${dimensaoCSS} overflow: hidden; } .etiqueta-header { text-align: center; font-weight: 900; font-size: 20px; text-transform: uppercase; line-height: 1.1; margin-bottom: 4px; } .etiqueta-header.destaque { font-size: 30px; } .etiqueta-linha { border-bottom: 4px solid black; margin: 4px 0; width: 100%; display: block; } .etiqueta-body { flex: 1; display: flex; flex-direction: column; justify-content: space-between; font-size: 16px; padding: 0; } .etiqueta-meio { display: flex; justify-content: space-between; align-items: center; flex: 1; } .etiqueta-info-textual { display: flex; flex-direction: column; justify-content: space-around; flex: 1; padding-right: 5px; height: 100%; } .etiqueta-row { display: flex; align-items: center; justify-content: flex-start; margin-bottom: 4px; } .etiqueta-label { font-weight: bold; margin-right: 5px; } .etiqueta-val-container { display: flex; align-items: center; margin-top: 4px; gap: 5px; } .etiqueta-val-destaque { font-size: 24px; font-weight: 900; } .etiqueta-val-destaque.destaque { font-size: 36px; } .etiqueta-footer { text-align: center; display: flex; flex-direction: column; align-items: center; margin-top: auto; }</style><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script></head><body>`;
         
         for(let i = 0; i < qtd; i++) {
             let nomeDisplay = marca !== "" ? `${p.nome} (${marca})` : p.nome;
@@ -1340,13 +1341,15 @@
         for(let i = 0; i < qtd; i++) {
             if(db.configs.controleQR && p.usaQR) {
                 document.getElementById('viz-qrcode').innerHTML = ''; 
-                // Reduzido para 70px v1.0.3
                 new QRCode(document.getElementById('viz-qrcode'), { text: skus[i], width: 70, height: 70 }); 
                 document.getElementById('viz-sku').innerText = skus[i].slice(-5); 
                 await new Promise(r => setTimeout(r, 60)); 
             }
             
-            let c = await html2canvas(gab, { scale: 2, backgroundColor: "#ffffff" });
+            // Removi o scale: 2 pq ele tava criando a imagem o dobro do tamanho 
+            // e qdo o JS ia espremer de volta pra 320px, ele "engolia" uma linha preta, gerando o gap branco.
+            // Agora vai 1:1, pixel por pixel perfeito!
+            let c = await html2canvas(gab, { scale: 1, backgroundColor: "#ffffff", logging: false });
             
             if(i === 0) { 
                 finalCanvas.width = dotsW; 
