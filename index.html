@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô_Etiqueta v1.1.6</title>
+    <title>Alô_Etiqueta v1.1.7</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -75,15 +75,14 @@
         .bg-green { background: #388E3C; }
 
         /* ============================================================
-           GABARITO v1.1.6 - O FEIJÃO COM ARROZ PERFEITO (Baseado na Foto)
-           Estrutura travada: Topo -> Mola no Meio -> Rodapé fixo.
+           GABARITO v1.1.7 - O FEIJÃO COM ARROZ PERFEITO
+           Estrutura travada: Topo -> Mola no Meio -> Rodapé a exatos 8mm.
            ============================================================ */
         #area-impressao-visual {
             position: fixed; top: 0; left: -3000px;
             background: white; color: black; font-family: 'Arial', sans-serif;
             box-sizing: border-box; padding: 8px;
             display: flex; flex-direction: column;
-            /* Medidas exatas forçadas via JS depois, mas já deixa preparadas */
             width: 320px; height: 320px;
         }
 
@@ -95,12 +94,8 @@
         /* 2. MEIO (A mola que estica e salva o QR Code) */
         .print-body { flex: 1; display: flex; justify-content: space-between; align-items: flex-start; padding: 6px 0; overflow: hidden; }
         
-        /* O min-width: 0 é a mágica que impede o texto de empurrar o QR code pra fora */
         .info-esquerda { flex: 1; min-width: 0; padding-right: 5px; display: flex; flex-direction: column; gap: 4px;}
-        
-        /* E a mágica 2: word-wrap pra quebrar a linha da data se for gigante */
         .linha-acao-data { font-size: 14px; font-weight: bold; line-height: 1.2; word-wrap: break-word; }
-        
         .linha-opcionais { font-size: 12px; display: flex; gap: 10px; font-weight: bold; }
         #viz-box-preco-container { font-size: 15px; font-weight: bold; text-transform: uppercase; margin-top: 2px;}
         
@@ -108,22 +103,28 @@
         .val-label, .val-data { font-size: 22px; font-weight: 900; }
         .validade-grande .val-label, .validade-grande .val-data { font-size: 32px !important; }
 
-        /* QR Code blindado de empurrões */
         #viz-qrcode-container { width: 70px; flex-shrink: 0; display: none; flex-direction: column; align-items: center; }
         #viz-sku { font-size: 10px; margin-top: 2px; font-weight: bold; }
 
-        /* 3. RODAPÉ (Travado embaixo com o visual da sua foto) */
-        .print-footer { border-top: 2px solid black; padding-top: 6px; text-align: center; position: relative; }
+        /* 3. RODAPÉ (Travado a 8mm do fundo na v1.1.7) */
+        .print-footer { 
+            border-top: 2px solid black; 
+            padding-top: 6px; 
+            text-align: center; 
+            position: relative; 
+            height: 56px; /* Garante que a linha fique a 8mm do limite (64px totais considerando o padding base) */
+            flex-shrink: 0;
+            box-sizing: border-box;
+        }
         
-        /* Joga a caixinha "MANTER CONGELADO" exatamente em cima da linha */
         #viz-linha-armazenamento { margin-top: -16px; margin-bottom: 4px; }
         #viz-armazenamento { background: white; padding: 0 6px; border: 2px solid black; border-radius: 4px; font-size: 12px; font-weight: bold; text-transform: uppercase; display: inline-block; }
         
         .item-estabelecimento { font-weight: bold; font-size: 14px; white-space: nowrap; overflow: hidden; margin-bottom: 2px;}
         .item-operador { font-size: 12px; }
 
-        /* As âncoras na base garantem que a impressora enxergue a altura de 40mm */
-        .ancora-altura { position: absolute; bottom: 0; width: 1px; height: 1px; background: #010101; }
+        /* As âncoras na base absoluta garantem que o RawBT traga o papel até 40mm sem cortar antes */
+        .ancora-altura { position: absolute; bottom: 0; width: 1px; height: 1px; background: #000; }
 
         #reader { width: 100%; background: #000; border-radius: 8px; overflow: hidden; }
         .detalhes-estoque-lista li:last-child { border-bottom: none !important; }
@@ -169,10 +170,10 @@
         
         <div class="item-estabelecimento" id="viz-estabelecimento">Feijão Maravilha</div>
         <div class="item-operador">Operador(a): <span id="viz-operador">Cozinha 1</span></div>
-        
-        <div class="ancora-altura" style="left: 0;"></div>
-        <div class="ancora-altura" style="right: 0;"></div>
     </div>
+    
+    <div class="ancora-altura" style="left: 0;"></div>
+    <div class="ancora-altura" style="right: 0;"></div>
 </div>
 
 <div class="app-container">
@@ -213,7 +214,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.1.6</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.1.7</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
