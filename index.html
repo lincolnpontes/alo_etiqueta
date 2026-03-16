@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô_Etiqueta v1.0.9</title>
+    <title>Alô_Etiqueta v1.1.0</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -74,40 +74,155 @@
         .bg-yellow { background: #fbc02d; color: #333; }
         .bg-green { background: #388E3C; }
 
-        /* GABARITO DA ETIQUETA VISUAL: CIMENTO ARMADO PARA MANTER CABEÇALHO/RODAPÉ FIXOS */
-        #area-impressao-visual { position: fixed; top: 0; left: -3000px; background: white; color: black; font-family: 'Arial', sans-serif; box-sizing: border-box; padding: 4px; display: flex; flex-direction: column; overflow: hidden; }
-        
-        .etiqueta-borda-interna { border: none; display: flex; flex-direction: column; width: 100%; height: 100%; box-sizing: border-box; justify-content: space-between; }
-        
-        .box-header { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; border-bottom: 2px solid black; padding-bottom: 2px; margin-bottom: 2px; width: 100%; }
-        .box-body { flex: 1 1 auto; display: flex; flex-direction: column; overflow: hidden; width: 100%; justify-content: space-between; }
-        .box-footer { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; border-top: 2px solid black; padding-top: 2px; margin-top: 2px; width: 100%; }
-        
-        .etiqueta-header { text-align: center; font-weight: 900; font-size: 20px; text-transform: uppercase; line-height: 1.1; margin: 0; width: 100%; }
-        .etiqueta-header.destaque { font-size: 30px !important; }
-        
-        .etiqueta-meio { display: flex; justify-content: space-between; align-items: stretch; flex: 1; margin-top: 2px; }
-        .etiqueta-info-textual { display: flex; flex-direction: column; justify-content: space-around; flex: 1; padding-right: 5px; }
-        
-        .etiqueta-row { display: flex; align-items: center; justify-content: flex-start; margin-bottom: 2px; }
-        .etiqueta-label { font-weight: bold; margin-right: 5px; }
-        
-        #viz-label-acao { text-transform: uppercase; font-size: 18px; } /* Ação padrão maior e maiúscula */
-        #viz-box-preco-container { font-size: 18px !important; } /* Total maior */
-        
-        .etiqueta-val-container { display: flex; align-items: center; margin-top: 2px; gap: 5px; }
-        .etiqueta-val-destaque { font-size: 24px; font-weight: 900; }
-        .etiqueta-val-destaque.destaque { font-size: 36px !important; }
-        
-        #viz-linha-armazenamento { text-align: center; margin-top: auto; padding-top: 2px; }
-        #viz-armazenamento { background-color: black !important; color: white !important; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 16px; display: inline-block; text-transform: uppercase; }
+        /* ============================================================
+           NOVO GABARITO DE IMPRESSÃO - POSICIONAMENTO ABSOLUTO (v1.1.0)
+           Garante que nada saia do lugar em etiquetas 40x40mm.
+           A largura e altura exatas são definidas no JS antes do html2canvas.
+           ============================================================ */
+        #area-impressao-visual {
+            position: fixed;
+            top: 0;
+            left: -3000px;
+            background: white;
+            color: black;
+            font-family: 'Arial', sans-serif;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
 
-        #viz-qrcode-container { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; padding-left: 2px; }
+        .etiqueta-absoluta {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: none;
+            box-sizing: border-box;
+        }
+
+        .linha-divisoria {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: black;
+        }
+        .linha-topo { top: 35px; }
+        .linha-rodape { bottom: 35px; }
+
+        .centralizado-x {
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            width: 100%;
+        }
+
+        .item-nome {
+            position: absolute;
+            top: 0;
+            font-weight: 900;
+            font-size: 18px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .item-nome.destaque { font-size: 26px !important; }
+
+        .bloco-central {
+            position: absolute;
+            top: 42px;
+            bottom: 42px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .info-esquerda {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding-right: 5px;
+        }
+
+        .linha-acao-data {
+            font-size: 16px;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+        }
+        .label-acao {
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 16px;
+            margin-right: 4px;
+        }
+
+        .linha-opcionais {
+            font-size: 12px;
+            display: flex;
+            gap: 10px;
+        }
+        .bold { font-weight: bold; }
+
+        .container-validade {
+            margin-top: 4px;
+            white-space: nowrap;
+        }
+        .val-label { font-size: 20px; font-weight: 900; margin-right: 4px; }
+        .val-data { font-size: 20px; font-weight: 900; }
+        
+        .validade-grande .val-label,
+        .validade-grande .val-data { font-size: 32px !important; }
+
+        #viz-qrcode-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            flex-shrink: 0;
+        }
         #viz-sku { font-size: 9px; margin-top: 2px; font-weight: bold; }
 
-        .etiqueta-footer-title { font-weight: bold; font-size: 18px; text-align: center; } /* Restaurante maior */
-        .etiqueta-footer-op { font-size: 13px; margin-top: 2px; text-align: center; }
+        #viz-linha-armazenamento {
+            position: absolute;
+            bottom: 0;
+            display: none;
+        }
+        #viz-armazenamento {
+            color: black;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 2px solid black;
+            font-weight: bold;
+            font-size: 14px;
+            text-transform: uppercase;
+            background-color: transparent;
+        }
 
+        #viz-box-preco-container {
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .item-estabelecimento {
+            position: absolute;
+            bottom: 18px;
+            font-weight: bold;
+            font-size: 16px;
+            white-space: nowrap;
+        }
+
+        .item-operador {
+            position: absolute;
+            bottom: 0;
+            font-size: 12px;
+        }
+        
         #reader { width: 100%; background: #000; border-radius: 8px; overflow: hidden; }
         .detalhes-estoque-lista li:last-child { border-bottom: none !important; }
     </style>
@@ -115,51 +230,48 @@
 <body>
 
 <div id="area-impressao-visual">
-    <div class="etiqueta-borda-interna">
-        <div class="box-header">
-            <div class="etiqueta-header" id="viz-nome-produto">PRODUTO</div>
-        </div>
+    <div class="etiqueta-absoluta">
+        <div class="item-nome centralizado-x" id="viz-nome-produto">PRODUTO</div>
         
-        <div class="box-body">
-            <div class="etiqueta-meio">
-                <div class="etiqueta-info-textual">
-                    <div class="etiqueta-row">
-                        <span class="etiqueta-label" id="viz-label-acao">MANIPULADO EM:</span>
-                        <span id="viz-data-man" style="font-size: 16px;">00/00/0000 - 00:00</span>
-                    </div>
-                    
-                    <div class="etiqueta-row" id="viz-linha-opcionais" style="display:none; justify-content: flex-start; gap: 15px;">
-                        <div id="viz-box-peso" style="display:none;"><span class="etiqueta-label">Peso:</span> <span id="viz-peso" style="font-weight:bold;">0g</span></div>
-                        <div id="viz-box-preco-container" style="display:none; font-weight: bold;">
-                            <span id="viz-label-preco">Total:</span> R$ <span id="viz-preco">0,00</span>
-                        </div>
-                    </div>
-                    
-                    <div class="etiqueta-row" id="viz-row-lote" style="display:none;">
-                        <div><span class="etiqueta-label">Lote:</span> <span id="viz-lote">---</span></div>
-                    </div>
-                    
-                    <div class="etiqueta-val-container">
-                        <span class="etiqueta-val-destaque" id="viz-label-val">VAL:</span>
-                        <span class="etiqueta-val-destaque" id="viz-data-val">00/00/0000</span>
-                    </div>
+        <div class="linha-divisoria linha-topo"></div>
+        
+        <div class="bloco-central">
+            <div class="info-esquerda">
+                <div class="linha-acao-data">
+                    <span class="label-acao" id="viz-label-acao">MANIPULADO:</span>
+                    <span id="viz-data-man">00/00/0000 00:00</span>
                 </div>
                 
-                <div id="viz-qrcode-container" style="display:none;">
-                    <div id="viz-qrcode"></div>
-                    <div id="viz-sku">SKU</div>
+                <div class="linha-opcionais" id="viz-linha-opcionais" style="display:none;">
+                    <div id="viz-box-peso" style="display:none;">Peso: <span class="bold" id="viz-peso">0g</span></div>
+                    <div id="viz-row-lote" style="display:none;">Lote: <span class="bold" id="viz-lote">---</span></div>
+                </div>
+
+                <div id="viz-box-preco-container" style="display:none;">
+                    <span id="viz-label-preco">TOTAL:</span> R$ <span id="viz-preco">0,00</span>
+                </div>
+                
+                <div class="container-validade" id="viz-container-validade">
+                    <span class="val-label" id="viz-label-val">VAL:</span>
+                    <span class="val-data" id="viz-data-val">00/00/0000</span>
                 </div>
             </div>
             
-            <div id="viz-linha-armazenamento" style="display: none;">
+            <div id="viz-qrcode-container">
+                <div id="viz-qrcode"></div>
+                <div id="viz-sku">SKU</div>
+            </div>
+
+            <div id="viz-linha-armazenamento" class="centralizado-x">
                 <span id="viz-armazenamento">RESFRIADO</span>
             </div>
         </div>
         
-        <div class="box-footer">
-            <div class="etiqueta-footer-title" id="viz-estabelecimento">Estabelecimento</div>
-            <div class="etiqueta-footer-op">Operador(a): <span id="viz-operador" style="font-weight:bold;">Nome</span></div>
-        </div>
+        <div class="linha-divisoria linha-rodape"></div>
+        
+        <div class="item-estabelecimento centralizado-x" id="viz-estabelecimento">Estabelecimento</div>
+        
+        <div class="item-operador centralizado-x">Operador(a): <span id="viz-operador" class="bold">Nome</span></div>
     </div>
 </div>
 
@@ -193,13 +305,15 @@
             <label>Senha:</label>
             <input type="password" id="senhaAdmin" placeholder="Digite para entrar..." inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(this.value === '1999' || (db.configs.senhaAdmin !== '' && this.value === db.configs.senhaAdmin)){this.blur();fecharModal('modalLoginAdmin');abrirPainelUnificado();this.value='';}">
         </div>
-        <div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalLoginAdmin')">Cancelar</button></div>
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="fecharModal('modalLoginAdmin')">Cancelar</button>
+        </div>
     </div>
 </div>
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.9</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.1.0</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
@@ -214,42 +328,78 @@
 
         <h3 style="font-size: 16px; color: #d32f2f; margin-top: 25px;">Avançado</h3>
         <button class="btn-danger" onclick="abrirModalAvancado()">⚠️ Configurações Avançadas</button>
-        <div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalPainelUnificado')">Fechar Painel</button></div>
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="fecharModal('modalPainelUnificado')">Fechar Painel</button>
+        </div>
     </div>
 </div>
 
 <div class="modal-overlay" id="modalGerenciarEtiquetas">
     <div class="modal">
         <div class="modal-title" style="color:#f57f17; border-color:#f57f17;">Gerenciar Etiquetas</div>
-        <div class="form-group"><label>Nome do Estabelecimento:</label><input type="text" id="cfgEstabelecimento" onchange="salvarEtiquetaConfigs()"></div>
+        <div class="form-group">
+            <label>Nome do Estabelecimento:</label>
+            <input type="text" id="cfgEstabelecimento" onchange="salvarEtiquetaConfigs()">
+        </div>
         <div style="display: flex; gap: 10px;">
             <div class="form-group" style="flex:1;">
                 <label>Tamanho:</label>
                 <select id="cfgTamanho" onchange="salvarEtiquetaConfigs()">
-                    <option value="60x40">60x40 mm</option><option value="50x50">50x50 mm</option><option value="40x40">40x40 mm</option>
+                    <option value="60x40">60x40 mm</option>
+                    <option value="50x50">50x50 mm</option>
+                    <option value="40x40">40x40 mm</option>
                 </select>
             </div>
             <div class="form-group" style="flex:1;">
                 <label>Modo Impressão:</label>
                 <select id="cfgModo" onchange="salvarEtiquetaConfigs()">
-                    <option value="pdf">PDF</option><option value="rawbt">RawBT</option>
+                    <option value="pdf">PDF</option>
+                    <option value="rawbt">RawBT</option>
                 </select>
             </div>
         </div>
         <h3 style="font-size: 14px; margin-bottom:5px;">Aparência Visual</h3>
-        <div class="switch-container"><span style="font-weight:bold; font-size:14px;">Tamanho Destacado do Produto</span><label class="switch"><input type="checkbox" id="cfgDestaqueProd" onchange="salvarEtiquetaConfigs()"><span class="slider"></span></label></div>
-        <div class="switch-container"><span style="font-weight:bold; font-size:14px;">Tamanho Destacado da Validade</span><label class="switch"><input type="checkbox" id="cfgDestaqueVal" onchange="salvarEtiquetaConfigs()"><span class="slider"></span></label></div>
+        <div class="switch-container">
+            <span style="font-weight:bold; font-size:14px;">Tamanho Destacado do Produto</span>
+            <label class="switch">
+                <input type="checkbox" id="cfgDestaqueProd" onchange="salvarEtiquetaConfigs()">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="switch-container">
+            <span style="font-weight:bold; font-size:14px;">Tamanho Destacado da Validade</span>
+            <label class="switch">
+                <input type="checkbox" id="cfgDestaqueVal" onchange="salvarEtiquetaConfigs()">
+                <span class="slider"></span>
+            </label>
+        </div>
         <h3 style="font-size: 14px; margin-bottom:5px;">Rastreabilidade</h3>
-        <div class="switch-container"><div style="display:flex; flex-direction:column;"><span style="font-weight:bold; font-size:14px;">Controle Global QR Code</span><span style="font-size:10px; color:#666;">Habilita botão na tela inicial</span></div><label class="switch"><input type="checkbox" id="cfgQRGlobal" onchange="salvarEtiquetaConfigs()"><span class="slider"></span></label></div>
-        <div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalGerenciarEtiquetas'); abrirPainelUnificado();">Voltar</button></div>
+        <div class="switch-container">
+            <div style="display:flex; flex-direction:column;">
+                <span style="font-weight:bold; font-size:14px;">Controle Global QR Code</span>
+                <span style="font-size:10px; color:#666;">Habilita botão na tela inicial</span>
+            </div>
+            <label class="switch">
+                <input type="checkbox" id="cfgQRGlobal" onchange="salvarEtiquetaConfigs()">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="fecharModal('modalGerenciarEtiquetas'); abrirPainelUnificado();">Voltar</button>
+        </div>
     </div>
 </div>
 
 <div class="modal-overlay" id="modalSenhaAvancada">
     <div class="modal">
         <div class="modal-title" style="color:#d32f2f;">Acesso Restrito</div>
-        <div class="form-group"><label>Exige Senha Mestra:</label><input type="password" id="senhaAvancada" placeholder="Somente a mestra" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(this.value === '1999'){this.blur();fecharModal('modalSenhaAvancada');abrirZonaRisco();this.value='';}"></div>
-        <div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalSenhaAvancada')">Cancelar</button></div>
+        <div class="form-group">
+            <label>Exige Senha Mestra:</label>
+            <input type="password" id="senhaAvancada" placeholder="Somente a mestra" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(this.value === '1999'){this.blur();fecharModal('modalSenhaAvancada');abrirZonaRisco();this.value='';}">
+        </div>
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="fecharModal('modalSenhaAvancada')">Cancelar</button>
+        </div>
     </div>
 </div>
 
@@ -257,20 +407,36 @@
     <div class="modal" style="max-height: 90vh; overflow-y: auto;">
         <div class="modal-title" style="color:#d32f2f;">Zona de Risco</div>
         <h3 style="font-size: 15px; color: #333; margin-top: 0; margin-bottom: 10px;">Nuvem</h3>
-        <div class="form-group"><label>URL Apps Script:</label><input type="text" id="configUrlAppScript"></div>
+        <div class="form-group">
+            <label>URL Apps Script:</label>
+            <input type="text" id="configUrlAppScript">
+        </div>
         <button class="btn-action" style="width:100%; margin-bottom:10px; background:#4CAF50;" onclick="salvarUrlEPuxar(event)">💾 Puxar e Mesclar Dados</button>
         <button class="btn-outline" style="border-color:#2e7d32; color:#2e7d32; justify-content:center;" onclick="salvarTudoNaNuvem(event)">⬆️ Forçar Envio para Nuvem</button>
+        
         <h3 style="font-size: 15px; color: #333; margin-top: 10px; margin-bottom: 10px;">Físico</h3>
         <div style="display: flex; gap: 10px; margin-top:10px;">
             <button class="btn-outline" style="margin:0; flex:1; justify-content:center; font-size:13px;" onclick="exportarBancoTXT()">📤 Backup TXT</button>
             <button class="btn-outline" style="margin:0; flex:1; justify-content:center; font-size:13px;" onclick="document.getElementById('fileImport').click()">📥 Importar TXT</button>
             <input type="file" id="fileImport" style="display:none;" accept=".txt" onchange="importarBancoTXT(event)">
         </div>
+        
         <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
-        <div class="form-group"><label>Excluir Histórico Local (Digite: <b>quero excluir todo o histórico</b>)</label><input type="text" id="inputConfirmarExclusao"><button class="btn-danger" style="margin-top:5px;" onclick="excluirHistoricoSeguro()">🗑️ Apagar Histórico</button></div>
+        <div class="form-group">
+            <label>Excluir Histórico Local (Digite: <b>quero excluir todo o histórico</b>)</label>
+            <input type="text" id="inputConfirmarExclusao">
+            <button class="btn-danger" style="margin-top:5px;" onclick="excluirHistoricoSeguro()">🗑️ Apagar Histórico</button>
+        </div>
+        
         <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
-        <div class="form-group"><label>Problemas?</label><button class="btn-outline" style="border-color:#fbc02d; color:#fbc02d; justify-content:center;" onclick="forcarAtualizacao()">🔄 Forçar Atualização</button></div>
-        <div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalZonaRisco'); abrirPainelUnificado();">Voltar</button></div>
+        <div class="form-group">
+            <label>Problemas?</label>
+            <button class="btn-outline" style="border-color:#fbc02d; color:#fbc02d; justify-content:center;" onclick="forcarAtualizacao()">🔄 Forçar Atualização</button>
+        </div>
+        
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="fecharModal('modalZonaRisco'); abrirPainelUnificado();">Voltar</button>
+        </div>
     </div>
 </div>
 
@@ -278,8 +444,14 @@
     <div class="modal">
         <div class="modal-title">Identidade</div>
         <input type="hidden" id="operadorAlvo">
-        <div class="form-group"><label>Senha:</label><input type="password" id="senhaTrocaOperador" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');"></div>
-        <div class="modal-actions"><button class="btn-cancel" onclick="cancelarTrocaOperador()">Cancelar</button><button class="btn-action" onclick="confirmarTrocaOperador()">Confirmar</button></div>
+        <div class="form-group">
+            <label>Senha:</label>
+            <input type="password" id="senhaTrocaOperador" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+        </div>
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="cancelarTrocaOperador()">Cancelar</button>
+            <button class="btn-action" onclick="confirmarTrocaOperador()">Confirmar</button>
+        </div>
     </div>
 </div>
 
@@ -290,7 +462,9 @@
             Itens manipulados que <b>ainda estão no estoque</b> (não foram baixados).
         </div>
         <ul class="list" id="listaValidade" style="max-height: 50vh; overflow-y: auto; border: 1px solid #eee; padding: 0; border-radius:5px; margin-bottom: 15px;"></ul>
-        <div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalValidade')">Fechar Painel</button></div>
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="fecharModal('modalValidade')">Fechar Painel</button>
+        </div>
     </div>
 </div>
 
@@ -298,14 +472,21 @@
     <div class="modal" id="modalEstoqueInner">
         <div id="estoqueMain">
             <div class="modal-title">Relatório Consolidado <button onclick="excluirHistoricoSeguroDireto()" style="background:none; border:none; font-size:16px; cursor:pointer;" title="Limpar">🧹 Limpar</button></div>
-            <div class="form-group" style="background:#f5f5f5; padding: 15px; border-radius: 8px; text-align: center;"><div style="font-size: 14px; font-weight: bold; color: #555;">TOTAL GERAL</div><div id="estoqueTotal" style="font-size: 28px; font-weight: 900; color: #1976D2;">0</div></div>
+            <div class="form-group" style="background:#f5f5f5; padding: 15px; border-radius: 8px; text-align: center;">
+                <div style="font-size: 14px; font-weight: bold; color: #555;">TOTAL GERAL</div>
+                <div id="estoqueTotal" style="font-size: 28px; font-weight: 900; color: #1976D2;">0</div>
+            </div>
             <ul class="list" id="listaEstoque" style="max-height: 40vh; overflow-y: auto; border: 1px solid #eee; padding: 5px; border-radius:5px;"></ul>
-            <div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalEstoque'); abrirPainelUnificado();">Voltar</button></div>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="fecharModal('modalEstoque'); abrirPainelUnificado();">Voltar</button>
+            </div>
         </div>
         <div id="estoqueDetalhes" style="display: none;">
             <div class="modal-title" id="estoqueDetTitulo" style="font-size: 18px; color: #1976D2;">Produto</div>
             <ul class="list detalhes-estoque-lista" id="listaEstoqueDetalhes" style="max-height: 50vh; overflow-y: auto; border: 1px solid #eee; padding: 0; border-radius:5px; margin-bottom: 15px;"></ul>
-            <div class="modal-actions"><button class="btn-cancel" onclick="voltarEstoqueMain()">⬅️ Voltar à Lista</button></div>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="voltarEstoqueMain()">⬅️ Voltar à Lista</button>
+            </div>
         </div>
     </div>
 </div>
@@ -314,7 +495,9 @@
     <div class="modal" style="width:100%; height:100%; max-height:100%; max-width:100%; border-radius:0; display:flex; flex-direction:column; padding:0; background: #000;">
         <div style="background:#1565C0; color:white; padding:15px; font-weight:bold; font-size:18px; text-align:center;">Posicione o QR Code</div>
         <div id="reader" style="flex:1; width:100%; display: flex; align-items: center; justify-content: center;"></div>
-        <div style="padding:20px; background: #000;"><button class="btn-danger" style="margin:0; font-size: 18px; padding: 15px;" onclick="fecharLeitorQR()">Fechar Câmera</button></div>
+        <div style="padding:20px; background: #000;">
+            <button class="btn-danger" style="margin:0; font-size: 18px; padding: 15px;" onclick="fecharLeitorQR()">Fechar Câmera</button>
+        </div>
     </div>
 </div>
 
@@ -323,7 +506,9 @@
         <div class="modal-title" id="tituloListagem">Gerenciar</div>
         <button class="btn-action" id="btnNovoListagem" style="width: 100%; margin-bottom: 15px;">+ Novo</button>
         <div id="conteudoListagem" style="max-height: 50vh; overflow-y: auto; padding-right: 5px;"></div>
-        <div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalListagem'); abrirPainelUnificado();">Voltar</button></div>
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="fecharModal('modalListagem'); abrirPainelUnificado();">Voltar</button>
+        </div>
     </div>
 </div>
 
@@ -344,17 +529,55 @@
         <div id="msgCodigoDisponivel" style="font-size: 13px; font-weight: bold; margin-top: -10px; margin-bottom: 15px;"></div>
         
         <div style="display: flex; gap:10px;">
-            <div class="form-group" style="flex: 1;"><label>Categoria:</label><select id="prodCategoria"></select></div>
-            <div class="form-group" style="flex: 1;"><label>Val. (Dias):</label><input type="number" id="prodValidade"></div>
+            <div class="form-group" style="flex: 1;">
+                <label>Categoria:</label>
+                <select id="prodCategoria"></select>
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label>Val. (Dias):</label>
+                <input type="number" id="prodValidade">
+            </div>
         </div>
-        <div class="form-group"><label>Ação Padrão (Etiqueta):</label><select id="prodAcaoPadrao"><option value="Manipulado em:">Manipulado em</option><option value="Aberto em:">Aberto em</option><option value="Congelado em:">Congelado em</option></select></div>
-        <div class="form-group"><label>Marcas (Separe por vírgula):</label><input type="text" id="prodMarcas" placeholder="Ex: Seara, Sadia"></div>
+        <div class="form-group">
+            <label>Ação Padrão (Etiqueta):</label>
+            <select id="prodAcaoPadrao">
+                <option value="Manipulado em:">Manipulado em</option>
+                <option value="Aberto em:">Aberto em</option>
+                <option value="Congelado em:">Congelado em</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Marcas (Separe por vírgula):</label>
+            <input type="text" id="prodMarcas" placeholder="Ex: Seara, Sadia">
+        </div>
         <div style="display: flex; gap:10px;">
-            <div class="form-group" style="flex: 1;"><label>Conservação:</label><select id="prodArmazenamento"><option value="ambiente">Ambiente</option><option value="resfriado">Resfriado</option><option value="congelado">Congelado</option></select></div>
-            <div class="form-group" style="flex: 1;"><label>Preço Base (R$):</label><input type="number" id="prodPreco" step="0.01"></div>
+            <div class="form-group" style="flex: 1;">
+                <label>Conservação:</label>
+                <select id="prodArmazenamento">
+                    <option value="ambiente">Ambiente</option>
+                    <option value="resfriado">Resfriado</option>
+                    <option value="congelado">Congelado</option>
+                </select>
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label>Preço Base (R$):</label>
+                <input type="number" id="prodPreco" step="0.01">
+            </div>
         </div>
-        <div class="switch-container"><div style="display:flex; flex-direction:column;"><span style="font-weight:bold; font-size:14px;">Controle QR Code</span><span style="font-size:10px; color:#666;">Gerar e controlar baixa</span></div><label class="switch"><input type="checkbox" id="prodUsaQR"><span class="slider"></span></label></div>
-        <div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalFormProduto'); abrirGerenciar('produtos')">Cancelar</button><button class="btn-action" onclick="salvarProduto()">Salvar</button></div>
+        <div class="switch-container">
+            <div style="display:flex; flex-direction:column;">
+                <span style="font-weight:bold; font-size:14px;">Controle QR Code</span>
+                <span style="font-size:10px; color:#666;">Gerar e controlar baixa</span>
+            </div>
+            <label class="switch">
+                <input type="checkbox" id="prodUsaQR">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="fecharModal('modalFormProduto'); abrirGerenciar('produtos')">Cancelar</button>
+            <button class="btn-action" onclick="salvarProduto()">Salvar</button>
+        </div>
     </div>
 </div>
 
@@ -362,9 +585,24 @@
     <div class="modal">
         <div class="modal-title">Categoria</div>
         <input type="hidden" id="catNomeOriginal">
-        <div class="form-group"><label>Nome:</label><input type="text" id="catNome"></div>
-        <div style="display: flex; gap: 10px;"><div class="form-group"><label>Fundo:</label><input type="color" id="catCor" value="#1976D2"></div><div class="form-group"><label>Texto:</label><input type="color" id="catCorTexto" value="#ffffff"></div></div>
-        <div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalFormCategoria'); abrirGerenciar('categorias')">Cancelar</button><button class="btn-action" onclick="salvarCategoria()">Salvar</button></div>
+        <div class="form-group">
+            <label>Nome:</label>
+            <input type="text" id="catNome">
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <div class="form-group">
+                <label>Fundo:</label>
+                <input type="color" id="catCor" value="#1976D2">
+            </div>
+            <div class="form-group">
+                <label>Texto:</label>
+                <input type="color" id="catCorTexto" value="#ffffff">
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="fecharModal('modalFormCategoria'); abrirGerenciar('categorias')">Cancelar</button>
+            <button class="btn-action" onclick="salvarCategoria()">Salvar</button>
+        </div>
     </div>
 </div>
 
@@ -372,9 +610,18 @@
     <div class="modal">
         <div class="modal-title">Operador(a)</div>
         <input type="hidden" id="opNomeOriginal">
-        <div class="form-group"><label>Nome:</label><input type="text" id="opNome"></div>
-        <div class="form-group"><label>Senha (Vazio = sem):</label><input type="text" id="opSenha" placeholder="Opcional" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');"></div>
-        <div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalFormOperador'); abrirGerenciar('operadores')">Cancelar</button><button class="btn-action" onclick="salvarOperador()">Salvar</button></div>
+        <div class="form-group">
+            <label>Nome:</label>
+            <input type="text" id="opNome">
+        </div>
+        <div class="form-group">
+            <label>Senha (Vazio = sem):</label>
+            <input type="text" id="opSenha" placeholder="Opcional" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+        </div>
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="fecharModal('modalFormOperador'); abrirGerenciar('operadores')">Cancelar</button>
+            <button class="btn-action" onclick="salvarOperador()">Salvar</button>
+        </div>
     </div>
 </div>
 
@@ -383,20 +630,54 @@
         <div class="modal-title" id="imprimirNomeProduto" style="font-size:18px;">Produto</div>
         <input type="hidden" id="imprimirCodigoProduto">
         <div style="display:flex; gap:10px;">
-            <div class="form-group" style="flex:0.6;"><label>Ação:</label><select id="imprimirAcao"><option value="Manipulado em:">Manipulado em</option><option value="Aberto em:">Aberto em</option><option value="Congelado em:">Congelado em</option></select></div>
-            <div class="form-group" style="flex:0.4;"><label>Qtd:</label><div class="qtd-control"><button class="qtd-btn" onclick="mudarQtd(-1)">-</button><span id="imprimirQtd" style="font-size: 18px; font-weight: bold;">1</span><button class="qtd-btn" onclick="mudarQtd(1)">+</button></div></div>
+            <div class="form-group" style="flex:0.6;">
+                <label>Ação:</label>
+                <select id="imprimirAcao">
+                    <option value="Manipulado em:">Manipulado em</option>
+                    <option value="Aberto em:">Aberto em</option>
+                    <option value="Congelado em:">Congelado em</option>
+                </select>
+            </div>
+            <div class="form-group" style="flex:0.4;">
+                <label>Qtd:</label>
+                <div class="qtd-control">
+                    <button class="qtd-btn" onclick="mudarQtd(-1)">-</button>
+                    <span id="imprimirQtd" style="font-size: 18px; font-weight: bold;">1</span>
+                    <button class="qtd-btn" onclick="mudarQtd(1)">+</button>
+                </div>
+            </div>
         </div>
         <div style="display:flex; gap:10px;">
-            <div class="form-group" style="flex:1;" id="boxMarcaSelect"><label>Marca:</label><select id="imprimirMarca" onchange="toggleLote()"></select></div>
-            <div class="form-group" style="flex:1; display:none;" id="boxLote"><label>Lote:</label><input type="text" id="imprimirLote"></div>
+            <div class="form-group" style="flex:1;" id="boxMarcaSelect">
+                <label>Marca:</label>
+                <select id="imprimirMarca" onchange="toggleLote()"></select>
+            </div>
+            <div class="form-group" style="flex:1; display:none;" id="boxLote">
+                <label>Lote:</label>
+                <input type="text" id="imprimirLote">
+            </div>
         </div>
         <div style="display:flex; gap:10px;">
-            <div class="form-group" style="flex:1;"><label>Peso (g):</label><input type="number" id="imprimirPeso" placeholder="Opcional" oninput="calcularTotalPagar()"></div>
-            <div class="form-group" style="flex:1;"><label>Preço (R$):</label><input type="number" id="imprimirPreco" step="0.01" oninput="calcularTotalPagar()"></div>
+            <div class="form-group" style="flex:1;">
+                <label>Peso (g):</label>
+                <input type="number" id="imprimirPeso" placeholder="Opcional" oninput="calcularTotalPagar()">
+            </div>
+            <div class="form-group" style="flex:1;">
+                <label>Preço (R$):</label>
+                <input type="number" id="imprimirPreco" step="0.01" oninput="calcularTotalPagar()">
+            </div>
         </div>
-        <div id="boxCalculoTotal" style="background:#e8f5e9; padding:10px; border-radius:5px; text-align:center; font-weight:bold; color:#2e7d32; margin-bottom:15px; display:none;">Total Calc: R$ <span id="imprimirCalculo">0,00</span></div>
-        <div class="form-group"><label>Validade Final:</label><input type="date" id="imprimirValidade"></div>
-        <div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalImprimir')">Cancelar</button><button class="btn-action" id="btnProcessarImpressao" onclick="processarImpressao()">🖨️ IMPRIMIR</button></div>
+        <div id="boxCalculoTotal" style="background:#e8f5e9; padding:10px; border-radius:5px; text-align:center; font-weight:bold; color:#2e7d32; margin-bottom:15px; display:none;">
+            Total Calc: R$ <span id="imprimirCalculo">0,00</span>
+        </div>
+        <div class="form-group">
+            <label>Validade Final:</label>
+            <input type="date" id="imprimirValidade">
+        </div>
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="fecharModal('modalImprimir')">Cancelar</button>
+            <button class="btn-action" id="btnProcessarImpressao" onclick="processarImpressao()">🖨️ IMPRIMIR</button>
+        </div>
     </div>
 </div>
 
@@ -412,12 +693,30 @@
 
     function carregarBanco() {
         let def = {
-            produtos: [{ codigo: 1, nome: "Hambúrguer", categoria: "Carnes", validadeDias: 5, armazenamento: "congelado", precoPadrao: "", marcas: [], acaoPadrao: "Manipulado em:", usaQR: false }],
-            categorias: [{ nome: "Carnes", cor: "#ffcccc", corTexto: "#000000" }],
-            operadores: [{ nome: "Admin", senha: "" }],
-            configs: { modo: "pdf", estabelecimento: "Restaurante", urlAppScript: "", tamanhoEtiqueta: "50x50", destaqueProd: false, destaqueVal: false, controleQR: false, senhaAdmin: "", ultimoWipe: 0 },
-            historico: [], filaRetentativaStatus: []
+            produtos: [
+                { codigo: 1, nome: "Hambúrguer", categoria: "Carnes", validadeDias: 5, armazenamento: "congelado", precoPadrao: "", marcas: [], acaoPadrao: "Manipulado em:", usaQR: false }
+            ],
+            categorias: [
+                { nome: "Carnes", cor: "#ffcccc", corTexto: "#000000" }
+            ],
+            operadores: [
+                { nome: "Admin", senha: "" }
+            ],
+            configs: { 
+                modo: "pdf", 
+                estabelecimento: "Restaurante", 
+                urlAppScript: "", 
+                tamanhoEtiqueta: "50x50", 
+                destaqueProd: false, 
+                destaqueVal: false, 
+                controleQR: false, 
+                senhaAdmin: "", 
+                ultimoWipe: 0 
+            },
+            historico: [], 
+            filaRetentativaStatus: []
         };
+        
         let local = JSON.parse(localStorage.getItem('etiquetadora_db'));
         if (local) {
             if(!local.configs.tamanhoEtiqueta) local.configs.tamanhoEtiqueta = "50x50";
@@ -426,7 +725,10 @@
             if(typeof local.configs.controleQR === 'undefined') local.configs.controleQR = false;
             if(typeof local.configs.senhaAdmin === 'undefined') local.configs.senhaAdmin = "";
             if(typeof local.configs.ultimoWipe === 'undefined') local.configs.ultimoWipe = 0;
-            local.produtos.forEach(p => { if(!p.acaoPadrao) p.acaoPadrao = "Manipulado em:"; if(typeof p.usaQR === 'undefined') p.usaQR = false; });
+            local.produtos.forEach(p => { 
+                if(!p.acaoPadrao) p.acaoPadrao = "Manipulado em:"; 
+                if(typeof p.usaQR === 'undefined') p.usaQR = false; 
+            });
             return local;
         }
         return def;
@@ -450,15 +752,17 @@
         syncGeral();
     }
     
-    function fecharModal(id) { document.getElementById(id).style.display = 'none'; }
+    function fecharModal(id) { 
+        document.getElementById(id).style.display = 'none'; 
+    }
     
     function abrirLoginAdmin() { 
-        // SENHA DESATIVADA TEMPORARIAMENTE
-        abrirPainelUnificado(); return;
+        abrirPainelUnificado(); 
+        return; 
     }
     
     function abrirPainelUnificado() { 
-        document.getElementById('cfgSenhaAdmin').value = db.configs.senhaAdmin || "";
+        document.getElementById('cfgSenhaAdmin').value = db.configs.senhaAdmin || ""; 
         document.getElementById('modalPainelUnificado').style.display = 'flex'; 
     }
 
@@ -490,9 +794,9 @@
     }
 
     function abrirModalAvancado() { 
-        // SENHA DESATIVADA TEMPORARIAMENTE
         fecharModal('modalPainelUnificado'); 
-        abrirZonaRisco(); return;
+        abrirZonaRisco(); 
+        return; 
     }
     
     function abrirZonaRisco() { 
@@ -509,7 +813,6 @@
         if(!url) return alert("A URL do Google Apps Script está vazia!"); 
         
         const btn = event.target; 
-        const textoOriginal = btn.innerText; 
         btn.innerText = "Mesclando Dados..."; 
         btn.disabled = true;
 
@@ -521,9 +824,9 @@
             try {
                 let dadosNuvem = JSON.parse(textoBruto);
                 if(dadosNuvem && dadosNuvem.produtos && Array.isArray(dadosNuvem.produtos)) { 
-                    if (dadosNuvem.configs && dadosNuvem.configs.ultimoWipe > (db.configs.ultimoWipe || 0)) {
-                        db.historico = [];
-                        db.configs.ultimoWipe = dadosNuvem.configs.ultimoWipe;
+                    if (dadosNuvem.configs && dadosNuvem.configs.ultimoWipe > (db.configs.ultimoWipe || 0)) { 
+                        db.historico = []; 
+                        db.configs.ultimoWipe = dadosNuvem.configs.ultimoWipe; 
                     }
 
                     let mapaProd = {};
@@ -553,7 +856,7 @@
             alert("❌ Erro de conexão: " + erro.message); 
         }
         
-        btn.innerText = textoOriginal; 
+        btn.innerText = "💾 Puxar e Mesclar Dados"; 
         btn.disabled = false;
     }
     
@@ -563,10 +866,11 @@
         salvarBancoLocal(); 
         
         if(!url) return alert("A URL está vazia!"); 
+        
         const btn = event.target; 
-        const textoOriginal = btn.innerText; 
         btn.innerText = "Enviando..."; 
         btn.disabled = true;
+        
         try {
             let pacote = { action: 'salvar_banco', dados: db };
             await fetch(url, { method: 'POST', redirect: 'follow', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(pacote) });
@@ -574,7 +878,8 @@
         } catch(erro) { 
             alert("❌ Falha na requisição.\nErro: " + erro.message); 
         }
-        btn.innerText = textoOriginal; 
+        
+        btn.innerText = "⬆️ Forçar Envio para Nuvem"; 
         btn.disabled = false;
     }
 
@@ -635,13 +940,25 @@
         const dataStr = JSON.stringify(db); 
         const fileName = `backup_alo_etiqueta_${new Date().getTime()}.txt`; 
         const blob = new Blob([dataStr], { type: "text/plain" }); 
+        
         if (navigator.share && navigator.canShare) { 
             try {
                 const file = new File([blob], fileName, { type: "text/plain" });
-                if (navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: 'Backup Alô_Etiqueta' }); return; }
-            } catch (err) { console.log("Compartilhamento nativo cancelado.", err); }
+                if (navigator.canShare({ files: [file] })) { 
+                    await navigator.share({ files: [file], title: 'Backup Alô_Etiqueta' }); 
+                    return; 
+                }
+            } catch (err) { 
+                console.log("Compartilhamento nativo cancelado.", err); 
+            }
         }
-        const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = fileName; a.click(); URL.revokeObjectURL(url);
+        
+        const url = URL.createObjectURL(blob); 
+        const a = document.createElement('a'); 
+        a.href = url; 
+        a.download = fileName; 
+        a.click(); 
+        URL.revokeObjectURL(url);
     }
     
     function importarBancoTXT(e) { 
@@ -649,15 +966,28 @@
         if(!file) return; 
         const reader = new FileReader(); 
         reader.onload = function(evt) { 
-            try { db = JSON.parse(evt.target.result); salvarBancoLocal(); alert("Restaurado!"); location.reload(); } catch(err) { alert("Inválido."); } 
+            try { 
+                db = JSON.parse(evt.target.result); 
+                salvarBancoLocal(); 
+                alert("Restaurado!"); 
+                location.reload(); 
+            } catch(err) { 
+                alert("Inválido."); 
+            } 
         }; 
         reader.readAsText(file); 
     }
 
     async function syncGeral() {
         const ind = document.getElementById('indicadorConexao'); 
-        if(!db.configs.urlAppScript) { ind.innerText = '⚪'; return; } 
-        if(!navigator.onLine) { ind.innerText = '🔴'; return; }
+        if(!db.configs.urlAppScript) { 
+            ind.innerText = '⚪'; 
+            return; 
+        } 
+        if(!navigator.onLine) { 
+            ind.innerText = '🔴'; 
+            return; 
+        }
         
         try { 
             if(db.filaRetentativaStatus.length > 0) { 
@@ -708,15 +1038,21 @@
     function renderizarOperadores() { 
         const sel = document.getElementById('seletorOperador'); 
         sel.innerHTML = '<option value="">Selecionar...</option>'; 
-        db.operadores.forEach(op => { sel.innerHTML += `<option value="${op.nome}">${op.nome}</option>`; }); 
+        db.operadores.forEach(op => { 
+            sel.innerHTML += `<option value="${op.nome}">${op.nome}</option>`; 
+        }); 
         const ult = localStorage.getItem('etiquetadora_operadorAtual'); 
-        if(ult && db.operadores.find(o => o.nome === ult)) { sel.value = ult; operadorAnteriorSelect = ult; } 
+        if(ult && db.operadores.find(o => o.nome === ult)) { 
+            sel.value = ult; 
+            operadorAnteriorSelect = ult; 
+        } 
     }
     
     function verificarTrocaOperador(el) { 
         const nome = el.value; 
         if(!nome) return; 
         const op = db.operadores.find(o => o.nome === nome); 
+        
         if(op && op.senha !== "") { 
             document.getElementById('operadorAlvo').value = nome; 
             document.getElementById('senhaTrocaOperador').value = ''; 
@@ -732,6 +1068,7 @@
         const alvo = document.getElementById('operadorAlvo').value; 
         const senha = document.getElementById('senhaTrocaOperador').value; 
         const op = db.operadores.find(o => o.nome === alvo); 
+        
         if(op && op.senha === senha) { 
             operadorAnteriorSelect = alvo; 
             localStorage.setItem('etiquetadora_operadorAtual', alvo); 
@@ -749,7 +1086,9 @@
     
     function renderizarFiltros() { 
         let html = `<div class="chip ${categoriaAtual === null ? 'active' : ''}" style="${categoriaAtual === null ? 'background:#ccc;color:#000' : ''}" onclick="filtrarCategoria(null)">TODOS</div>`; 
-        db.categorias.forEach(cat => { html += `<div class="chip ${categoriaAtual === cat.nome ? 'active' : ''}" style="background:${cat.cor}; color:${cat.corTexto || '#000'};" onclick="filtrarCategoria('${cat.nome}')">${cat.nome}</div>`; }); 
+        db.categorias.forEach(cat => { 
+            html += `<div class="chip ${categoriaAtual === cat.nome ? 'active' : ''}" style="background:${cat.cor}; color:${cat.corTexto || '#000'};" onclick="filtrarCategoria('${cat.nome}')">${cat.nome}</div>`; 
+        }); 
         document.getElementById('containerFiltros').innerHTML = html; 
     }
     
@@ -762,17 +1101,28 @@
     function renderizarLista() { 
         const lista = document.getElementById('listaProdutos'); 
         lista.innerHTML = ''; 
+        
         let filtrados = categoriaAtual === null ? db.produtos : db.produtos.filter(p => p.categoria === categoriaAtual); 
         filtrados.sort((a,b) => a.codigo - b.codigo); 
+        
         filtrados.forEach(p => { 
             const cat = db.categorias.find(x => x.nome === p.categoria) || {cor:'#eee', corTexto:'#333'}; 
-            lista.innerHTML += `<li class="item" onclick="abrirModalImprimir(${p.codigo})"><div class="item-avatar" style="background:${cat.cor};color:${cat.corTexto}">${p.codigo}</div><div class="item-info"><div class="item-title">${p.nome}</div><div class="item-subtitle">${p.categoria} • Val: ${p.validadeDias}d</div></div><div class="print-icon">🖨️</div></li>`; 
+            lista.innerHTML += `
+                <li class="item" onclick="abrirModalImprimir(${p.codigo})">
+                    <div class="item-avatar" style="background:${cat.cor};color:${cat.corTexto}">${p.codigo}</div>
+                    <div class="item-info">
+                        <div class="item-title">${p.nome}</div>
+                        <div class="item-subtitle">${p.categoria} • Val: ${p.validadeDias}d</div>
+                    </div>
+                    <div class="print-icon">🖨️</div>
+                </li>`; 
         }); 
     }
     
     function buscarPorCodigo() { 
         const cod = parseInt(document.getElementById('buscaCodigo').value); 
         if(isNaN(cod)) return; 
+        
         const p = db.produtos.find(x => x.codigo === cod); 
         if(p) { 
             abrirModalImprimir(cod); 
@@ -785,17 +1135,28 @@
     
     function moverItem(tipo, idx, dir) { 
         const arr = db[tipo]; 
-        if(dir === 'cima' && idx > 0) { let temp = arr[idx]; arr[idx] = arr[idx-1]; arr[idx-1] = temp; } 
-        else if(dir === 'baixo' && idx < arr.length-1) { let temp = arr[idx]; arr[idx] = arr[idx+1]; arr[idx+1] = temp; } 
+        if(dir === 'cima' && idx > 0) { 
+            let temp = arr[idx]; 
+            arr[idx] = arr[idx-1]; 
+            arr[idx-1] = temp; 
+        } else if(dir === 'baixo' && idx < arr.length-1) { 
+            let temp = arr[idx]; 
+            arr[idx] = arr[idx+1]; 
+            arr[idx+1] = temp; 
+        } 
+        
         salvarBancoLocal(); 
         abrirGerenciar(tipo); 
-        if(tipo === 'categorias') { renderizarFiltros(); } 
+        if(tipo === 'categorias') { 
+            renderizarFiltros(); 
+        } 
     }
     
     function duplicarProduto(idx) { 
         let novoProd = JSON.parse(JSON.stringify(db.produtos[idx])); 
         let maxCod = Math.max(...db.produtos.map(p => p.codigo)); 
         novoProd.codigo = maxCod > 0 ? maxCod + 1 : 1; 
+        
         db.produtos.push(novoProd); 
         salvarBancoLocal(); 
         abrirGerenciar('produtos'); 
@@ -807,33 +1168,71 @@
         const btn = document.getElementById('btnNovoListagem'); 
         const tit = document.getElementById('tituloListagem'); 
         lista.innerHTML = ''; 
+        
         if(tipo === 'produtos') { 
             tit.innerText = "Gerenciar Produtos"; 
             btn.onclick = () => abrirFormProduto(-1); 
+            
             db.produtos.sort((a,b) => a.codigo - b.codigo).forEach((p,idx) => { 
-                lista.innerHTML += `<div class="gerenciar-item"><div class="gerenciar-info"><strong>${p.codigo} - ${p.nome}</strong><br><span style="color:#666">${p.categoria}</span></div><div class="gerenciar-actions"><button onclick="abrirFormProduto(${idx})">✏️</button><button onclick="duplicarProduto(${idx})" title="Duplicar">📑</button><button onclick="excluirItem('produtos',${p.codigo})">🗑️</button></div></div>`; 
+                lista.innerHTML += `
+                    <div class="gerenciar-item">
+                        <div class="gerenciar-info">
+                            <strong>${p.codigo} - ${p.nome}</strong><br>
+                            <span style="color:#666">${p.categoria}</span>
+                        </div>
+                        <div class="gerenciar-actions">
+                            <button onclick="abrirFormProduto(${idx})">✏️</button>
+                            <button onclick="duplicarProduto(${idx})" title="Duplicar">📑</button>
+                            <button onclick="excluirItem('produtos',${p.codigo})">🗑️</button>
+                        </div>
+                    </div>`; 
             }); 
         } else if(tipo === 'categorias') { 
             tit.innerText = "Gerenciar Categorias"; 
             btn.onclick = () => abrirFormCategoria(-1); 
+            
             db.categorias.forEach((c,idx) => { 
-                lista.innerHTML += `<div class="gerenciar-item"><div class="gerenciar-info"><strong>${c.nome}</strong></div><div class="gerenciar-actions"><button onclick="moverItem('categorias',${idx},'cima')">🔼</button><button onclick="moverItem('categorias',${idx},'baixo')">🔽</button><button onclick="abrirFormCategoria(${idx})">✏️</button><button onclick="excluirItem('categorias','${c.nome}')">🗑️</button></div></div>`; 
+                lista.innerHTML += `
+                    <div class="gerenciar-item">
+                        <div class="gerenciar-info">
+                            <strong>${c.nome}</strong>
+                        </div>
+                        <div class="gerenciar-actions">
+                            <button onclick="moverItem('categorias',${idx},'cima')">🔼</button>
+                            <button onclick="moverItem('categorias',${idx},'baixo')">🔽</button>
+                            <button onclick="abrirFormCategoria(${idx})">✏️</button>
+                            <button onclick="excluirItem('categorias','${c.nome}')">🗑️</button>
+                        </div>
+                    </div>`; 
             }); 
         } else if(tipo === 'operadores') { 
             tit.innerText = "Gerenciar Operadores"; 
             btn.onclick = () => abrirFormOperador(-1); 
+            
             db.operadores.forEach((o,idx) => { 
-                lista.innerHTML += `<div class="gerenciar-item"><div class="gerenciar-info"><strong>${o.nome}</strong></div><div class="gerenciar-actions"><button onclick="abrirFormOperador(${idx})">✏️</button><button onclick="excluirItem('operadores','${o.nome}')">🗑️</button></div></div>`; 
+                lista.innerHTML += `
+                    <div class="gerenciar-item">
+                        <div class="gerenciar-info">
+                            <strong>${o.nome}</strong>
+                        </div>
+                        <div class="gerenciar-actions">
+                            <button onclick="abrirFormOperador(${idx})">✏️</button>
+                            <button onclick="excluirItem('operadores','${o.nome}')">🗑️</button>
+                        </div>
+                    </div>`; 
             }); 
         } 
+        
         document.getElementById('modalListagem').style.display = 'flex'; 
     }
     
     function excluirItem(tipo, id) { 
         if(!confirm("Certeza?")) return; 
+        
         if(tipo === 'produtos') db.produtos = db.produtos.filter(i => i.codigo !== id); 
         if(tipo === 'categorias') db.categorias = db.categorias.filter(i => i.nome !== id); 
         if(tipo === 'operadores') db.operadores = db.operadores.filter(i => i.nome !== id); 
+        
         salvarBancoLocal(); 
         iniciar(); 
         abrirGerenciar(tipo); 
@@ -863,9 +1262,12 @@
 
     function abrirFormProduto(idx) { 
         fecharModal('modalListagem'); 
+        
         const cb = document.getElementById('prodCategoria'); 
         cb.innerHTML = ''; 
-        db.categorias.forEach(c => cb.innerHTML += `<option value="${c.nome}">${c.nome}</option>`); 
+        db.categorias.forEach(c => {
+            cb.innerHTML += `<option value="${c.nome}">${c.nome}</option>`;
+        }); 
         
         document.getElementById('msgCodigoDisponivel').innerHTML = '';
         
@@ -892,6 +1294,7 @@
             document.getElementById('prodAcaoPadrao').value = 'Manipulado em:'; 
             document.getElementById('prodUsaQR').checked = false; 
         } 
+        
         document.getElementById('modalFormProduto').style.display = 'flex'; 
     }
     
@@ -907,17 +1310,36 @@
         const ac = document.getElementById('prodAcaoPadrao').value; 
         const qr = document.getElementById('prodUsaQR').checked; 
         
-        if(!cod || !nm || !cat || isNaN(val)) return alert("Preencha os obrigatórios!"); 
-        if(orig === "" && db.produtos.find(p => p.codigo === cod)) return alert("Código existe!"); 
-        if(orig !== "" && parseInt(orig) !== cod && db.produtos.find(p => p.codigo === cod)) return alert("Código existe!"); 
+        if(!cod || !nm || !cat || isNaN(val)) {
+            return alert("Preencha os campos obrigatórios!"); 
+        }
         
-        let obj = { codigo: cod, nome: nm, categoria: cat, validadeDias: val, armazenamento: arm, precoPadrao: prc, marcas: mrc, acaoPadrao: ac, usaQR: qr }; 
+        if(orig === "" && db.produtos.find(p => p.codigo === cod)) {
+            return alert("Código já existe!"); 
+        }
+        
+        if(orig !== "" && parseInt(orig) !== cod && db.produtos.find(p => p.codigo === cod)) {
+            return alert("Código já existe!"); 
+        }
+        
+        let obj = { 
+            codigo: cod, 
+            nome: nm, 
+            categoria: cat, 
+            validadeDias: val, 
+            armazenamento: arm, 
+            precoPadrao: prc, 
+            marcas: mrc, 
+            acaoPadrao: ac, 
+            usaQR: qr 
+        }; 
         
         if(orig !== "") { 
             db.produtos[db.produtos.findIndex(p => p.codigo === parseInt(orig))] = obj; 
         } else { 
             db.produtos.push(obj); 
         } 
+        
         salvarBancoLocal(); 
         fecharModal('modalFormProduto'); 
         abrirGerenciar('produtos'); 
@@ -925,6 +1347,7 @@
     
     function abrirFormCategoria(idx) { 
         fecharModal('modalListagem'); 
+        
         if(idx >= 0) { 
             const c = db.categorias[idx]; 
             document.getElementById('catNomeOriginal').value = c.nome; 
@@ -937,6 +1360,7 @@
             document.getElementById('catCor').value = '#1976D2'; 
             document.getElementById('catCorTexto').value = '#fff'; 
         } 
+        
         document.getElementById('modalFormCategoria').style.display = 'flex'; 
     }
     
@@ -945,14 +1369,22 @@
         const nm = document.getElementById('catNome').value.trim(); 
         const cor = document.getElementById('catCor').value; 
         const ct = document.getElementById('catCorTexto').value; 
-        if(!nm) return alert("Preencha!"); 
-        if(orig === "" && db.categorias.find(c => c.nome.toLowerCase() === nm.toLowerCase())) return alert("Já existe!"); 
+        
+        if(!nm) return alert("Preencha o nome!"); 
+        
+        if(orig === "" && db.categorias.find(c => c.nome.toLowerCase() === nm.toLowerCase())) {
+            return alert("Categoria já existe!"); 
+        }
+        
         if(orig !== "") { 
             db.categorias[db.categorias.findIndex(c => c.nome === orig)] = { nome: nm, cor: cor, corTexto: ct }; 
-            db.produtos.forEach(p => { if(p.categoria === orig) p.categoria = nm; }); 
+            db.produtos.forEach(p => { 
+                if(p.categoria === orig) p.categoria = nm; 
+            }); 
         } else { 
             db.categorias.push({ nome: nm, cor: cor, corTexto: ct }); 
         } 
+        
         salvarBancoLocal(); 
         fecharModal('modalFormCategoria'); 
         abrirGerenciar('categorias'); 
@@ -960,6 +1392,7 @@
     
     function abrirFormOperador(idx) { 
         fecharModal('modalListagem'); 
+        
         if(idx >= 0) { 
             const o = db.operadores[idx]; 
             document.getElementById('opNomeOriginal').value = o.nome; 
@@ -970,6 +1403,7 @@
             document.getElementById('opNome').value = ''; 
             document.getElementById('opSenha').value = ''; 
         } 
+        
         document.getElementById('modalFormOperador').style.display = 'flex'; 
     }
     
@@ -977,14 +1411,22 @@
         const orig = document.getElementById('opNomeOriginal').value; 
         const nm = document.getElementById('opNome').value.trim(); 
         const s = document.getElementById('opSenha').value; 
-        if(!nm) return alert("Preencha!"); 
-        if(orig === "" && db.operadores.find(o => o.nome.toLowerCase() === nm.toLowerCase())) return alert("Já existe!"); 
+        
+        if(!nm) return alert("Preencha o nome!"); 
+        
+        if(orig === "" && db.operadores.find(o => o.nome.toLowerCase() === nm.toLowerCase())) {
+            return alert("Operador já existe!"); 
+        }
+        
         if(orig !== "") { 
             db.operadores[db.operadores.findIndex(o => o.nome === orig)] = { nome: nm, senha: s }; 
-            if(localStorage.getItem('etiquetadora_operadorAtual') === orig) { localStorage.setItem('etiquetadora_operadorAtual', nm); } 
+            if(localStorage.getItem('etiquetadora_operadorAtual') === orig) { 
+                localStorage.setItem('etiquetadora_operadorAtual', nm); 
+            } 
         } else { 
             db.operadores.push({ nome: nm, senha: s }); 
         } 
+        
         salvarBancoLocal(); 
         fecharModal('modalFormOperador'); 
         abrirGerenciar('operadores'); 
@@ -993,19 +1435,29 @@
     function abrirEstoque() { 
         fecharModal('modalPainelUnificado'); 
         voltarEstoqueMain(); 
+        
         const lista = document.getElementById('listaEstoque'); 
         lista.innerHTML = ''; 
+        
         let total = 0; 
         let stats = {}; 
+        
         db.historico.forEach(r => { 
             if(!stats[r.produto]) stats[r.produto] = 0; 
             stats[r.produto] += 1; 
             total += 1; 
         }); 
+        
         document.getElementById('estoqueTotal').innerText = total; 
+        
         Object.keys(stats).sort((a,b) => stats[b] - stats[a]).forEach(k => { 
-            lista.innerHTML += `<li style="display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:1px solid #eee;cursor:pointer;" onclick="abrirDetalhesEstoque('${k}')"><strong style="color: #333;">${k}</strong><span style="background:#e0e0e0;padding:4px 10px;border-radius:12px;font-weight:bold">${stats[k]}x ➡️</span></li>`; 
+            lista.innerHTML += `
+                <li style="display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:1px solid #eee;cursor:pointer;" onclick="abrirDetalhesEstoque('${k}')">
+                    <strong style="color: #333;">${k}</strong>
+                    <span style="background:#e0e0e0;padding:4px 10px;border-radius:12px;font-weight:bold">${stats[k]}x ➡️</span>
+                </li>`; 
         }); 
+        
         document.getElementById('modalEstoque').style.display = 'flex'; 
     }
     
@@ -1013,12 +1465,21 @@
         document.getElementById('estoqueMain').style.display = 'none'; 
         document.getElementById('estoqueDetalhes').style.display = 'block'; 
         document.getElementById('estoqueDetTitulo').innerText = nome; 
+        
         const ul = document.getElementById('listaEstoqueDetalhes'); 
         ul.innerHTML = ''; 
-        const registros = db.historico.filter(r => r.produto === nome).reverse(); 
+        
+        const registros = db.historico.filter(r => r.produto === nome).reverse();
+        
         registros.forEach(r => { 
-            let risco = r.baixado ? "text-decoration: line-through; opacity: 0.6;" : ""; 
-            ul.innerHTML += `<li style="padding: 12px; border-bottom: 1px solid #eee; ${risco}"><div style="font-size: 13px; color: #444; margin-bottom: 4px;">Manipulado: ${r.dataManipulado} - ${r.horaManipulado}</div><div style="font-size: 14px; color: #1565C0;">Validade: <strong>${r.validadeFinal}</strong></div><div style="font-size: 11px; color: #999; margin-top: 4px; font-weight: bold;">SKU: ${r.sku} ${r.baixado ? '✅ Baixado' : ''}</div></li>`; 
+            let risco = r.baixado ? "text-decoration: line-through; opacity: 0.6;" : "";
+            
+            ul.innerHTML += `
+                <li style="padding: 12px; border-bottom: 1px solid #eee; ${risco}">
+                    <div style="font-size: 13px; color: #444; margin-bottom: 4px;">Manipulado: ${r.dataManipulado}</div>
+                    <div style="font-size: 14px; color: #1565C0;">Validade: <strong>${r.validadeFinal}</strong></div>
+                    <div style="font-size: 11px; color: #999; margin-top: 4px; font-weight: bold;">SKU: ${r.sku} ${r.baixado ? '✅ Baixado' : ''}</div>
+                </li>`; 
         }); 
     }
     
@@ -1028,46 +1489,46 @@
     }
     
     function abrirPainelValidade() {
-        try {
-            const lista = document.getElementById('listaValidade');
-            lista.innerHTML = '';
+        try { 
+            const lista = document.getElementById('listaValidade'); 
+            lista.innerHTML = ''; 
             
-            if(!db.historico) db.historico = [];
+            if(!db.historico) db.historico = []; 
+            
             let itensAtivos = db.historico.filter(x => !x.baixado);
             
             if (itensAtivos.length === 0) {
-                lista.innerHTML = '<div style="padding:20px; text-align:center; color:#666; font-weight:bold;">Tudo limpo! Nenhum item ativo no momento.</div>';
-            } else {
-                const parseDataBR = (str) => {
+                lista.innerHTML = '<div style="padding:20px; text-align:center; color:#666; font-weight:bold;">Tudo limpo! Nenhum item ativo no momento.</div>'; 
+            } else { 
+                const parseDataBR = (str) => { 
                     if(!str || typeof str !== 'string' || !str.includes('/')) return new Date(0); 
-                    const partes = str.split('/');
-                    if(partes.length !== 3) return new Date(0);
-                    return new Date(partes[2], partes[1]-1, partes[0]);
-                };
+                    const partes = str.split('/'); 
+                    return new Date(partes[2], partes[1]-1, partes[0]); 
+                }; 
                 
-                let hoje = new Date();
-                hoje.setHours(0,0,0,0);
+                let hoje = new Date(); 
+                hoje.setHours(0,0,0,0); 
                 
                 itensAtivos.sort((a, b) => parseDataBR(a.validadeFinal) - parseDataBR(b.validadeFinal));
                 
-                itensAtivos.forEach(item => {
+                itensAtivos.forEach(item => { 
                     let dVal = parseDataBR(item.validadeFinal);
                     let diffTime = dVal.getTime() - hoje.getTime();
                     let diffDias = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                     
                     let classeBadge = "bg-green";
-                    let textoStatus = `Vence em ${diffDias} dia(s)`;
+                    let textoStatus = `Vence em ${diffDias} dia(s)`; 
                     
-                    if (diffDias < 0) {
-                        classeBadge = "bg-red";
-                        textoStatus = `Vencido há ${Math.abs(diffDias)} dia(s)!`;
-                    } else if (diffDias === 0) {
-                        classeBadge = "bg-yellow";
-                        textoStatus = "Vence HOJE!";
-                    } else if (diffDias === 1) {
-                        classeBadge = "bg-yellow";
-                        textoStatus = "Vence AMANHÃ!";
-                    }
+                    if (diffDias < 0) { 
+                        classeBadge = "bg-red"; 
+                        textoStatus = `Vencido há ${Math.abs(diffDias)} dia(s)!`; 
+                    } else if (diffDias === 0) { 
+                        classeBadge = "bg-yellow"; 
+                        textoStatus = "Vence HOJE!"; 
+                    } else if (diffDias === 1) { 
+                        classeBadge = "bg-yellow"; 
+                        textoStatus = "Vence AMANHÃ!"; 
+                    } 
                     
                     let marcaDisplay = (item.marca && item.marca !== "-") ? `(${item.marca})` : "";
                     
@@ -1082,86 +1543,104 @@
                                 <div style="font-size: 10px; color: #999; margin-bottom: 8px;">SKU: ${item.sku.slice(-5)}</div>
                                 <button onclick="darBaixaManual('${item.sku}')" style="background:#4CAF50; color:white; border:none; padding:6px 10px; border-radius:4px; font-weight:bold; cursor:pointer; font-size:12px;">✅ Baixa</button>
                             </div>
-                        </li>
-                    `;
-                });
-            }
-            document.getElementById('modalValidade').style.display = 'flex';
-        } catch(err) {
+                        </li>`; 
+                }); 
+            } 
+            
+            document.getElementById('modalValidade').style.display = 'flex'; 
+        } catch(err) { 
             console.error(err);
-            alert("⚠️ Algum registro antigo está impedindo o cálculo da validade. Limpe seu estoque e tente novamente.");
+            alert("⚠️ Algum registro antigo está impedindo o cálculo da validade. Limpe seu estoque e tente novamente."); 
         }
     }
 
-    function darBaixaManual(sku) {
-        if(confirm("Confirma que este item foi utilizado/descartado?")) {
-            let item = db.historico.find(x => x.sku === sku);
-            if(item) {
-                item.baixado = true;
-                item.dataBaixa = new Date().toLocaleString('pt-BR');
-                salvarBancoLocal();
+    function darBaixaManual(sku) { 
+        if(confirm("Confirma que este item foi utilizado/descartado?")) { 
+            let item = db.historico.find(x => x.sku === sku); 
+            if(item) { 
+                item.baixado = true; 
+                item.dataBaixa = new Date().toLocaleString('pt-BR'); 
+                salvarBancoLocal(); 
                 abrirPainelValidade(); 
                 
-                db.filaRetentativaStatus.push(item);
-                syncGeral();
-            }
-        }
+                db.filaRetentativaStatus.push(item); 
+                syncGeral(); 
+            } 
+        } 
     }
 
     function abrirModalImprimir(cod) { 
-        if(!document.getElementById('seletorOperador').value) { return alert("Selecione um Operador(a)!"); } 
+        if(!document.getElementById('seletorOperador').value) {
+            return alert("Selecione um Operador(a)!"); 
+        }
+        
         const p = db.produtos.find(x => x.codigo === cod); 
         quantidadeAtual = 1; 
         document.getElementById('imprimirQtd').innerText = quantidadeAtual; 
+        
         let dVal = new Date(); 
         dVal.setDate(dVal.getDate() + p.validadeDias); 
+        
         document.getElementById('imprimirCodigoProduto').value = p.codigo; 
         document.getElementById('imprimirNomeProduto').innerText = p.nome; 
         document.getElementById('imprimirAcao').value = p.acaoPadrao; 
         document.getElementById('imprimirPeso').value = ''; 
         document.getElementById('imprimirPreco').value = p.precoPadrao; 
         document.getElementById('imprimirValidade').value = dVal.toISOString().split('T')[0]; 
+        
         const selM = document.getElementById('imprimirMarca'); 
         const boxM = document.getElementById('boxMarcaSelect'); 
+        
         if(p.marcas && p.marcas.length > 0) { 
             boxM.style.display = 'block'; 
             selM.innerHTML = '<option value="">Sem Marca</option>'; 
-            p.marcas.forEach(m => { selM.innerHTML += `<option value="${m}">${m}</option>`; }); 
+            p.marcas.forEach(m => {
+                selM.innerHTML += `<option value="${m}">${m}</option>`;
+            }); 
         } else { 
             boxM.style.display = 'none'; 
             selM.innerHTML = '<option value="">Sem Marca</option>'; 
         } 
+        
         toggleLote(); 
         calcularTotalPagar(); 
+        
         document.getElementById('modalImprimir').style.display = 'flex'; 
     }
     
     function toggleLote() { 
-        const m = document.getElementById('imprimirMarca').value; 
         const box = document.getElementById('boxLote'); 
-        if(m !== "") { box.style.display = 'block'; } 
-        else { box.style.display = 'none'; document.getElementById('imprimirLote').value = ''; } 
-    }
-    
-    function mudarQtd(v) { 
-        if(quantidadeAtual + v > 0) { quantidadeAtual += v; document.getElementById('imprimirQtd').innerText = quantidadeAtual; } 
-    }
-    
-    function calcularTotalPagar() { 
-        const pesoStr = document.getElementById('imprimirPeso').value; 
-        const precoStr = document.getElementById('imprimirPreco').value; 
-        const span = document.getElementById('imprimirCalculo'); 
-        const box = document.getElementById('boxCalculoTotal'); 
-        const preco = parseFloat(precoStr); 
-        const peso = parseFloat(pesoStr); 
-        if (!isNaN(preco)) { 
-            let total = preco; 
-            if (!isNaN(peso) && peso > 0) { total = (peso / 1000) * preco; } 
-            span.innerText = total.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2}); 
+        if(document.getElementById('imprimirMarca').value !== "") {
             box.style.display = 'block'; 
         } else { 
             box.style.display = 'none'; 
+            document.getElementById('imprimirLote').value = ''; 
         } 
+    }
+    
+    function mudarQtd(v) { 
+        if(quantidadeAtual + v > 0) { 
+            quantidadeAtual += v; 
+            document.getElementById('imprimirQtd').innerText = quantidadeAtual; 
+        } 
+    }
+    
+    function calcularTotalPagar() { 
+        const preco = parseFloat(document.getElementById('imprimirPreco').value); 
+        const peso = parseFloat(document.getElementById('imprimirPeso').value); 
+        const span = document.getElementById('imprimirCalculo'); 
+        const box = document.getElementById('boxCalculoTotal'); 
+        
+        if (!isNaN(preco)) { 
+            let total = preco; 
+            if (!isNaN(peso) && peso > 0) {
+                total = (peso / 1000) * preco; 
+            }
+            span.innerText = total.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2}); 
+            box.style.display = 'block'; 
+        } else {
+            box.style.display = 'none'; 
+        }
     }
     
     function formataDinheiro(v) { 
@@ -1173,188 +1652,291 @@
         btn.innerText = "Aguarde..."; 
         btn.disabled = true;
         
-        const p = db.produtos.find(x => x.codigo === parseInt(document.getElementById('imprimirCodigoProduto').value));
-        const acao = document.getElementById('imprimirAcao').value; 
+        const p = db.produtos.find(x => x.codigo === parseInt(document.getElementById('imprimirCodigoProduto').value)); 
+        const acaoSelect = document.getElementById('imprimirAcao').value; 
         const pesoInput = document.getElementById('imprimirPeso').value.trim(); 
         const precoInput = document.getElementById('imprimirPreco').value.trim(); 
         const op = document.getElementById('seletorOperador').value; 
         const est = db.configs.estabelecimento; 
         const marca = document.getElementById('imprimirMarca').value; 
-        const lote = document.getElementById('imprimirLote').value.trim();
+        const lote = document.getElementById('imprimirLote').value.trim(); 
         
         const valSplits = document.getElementById('imprimirValidade').value.split('-'); 
         const valBR = `${valSplits[2]}/${valSplits[1]}/${valSplits[0]}`; 
         
         const hj = new Date(); 
-        const manBR = `${String(hj.getDate()).padStart(2,'0')}/${String(hj.getMonth()+1).padStart(2,'0')}/${hj.getFullYear()}`; 
-        const hrBR = `${String(hj.getHours()).padStart(2,'0')}:${String(hj.getMinutes()).padStart(2,'0')}`;
         
+        // Data e hora na mesma linha formatada
+        const manBR = `${String(hj.getDate()).padStart(2,'0')}/${String(hj.getMonth()+1).padStart(2,'0')}/${hj.getFullYear()} ${String(hj.getHours()).padStart(2,'0')}:${String(hj.getMinutes()).padStart(2,'0')}`;
+        
+        // Mapeamento de nomes de ação para impressão (CAIXA ALTA)
+        let acaoImpressao = "MANIPULADO:";
+        if(acaoSelect === "Aberto em:") acaoImpressao = "ABERTO:";
+        else if(acaoSelect === "Congelado em:") acaoImpressao = "CONGELADO:";
+
         let skusGerados = [];
         for(let i = 0; i < quantidadeAtual; i++) {
             let skuCode = `SKU${Date.now()}${i}`; 
             skusGerados.push(skuCode);
+            
             let reg = { 
                 id: Date.now() + i, 
                 produto: p.nome, 
                 sku: skuCode, 
                 baixado: false, 
-                acao: acao, 
+                acaoImpressao: acaoImpressao, 
+                acaoSelect: acaoSelect, 
                 peso: (pesoInput === "" ? "-" : `${pesoInput}g`), 
                 marca: marca, 
                 lote: lote, 
                 preco: (precoInput === "" ? "" : formataDinheiro(precoInput)), 
                 dataManipulado: manBR, 
-                horaManipulado: hrBR, 
                 validadeFinal: valBR, 
                 quantidade: 1, 
                 operador: op 
             };
+            
             db.historico.push(reg); 
             db.filaRetentativaStatus.push(reg);
         }
-        salvarBancoLocal(); 
-        audioBeep.play().catch(()=>{});
         
+        salvarBancoLocal(); 
+        audioBeep.play().catch(()=>{}); 
         syncGeral();
         
         if(db.configs.modo === 'pdf') { 
             fecharModal('modalImprimir'); 
-            gerarPDF(p, acao, pesoInput, manBR, hrBR, valBR, quantidadeAtual, op, est, precoInput, marca, lote, skusGerados); 
+            gerarPDF(p, acaoImpressao, pesoInput, manBR, valBR, quantidadeAtual, op, est, precoInput, marca, lote, skusGerados); 
             btn.innerText = "🖨️ IMPRIMIR"; 
             btn.disabled = false; 
-        } else { 
-            await gerarRawBT(p, acao, pesoInput, manBR, hrBR, valBR, quantidadeAtual, op, est, precoInput, marca, lote, skusGerados, btn); 
-        }
-    }
-
-    function aplicarEstilosGabarito(elGabarito, elHeader, elVal) { 
-        const tam = db.configs.tamanhoEtiqueta || "50x50"; 
-        if(tam === "60x40") { elGabarito.style.width = "480px"; elGabarito.style.height = "320px"; } 
-        else if(tam === "50x50") { elGabarito.style.width = "400px"; elGabarito.style.height = "400px"; } 
-        else { elGabarito.style.width = "320px"; elGabarito.style.height = "320px"; } 
-        if(db.configs.destaqueProd) elHeader.classList.add('destaque'); else elHeader.classList.remove('destaque'); 
-        
-        const labelVal = document.getElementById('viz-label-val');
-        if(db.configs.destaqueVal) {
-            elVal.classList.add('destaque'); 
-            labelVal.classList.add('destaque');
         } else {
-            elVal.classList.remove('destaque'); 
-            labelVal.classList.remove('destaque');
+            await gerarRawBT(p, acaoImpressao, pesoInput, manBR, valBR, quantidadeAtual, op, est, precoInput, marca, lote, skusGerados, btn); 
         }
     }
 
-    function gerarPDF(p, acao, pesoInput, manBR, hrBR, valBR, qtd, op, est, precoInput, marca, lote, skus) {
-        let printWindow = window.open('', '', 'width=450,height=600');
-        let armaz = ""; 
-        if(p.armazenamento === "resfriado") armaz = "MANTER RESFRIADO"; 
-        if(p.armazenamento === "congelado") armaz = "MANTER CONGELADO";
+    function aplicarDestaquesVisuais() { 
+        const tam = db.configs.tamanhoEtiqueta || "50x50"; 
         
+        // Destaque Produto
+        if(db.configs.destaqueProd) {
+            document.getElementById('viz-nome-produto').classList.add('destaque'); 
+        } else {
+            document.getElementById('viz-nome-produto').classList.remove('destaque'); 
+        }
+        
+        // Destaque Validade
+        if(db.configs.destaqueVal) {
+            document.getElementById('viz-container-validade').classList.add('validade-grande'); 
+        } else {
+            document.getElementById('viz-container-validade').classList.remove('validade-grande');
+        }
+    }
+
+    function gerarPDF(p, acaoImpressao, pesoInput, manBR, valBR, qtd, op, est, precoInput, marca, lote, skus) {
+        let printWindow = window.open('', '', 'width=600,height=800');
+        
+        // Formatação do armazenamento (Fundo transparente, borda preta)
+        let armazHTML = "";
+        if(p.armazenamento && p.armazenamento !== "ambiente") {
+            let textoArm = p.armazenamento === "resfriado" ? "MANTER RESFRIADO" : "MANTER CONGELADO";
+            armazHTML = `
+                <div style="position:absolute; bottom:0; left:50%; transform:translateX(-50%); text-align:center; width:100%;">
+                    <span style="color:black; padding:2px 6px; border-radius:4px; border:2px solid black; font-weight:bold; font-size:14px; text-transform:uppercase;">${textoArm}</span>
+                </div>`;
+        }
+
         let dimensaoCSS = "width: 400px; height: 400px;"; 
         const tam = db.configs.tamanhoEtiqueta || "50x50"; 
         if(tam === "60x40") dimensaoCSS = "width: 480px; height: 320px;"; 
         if(tam === "40x40") dimensaoCSS = "width: 320px; height: 320px;";
         
-        let classeHeader = db.configs.destaqueProd ? "etiqueta-header destaque" : "etiqueta-header"; 
-        let classeVal = db.configs.destaqueVal ? "etiqueta-val-destaque destaque" : "etiqueta-val-destaque";
+        let classeHeader = db.configs.destaqueProd ? "item-nome destaque" : "item-nome"; 
+        let classeValidadeGrande = db.configs.destaqueVal ? "validade-grande" : "";
         
-        let htmlContent = `<html><head><style>body { font-family: 'Arial', sans-serif; padding: 20px; display: flex; flex-direction: column; align-items: center; background: #e0e0e0; margin: 0; } .etiqueta { background: white; padding: 4px; margin-bottom: 20px; box-sizing: border-box; display: flex; flex-direction: column; ${dimensaoCSS} overflow: hidden; } .etiqueta-borda-interna { border: none; display: flex; flex-direction: column; width: 100%; height: 100%; box-sizing: border-box; justify-content: space-between; } .box-header { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; border-bottom: 2px solid black; padding-bottom: 2px; margin-bottom: 2px; width: 100%; } .box-body { flex: 1 1 auto; display: flex; flex-direction: column; overflow: hidden; width: 100%; justify-content: space-between; } .box-footer { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; border-top: 2px solid black; padding-top: 2px; margin-top: 2px; width: 100%; } .etiqueta-header { text-align: center; font-weight: 900; font-size: 20px; text-transform: uppercase; line-height: 1.1; margin: 0; width: 100%; } .etiqueta-header.destaque { font-size: 30px; } .etiqueta-meio { display: flex; justify-content: space-between; align-items: stretch; flex: 1; margin-top: 2px; } .etiqueta-info-textual { display: flex; flex-direction: column; justify-content: space-around; flex: 1; padding-right: 5px; } .etiqueta-row { display: flex; align-items: center; justify-content: flex-start; margin-bottom: 2px; } .etiqueta-label { font-weight: bold; margin-right: 5px; } .etiqueta-val-container { display: flex; align-items: center; margin-top: 2px; gap: 5px; } .etiqueta-val-destaque { font-size: 24px; font-weight: 900; } .etiqueta-val-destaque.destaque { font-size: 36px; } .etiqueta-footer-title { font-weight: bold; font-size: 18px; text-align: center; } .etiqueta-footer-op { font-size: 13px; margin-top: 2px; text-align: center; }</style><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script></head><body>`;
+        let htmlContent = `
+        <html>
+        <head>
+            <style>
+                body { font-family: 'Arial', sans-serif; padding: 20px; background: #e0e0e0; margin: 0; display:flex; flex-direction:column; align-items:center; } 
+                .etiqueta-print { background: white; margin-bottom: 20px; box-sizing: border-box; ${dimensaoCSS} position:relative; overflow:hidden; } 
+                .etiqueta-absoluta { position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px; }
+                .linha-divisoria { position: absolute; left: 0; right: 0; height: 2px; background-color: black; }
+                .linha-topo { top: 35px; } 
+                .linha-rodape { bottom: 35px; }
+                .centralizado-x { left: 50%; transform: translateX(-50%); text-align: center; width: 100%; }
+                .${classeHeader} { position: absolute; top: 0; font-weight: 900; font-size: 18px; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+                .bloco-central { position: absolute; top: 42px; bottom: 42px; left: 0; right: 0; display: flex; justify-content: space-between; align-items: flex-start; }
+                .info-esquerda { flex: 1; display: flex; flex-direction: column; gap: 4px; padding-right: 5px; }
+                .linha-acao-data { font-size: 14px; white-space: nowrap; }
+                .label-acao { font-weight: bold; text-transform: uppercase; font-size: 16px; margin-right: 4px; }
+                .container-validade { margin-top: 4px; white-space: nowrap; }
+                .val-label { font-size: 20px; font-weight: 900; margin-right: 4px; }
+                .val-data { font-size: 20px; font-weight: 900; }
+                .validade-grande .val-label, .validade-grande .val-data { font-size: 32px !important; }
+                .linha-opcionais { font-size: 12px; display: flex; gap: 10px; }
+                .bold { font-weight: bold; }
+                #viz-box-preco-container-print { font-size: 16px; font-weight: bold; text-transform: uppercase; }
+                .item-estabelecimento { position: absolute; bottom: 18px; font-weight: bold; font-size: 16px; white-space: nowrap; }
+                .item-operador { position: absolute; bottom: 0; font-size: 12px; }
+            </style>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script>
+        </head>
+        <body>`;
         
         for(let i = 0; i < qtd; i++) {
             let nomeDisplay = marca !== "" ? `${p.nome} (${marca})` : p.nome;
-            let displayPeso = pesoInput !== "" ? "flex" : "none";
-            let displayLote = marca !== "" ? "flex" : "none";
-            let valorCalc = "";
-            let rotuloPreco = "Preço (und):";
+            let displayPeso = pesoInput !== "" ? "block" : "none";
+            let displayLote = marca !== "" ? "block" : "none";
             
+            let valorCalc = ""; 
             if(precoInput !== "") { 
-                let prNum = parseFloat(precoInput); let psNum = parseFloat(pesoInput); 
-                if(!isNaN(psNum) && psNum > 0) { 
-                    valorCalc = formataDinheiro((psNum/1000)*prNum); 
-                    rotuloPreco = "Valor Total:";
-                } else { 
-                    valorCalc = formataDinheiro(prNum); 
-                } 
+                let psNum = parseFloat(pesoInput); 
+                valorCalc = (!isNaN(psNum) && psNum > 0) ? formataDinheiro((psNum/1000)*parseFloat(precoInput)) : formataDinheiro(parseFloat(precoInput)); 
             }
             
-            let displayPreco = valorCalc !== "" ? "flex" : "none";
-            let displayOpcionais = (displayPeso === "flex" || displayPreco === "flex") ? "flex" : "none";
-            let displayArmaz = armaz !== "" ? "block" : "none";
+            let displayPreco = valorCalc !== "" ? "block" : "none";
+            let displayOpcionais = (displayPeso === "block" || displayLote === "block") ? "flex" : "none";
             let showQR = (db.configs.controleQR && p.usaQR) ? "flex" : "none";
-            let idQR = `qr_${Date.now()}_${i}`;
+            let idQR = `qr_pdf_${Date.now()}_${i}`;
 
-            htmlContent += `<div class="etiqueta"><div class="etiqueta-borda-interna"><div class="box-header"><div class="${classeHeader}">${nomeDisplay}</div></div><div class="box-body"><div class="etiqueta-meio"><div class="etiqueta-info-textual"><div class="etiqueta-row"><span class="etiqueta-label" style="text-transform: uppercase; font-size: 18px;">${acao}</span><span style="font-size: 16px;">${manBR} - ${hrBR}</span></div><div class="etiqueta-row" style="display: ${displayOpcionais}; justify-content: flex-start; gap: 15px;"><div style="display: ${displayPeso};"><span class="etiqueta-label">Peso:</span> <span style="font-weight:bold;">${pesoInput}g</span></div><div style="display: ${displayPreco}; font-weight: bold; font-size: 18px;"><span>${rotuloPreco}</span> R$ <span>${valorCalc}</span></div></div><div class="etiqueta-row" style="display: ${displayLote};"><div><span class="etiqueta-label">Lote:</span> <span>${lote || '-'}</span></div></div><div class="etiqueta-val-container"><span class="${classeVal}">VAL:</span><span class="${classeVal}">${valBR}</span></div></div><div style="display: ${showQR}; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; padding-left: 2px;"><div id="${idQR}"></div><div style="font-size: 9px; margin-top: 2px; font-weight: bold;">${skus[i].slice(-5)}</div></div></div><div style="text-align: center; margin-top: auto; padding-top: 2px; display: ${displayArmaz};"><span style="background-color: black !important; color: white !important; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 16px; display: inline-block; text-transform: uppercase;">${armaz}</span></div></div><div class="box-footer"><div class="etiqueta-footer-title">${est}</div><div class="etiqueta-footer-op">Operador(a): <span style="font-weight: bold;">${op}</span></div></div></div></div><script>if("${showQR}" === "flex") { new QRCode(document.getElementById("${idQR}"), { text: "${skus[i]}", width: 45, height: 45 }); }<\/script>`;
+            htmlContent += `
+            <div class="etiqueta-print">
+                <div class="etiqueta-absoluta">
+                    <div class="${classeHeader} centralizado-x">${nomeDisplay}</div>
+                    <div class="linha-divisoria linha-topo"></div>
+                    
+                    <div class="bloco-central">
+                        <div class="info-esquerda">
+                            <div class="linha-acao-data">
+                                <span class="label-acao">${acaoImpressao}</span>
+                                <span>${manBR}</span>
+                            </div>
+                            
+                            <div class="linha-opcionais" style="display: ${displayOpcionais};">
+                                <div style="display: ${displayPeso};">Peso: <span class="bold">${pesoInput}g</span></div>
+                                <div style="display: ${displayLote};">Lote: <span class="bold">${lote || '-'}</span></div>
+                            </div>
+                            
+                            <div id="viz-box-preco-container-print" style="display: ${displayPreco};">
+                                TOTAL: R$ <span>${valorCalc}</span>
+                            </div>
+                            
+                            <div class="container-validade ${classeValidadeGrande}">
+                                <span class="val-label">VAL:</span><span class="val-data">${valBR}</span>
+                            </div>
+                        </div>
+                        
+                        <div style="display: ${showQR}; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; padding-left: 2px;">
+                            <div id="${idQR}"></div>
+                            <div style="font-size: 9px; margin-top: 2px; font-weight: bold;">${skus[i].slice(-5)}</div>
+                        </div>
+                        
+                        ${armazHTML}
+                    </div>
+                    
+                    <div class="linha-divisoria linha-rodape"></div>
+                    <div class="item-estabelecimento centralizado-x">${est}</div>
+                    <div class="item-operador centralizado-x">Operador(a): <span class="bold">${op}</span></div>
+                </div>
+            </div>
+            <script>
+                if("${showQR}" === "flex") { 
+                    new QRCode(document.getElementById("${idQR}"), { text: "${skus[i]}", width: 55, height: 55 }); 
+                }
+            <\/script>`;
         }
         
-        htmlContent += `<script> setTimeout(function() { window.print(); window.close(); }, 600); <\/script></body></html>`;
+        htmlContent += `
+            <script> 
+                setTimeout(function() { window.print(); window.close(); }, 800); 
+            <\/script>
+        </body>
+        </html>`;
+        
         printWindow.document.write(htmlContent); 
         printWindow.document.close();
     }
 
-    async function gerarRawBT(p, acao, pesoInput, manBR, hrBR, valBR, qtd, op, est, precoInput, marca, lote, skus, btn) {
+    async function gerarRawBT(p, acaoImpressao, pesoInput, manBR, valBR, qtd, op, est, precoInput, marca, lote, skus, btn) {
         const gab = document.getElementById('area-impressao-visual'); 
-        const head = document.getElementById('viz-nome-produto'); 
-        const val = document.getElementById('viz-data-val');
         
-        aplicarEstilosGabarito(gab, head, val);
+        // Prepara dados no gabarito HTML oculto
+        document.getElementById('viz-nome-produto').innerText = marca !== "" ? `${p.nome} (${marca})` : p.nome;
+        document.getElementById('viz-label-acao').innerText = acaoImpressao; 
+        document.getElementById('viz-data-man').innerText = manBR; // Mesma linha garantida pelo CSS e JS
         
-        head.innerText = marca !== "" ? `${p.nome} (${marca})` : p.nome;
-        document.getElementById('viz-label-acao').innerText = acao; 
-        document.getElementById('viz-data-man').innerText = `${manBR} - ${hrBR}`;
-        
-        const rowPeso = document.getElementById('viz-box-peso'); let hasPeso = false;
-        
-        const rotuloPreco = document.getElementById('viz-label-preco');
-        
+        // Peso e Lote Opcionais
+        let hasOpcionais = false;
         if(pesoInput !== "") { 
-            rowPeso.style.display = "block"; 
+            document.getElementById('viz-box-peso').style.display = "block"; 
             document.getElementById('viz-peso').innerText = `${pesoInput}g`; 
-            hasPeso = true; 
-        } else { 
-            rowPeso.style.display = "none"; 
+            hasOpcionais = true; 
+        } else {
+            document.getElementById('viz-box-peso').style.display = "none";
         }
         
-        const rowLote = document.getElementById('viz-row-lote');
-        if(marca !== "") { rowLote.style.display = "flex"; document.getElementById('viz-lote').innerText = lote || '-'; } else { rowLote.style.display = "none"; }
+        if(marca !== "") { 
+            document.getElementById('viz-row-lote').style.display = "block"; 
+            document.getElementById('viz-lote').innerText = lote || '-'; 
+            hasOpcionais = true; 
+        } else {
+            document.getElementById('viz-row-lote').style.display = "none";
+        }
         
-        let calcPreco = "";
+        document.getElementById('viz-linha-opcionais').style.display = hasOpcionais ? "flex" : "none";
+        
+        // Total formatado em CAIXA ALTA
+        let calcPreco = ""; 
         if(precoInput !== "") { 
-            let prNum = parseFloat(precoInput); let psNum = parseFloat(pesoInput); 
-            if(!isNaN(psNum) && psNum > 0) { 
-                calcPreco = formataDinheiro((psNum/1000)*prNum); 
-                rotuloPreco.innerText = "Total:";
-            } else { 
-                calcPreco = formataDinheiro(prNum); 
-                rotuloPreco.innerText = "Total:";
-            } 
+            let psNum = parseFloat(pesoInput); 
+            calcPreco = (!isNaN(psNum) && psNum > 0) ? formataDinheiro((psNum/1000)*parseFloat(precoInput)) : formataDinheiro(parseFloat(precoInput)); 
         }
         
-        const bxPrecoCont = document.getElementById('viz-box-preco-container'); let hasPreco = false;
-        if(calcPreco !== "") { bxPrecoCont.style.display = "block"; document.getElementById('viz-preco').innerText = calcPreco; hasPreco = true; } else { bxPrecoCont.style.display = "none"; }
+        if(calcPreco !== "") { 
+            document.getElementById('viz-box-preco-container').style.display = "block"; 
+            document.getElementById('viz-preco').innerText = calcPreco; 
+        } else {
+            document.getElementById('viz-box-preco-container').style.display = "none";
+        }
         
-        const rowOpcionais = document.getElementById('viz-linha-opcionais');
-        if(hasPeso || hasPreco) { rowOpcionais.style.display = "flex"; } else { rowOpcionais.style.display = "none"; }
-        
-        let arm = p.armazenamento === "resfriado" ? "MANTER RESFRIADO" : (p.armazenamento === "congelado" ? "MANTER CONGELADO" : "");
-        const bxArmaz = document.getElementById('viz-linha-armazenamento');
-        if(arm !== "") { bxArmaz.style.display = "block"; document.getElementById('viz-armazenamento').innerText = arm; } else { bxArmaz.style.display = "none"; }
-        
-        val.innerText = valBR; 
+        // Validade e Rodapé
+        document.getElementById('viz-data-val').innerText = valBR; 
         document.getElementById('viz-estabelecimento').innerText = est; 
         document.getElementById('viz-operador').innerText = op;
         
+        // Conservação (Borda, sem fundo)
+        const bxArmaz = document.getElementById('viz-linha-armazenamento');
+        if(p.armazenamento && p.armazenamento !== "ambiente") {
+            bxArmaz.style.display = "block";
+            document.getElementById('viz-armazenamento').innerText = p.armazenamento === "resfriado" ? "MANTER RESFRIADO" : "MANTER CONGELADO";
+        } else {
+            bxArmaz.style.display = "none";
+        }
+        
+        // QR Code Container
         const qrCont = document.getElementById('viz-qrcode-container');
-        if(db.configs.controleQR && p.usaQR) { qrCont.style.display = 'flex'; } else { qrCont.style.display = 'none'; }
+        const usaQR = db.configs.controleQR && p.usaQR;
+        qrCont.style.display = usaQR ? 'flex' : 'none';
 
+        aplicarDestaquesVisuais();
+
+        // Canvas final para múltiplas cópias
         const finalCanvas = document.createElement('canvas'); 
         const ctx = finalCanvas.getContext('2d'); 
         
+        // Define dimensões em pixels baseadas no mm
         const tam = db.configs.tamanhoEtiqueta || "50x50";
-        let dotsW = 400, dotsH = 400;
-        if(tam === "60x40") { dotsW = 480; dotsH = 320; }
-        if(tam === "40x40") { dotsW = 320; dotsH = 320; }
+        let dotsW = 400, dotsH = 400; // 50x50mm padrão
         
-        // FORÇANDO O TAMANHO EXATO PARA EVITAR QUE O HTML2CANVAS ADIVINHE E DEIXE BURACO
+        if(tam === "60x40") { 
+            dotsW = 480; 
+            dotsH = 320; 
+        } else if(tam === "40x40") { 
+            dotsW = 320; 
+            dotsH = 320; 
+        }
+        
+        // Força tamanho do gabarito antes de renderizar
         gab.style.width = dotsW + "px";
         gab.style.height = dotsH + "px";
         gab.style.minWidth = dotsW + "px";
@@ -1363,27 +1945,28 @@
         gab.style.maxHeight = dotsH + "px";
 
         let currentY = 0; 
-        
         window.scrollTo(0, 0);
         
         for(let i = 0; i < qtd; i++) {
-            if(db.configs.controleQR && p.usaQR) {
+            // Gera QR Code de 55px
+            if(usaQR) {
                 document.getElementById('viz-qrcode').innerHTML = ''; 
-                new QRCode(document.getElementById('viz-qrcode'), { text: skus[i], width: 45, height: 45 }); 
+                new QRCode(document.getElementById('viz-qrcode'), { text: skus[i], width: 55, height: 55 }); 
                 document.getElementById('viz-sku').innerText = skus[i].slice(-5); 
-                await new Promise(r => setTimeout(r, 60)); 
+                await new Promise(r => setTimeout(r, 100)); // Espera QR gerar
             }
             
+            // Renderiza gabarito para canvas
             let c = await html2canvas(gab, { 
                 scale: 2, 
                 backgroundColor: "#ffffff", 
                 logging: false,
-                scrollX: 0,
-                scrollY: 0,
-                width: dotsW,
-                height: dotsH
+                useCORS: true,
+                width: dotsW, 
+                height: dotsH 
             });
             
+            // Prepara canvas final na primeira cópia
             if(i === 0) { 
                 finalCanvas.width = dotsW; 
                 finalCanvas.height = dotsH * qtd; 
@@ -1391,61 +1974,66 @@
                 ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height); 
             }
             
+            // Desenha cópia no canvas final
             ctx.imageSmoothingEnabled = true;
-            
             ctx.drawImage(c, 0, 0, c.width, c.height, 0, currentY, dotsW, dotsH); 
             currentY += dotsH;
         }
         
+        // Envia para RawBT via Intent
         const intent = "intent:" + finalCanvas.toDataURL("image/png") + "#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;";
+        
         btn.innerText = "🖨️ IMPRIMIR"; 
         btn.disabled = false; 
         fecharModal('modalImprimir'); 
         
-        // LIMPANDO A SUJEIRA DO GABARITO DEPOIS DE GERAR
-        gab.style.width = "";
-        gab.style.height = "";
-        gab.style.minWidth = "";
-        gab.style.minHeight = "";
-        gab.style.maxWidth = "";
+        // Limpa estilos forçados do gabarito
+        gab.style.width = ""; 
+        gab.style.height = ""; 
+        gab.style.minWidth = ""; 
+        gab.style.minHeight = ""; 
+        gab.style.maxWidth = ""; 
         gab.style.maxHeight = "";
 
         window.location.href = intent;
     }
 
-    function abrirScannerQR() {
+    function abrirScannerQR() { 
         document.getElementById('modalLeitorQR').style.display = 'flex'; 
-        html5QrCode = new Html5Qrcode("reader");
-        
-        syncGeral();
+        html5QrCode = new Html5Qrcode("reader"); 
+        syncGeral(); 
         
         html5QrCode.start(
             { facingMode: "environment" }, 
             { fps: 10, qrbox: { width: 250, height: 250 } }, 
             onScanSuccess, 
             onScanFailure
-        ).catch(err => { alert("Erro na câmera: " + err); });
+        ).catch(err => alert("Erro na câmera: " + err)); 
     }
     
     function fecharLeitorQR() { 
-        if(html5QrCode) { 
-            html5QrCode.stop().then(() => { html5QrCode.clear(); html5QrCode = null; }).catch(err => { console.log(err); }); 
-        } 
+        if(html5QrCode) {
+            html5QrCode.stop().then(() => { 
+                html5QrCode.clear(); 
+                html5QrCode = null; 
+            });
+        }
         document.getElementById('modalLeitorQR').style.display = 'none'; 
     }
     
-    function onScanSuccess(decodedText, decodedResult) {
-        if(html5QrCode) { html5QrCode.pause(); } 
-        let item = db.historico.find(x => x.sku === decodedText);
+    function onScanSuccess(decodedText) { 
+        if(html5QrCode) html5QrCode.pause(); 
+        
+        let item = db.historico.find(x => x.sku === decodedText); 
         
         if(!item) { 
             audioError.play().catch(()=>{}); 
             alert("❌ Etiqueta não encontrada no sistema!"); 
-            setTimeout(() => { if(html5QrCode) html5QrCode.resume(); }, 2000);
+            setTimeout(() => { if(html5QrCode) html5QrCode.resume(); }, 2000); 
         } else if (item.baixado) { 
             audioError.play().catch(()=>{}); 
             alert("⚠️ Este item já foi baixado em: " + item.dataBaixa); 
-            setTimeout(() => { if(html5QrCode) html5QrCode.resume(); }, 2000);
+            setTimeout(() => { if(html5QrCode) html5QrCode.resume(); }, 2000); 
         } else { 
             item.baixado = true; 
             item.dataBaixa = new Date().toLocaleString('pt-BR'); 
@@ -1453,14 +2041,15 @@
             audioBeep.play().catch(()=>{}); 
             alert("✅ Baixa realizada com sucesso no Estoque!\nItem: " + item.produto); 
             
-            db.filaRetentativaStatus.push(item);
-            syncGeral();
-            
+            db.filaRetentativaStatus.push(item); 
+            syncGeral(); 
             fecharLeitorQR(); 
-        }
+        } 
     }
     
-    function onScanFailure(error) { }
+    function onScanFailure() { 
+        // Silencioso enquanto busca
+    }
     
     iniciar();
 </script>
