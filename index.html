@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô_Etiqueta v1.1.4</title>
+    <title>Alô_Etiqueta v1.1.5</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -75,52 +75,66 @@
         .bg-green { background: #388E3C; }
 
         /* ============================================================
-           NOVO GABARITO (v1.1.4) - FLEXBOX PURO (Sem Posição Absoluta)
-           Isso garante que nada passe por cima de nada e a altura seja rígida.
+           GABARITO DEFINITIVO (v1.1.5) - POSIÇÃO ABSOLUTA REFEITA
+           - Topo fica no topo.
+           - Rodapé fica CRAVADO NO CHÃO (bottom: 5px).
+           - Meio fica no meio. Nada esmaga nada.
            ============================================================ */
         #area-impressao-visual {
             position: fixed;
-            top: 0; left: -3000px; /* Escondido da tela */
+            top: 0; left: -3000px;
             background: white; color: black;
             font-family: 'Arial', sans-serif;
             box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            padding: 5px; /* Margem interna da etiqueta */
+            /* width e height serão forçados via JS na hora de gerar */
         }
 
-        .print-header { text-align: center; padding-bottom: 2px; }
-        .item-nome { font-weight: 900; font-size: 18px; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .etiqueta-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            padding: 5px;
+        }
+
+        /* 1. TOPO */
+        .print-topo {
+            position: absolute;
+            top: 5px; left: 5px; right: 5px;
+        }
+        .item-nome { font-weight: 900; font-size: 18px; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; }
         .item-nome.destaque { font-size: 26px !important; }
+        .linha-divisoria { height: 2px; background-color: black; width: 100%; }
 
-        .linha-divisoria { height: 2px; background-color: black; width: 100%; margin: 2px 0; flex-shrink: 0; }
-
-        /* O miolo estica pra empurrar o rodapé pro fundo */
-        .print-body { flex: 1; display: flex; justify-content: space-between; padding: 2px 0; overflow: hidden; }
-        
+        /* 2. MEIO (Fica livre no meio do caminho) */
+        .print-meio {
+            position: absolute;
+            top: 40px; /* Logo abaixo do topo */
+            left: 5px; right: 5px;
+            display: flex; justify-content: space-between; align-items: flex-start;
+        }
         .info-esquerda { flex: 1; display: flex; flex-direction: column; gap: 4px; padding-right: 5px; }
-
-        .linha-acao-data { font-size: 16px; white-space: nowrap; display: flex; align-items: center; gap: 4px;}
+        .linha-acao-data { font-size: 16px; white-space: nowrap; display: flex; align-items: center; gap: 4px; }
         .label-acao { font-weight: bold; text-transform: uppercase; }
-        
         .linha-opcionais { font-size: 12px; display: flex; gap: 10px; }
         .bold { font-weight: bold; }
-
         #viz-box-preco-container { font-size: 16px; font-weight: bold; text-transform: uppercase; }
-
         .container-validade { margin-top: 2px; white-space: nowrap; }
         .val-label, .val-data { font-size: 20px; font-weight: 900; }
         .validade-grande .val-label, .validade-grande .val-data { font-size: 32px !important; }
-
-        /* Esse 'margin-top: auto' joga o armazenamento pro fundo do miolo sem sobrepor */
-        #viz-linha-armazenamento { text-align: center; margin-top: auto; padding-top: 2px;}
-        #viz-armazenamento { border: 2px solid black; padding: 2px 6px; font-weight: bold; font-size: 14px; text-transform: uppercase; border-radius: 4px; background: transparent;}
-
         #viz-qrcode-container { display: none; flex-direction: column; align-items: center; justify-content: flex-start; flex-shrink: 0; margin-left: 2px; }
         #viz-sku { font-size: 11px; margin-top: 2px; font-weight: bold; }
 
-        .print-footer { text-align: center; display: flex; flex-direction: column; gap: 2px; padding-top: 2px;}
-        .item-estabelecimento { font-weight: bold; font-size: 15px; white-space: nowrap; overflow: hidden;}
+        /* 3. RODAPÉ (PREGADO NA BASE) */
+        .print-rodape {
+            position: absolute;
+            bottom: 5px; /* Não importa o tamanho da tela, isso fica cravado no fundo */
+            left: 5px; right: 5px;
+            text-align: center;
+        }
+        #viz-linha-armazenamento { margin-bottom: 4px; }
+        #viz-armazenamento { border: 2px solid black; padding: 2px 6px; font-weight: bold; font-size: 14px; text-transform: uppercase; border-radius: 4px; background: transparent; }
+        .item-estabelecimento { font-weight: bold; font-size: 15px; white-space: nowrap; overflow: hidden; margin-top: 4px; }
         .item-operador { font-size: 13px; }
 
         #reader { width: 100%; background: #000; border-radius: 8px; overflow: hidden; }
@@ -130,52 +144,53 @@
 <body>
 
 <div id="area-impressao-visual">
-    <div class="print-header">
-        <div class="item-nome" id="viz-nome-produto">PRODUTO</div>
-    </div>
-    
-    <div class="linha-divisoria"></div>
-    
-    <div class="print-body">
-        <div class="info-esquerda">
-            <div class="linha-acao-data">
-                <span class="label-acao" id="viz-label-acao">MANIPULADO:</span>
-                <span id="viz-data-man">00/00/0000 00:00</span>
+    <div class="etiqueta-wrapper">
+        
+        <div class="print-topo">
+            <div class="item-nome" id="viz-nome-produto">PRODUTO</div>
+            <div class="linha-divisoria" style="margin-top: 4px;"></div>
+        </div>
+        
+        <div class="print-meio">
+            <div class="info-esquerda">
+                <div class="linha-acao-data">
+                    <span class="label-acao" id="viz-label-acao">MANIPULADO:</span>
+                    <span id="viz-data-man">00/00/0000 00:00</span>
+                </div>
+                
+                <div class="linha-opcionais" id="viz-linha-opcionais" style="display:none;">
+                    <div id="viz-box-peso" style="display:none;">Peso: <span class="bold" id="viz-peso">0g</span></div>
+                    <div id="viz-row-lote" style="display:none;">Lote: <span class="bold" id="viz-lote">---</span></div>
+                </div>
+
+                <div id="viz-box-preco-container" style="display:none;">
+                    <span id="viz-label-preco">TOTAL:</span> R$ <span id="viz-preco">0,00</span>
+                </div>
+                
+                <div class="container-validade" id="viz-container-validade">
+                    <span class="val-label" id="viz-label-val">VAL:</span>
+                    <span class="val-data" id="viz-data-val">00/00/0000</span>
+                </div>
             </div>
             
-            <div class="linha-opcionais" id="viz-linha-opcionais" style="display:none;">
-                <div id="viz-box-peso" style="display:none;">Peso: <span class="bold" id="viz-peso">0g</span></div>
-                <div id="viz-row-lote" style="display:none;">Lote: <span class="bold" id="viz-lote">---</span></div>
-            </div>
-
-            <div id="viz-box-preco-container" style="display:none;">
-                <span id="viz-label-preco">TOTAL:</span> R$ <span id="viz-preco">0,00</span>
-            </div>
-            
-            <div class="container-validade" id="viz-container-validade">
-                <span class="val-label" id="viz-label-val">VAL:</span>
-                <span class="val-data" id="viz-data-val">00/00/0000</span>
-            </div>
-
-            <div id="viz-linha-armazenamento" style="display:none;">
-                <span id="viz-armazenamento">RESFRIADO</span>
+            <div id="viz-qrcode-container">
+                <div id="viz-qrcode"></div>
+                <div id="viz-sku">SKU</div>
             </div>
         </div>
         
-        <div id="viz-qrcode-container">
-            <div id="viz-qrcode"></div>
-            <div id="viz-sku">SKU</div>
+        <div class="print-rodape">
+            <div id="viz-linha-armazenamento" style="display:none;">
+                <span id="viz-armazenamento">RESFRIADO</span>
+            </div>
+            
+            <div class="linha-divisoria"></div>
+            
+            <div class="item-estabelecimento" id="viz-estabelecimento">Estabelecimento</div>
+            <div class="item-operador">Operador(a): <span id="viz-operador" class="bold">Nome</span></div>
         </div>
-    </div>
-    
-    <div class="linha-divisoria"></div>
-    
-    <div class="print-footer">
-        <div class="item-estabelecimento" id="viz-estabelecimento">Estabelecimento</div>
-        <div class="item-operador">Operador(a): <span id="viz-operador" class="bold">Nome</span></div>
-    </div>
 
-    <div style="color: #050505; font-size: 1px; line-height: 1px; text-align: center; height: 1px; flex-shrink: 0;">.</div>
+    </div>
 </div>
 
 <div class="app-container">
@@ -216,7 +231,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.1.4</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.1.5</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
@@ -1636,7 +1651,7 @@
         if(p.armazenamento && p.armazenamento !== "ambiente") {
             let textoArm = p.armazenamento === "resfriado" ? "MANTER RESFRIADO" : "MANTER CONGELADO";
             armazHTML = `
-                <div style="text-align: center; margin-top: auto; padding-top: 2px;">
+                <div style="margin-bottom: 4px;">
                     <span style="border: 2px solid black; padding: 2px 6px; font-weight: bold; font-size: 14px; text-transform: uppercase; border-radius: 4px;">${textoArm}</span>
                 </div>`;
         }
@@ -1654,15 +1669,16 @@
         <head>
             <style>
                 body { font-family: 'Arial', sans-serif; padding: 20px; background: #e0e0e0; margin: 0; display:flex; flex-direction:column; align-items:center; } 
-                .etiqueta-print { background: white; margin-bottom: 20px; box-sizing: border-box; ${dimensaoCSS} position:relative; overflow:hidden; display: flex; flex-direction: column; padding: 10px; } 
+                .etiqueta-print { background: white; margin-bottom: 20px; box-sizing: border-box; ${dimensaoCSS} position:relative; overflow:hidden; } 
                 
-                .print-header { text-align: center; padding-bottom: 2px; }
-                .item-nome { font-weight: 900; font-size: 18px; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+                .etiqueta-wrapper { position: relative; width: 100%; height: 100%; box-sizing: border-box; padding: 10px; }
+                
+                .print-topo { position: absolute; top: 10px; left: 10px; right: 10px; }
+                .item-nome { font-weight: 900; font-size: 18px; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; }
                 .item-nome.destaque { font-size: 26px !important; }
+                .linha-divisoria { height: 2px; background-color: black; width: 100%; }
 
-                .linha-divisoria { height: 2px; background-color: black; width: 100%; margin: 4px 0; flex-shrink: 0; }
-
-                .print-body { flex: 1; display: flex; justify-content: space-between; padding: 2px 0; overflow: hidden; }
+                .print-meio { position: absolute; top: 45px; left: 10px; right: 10px; display: flex; justify-content: space-between; align-items: flex-start; }
                 .info-esquerda { flex: 1; display: flex; flex-direction: column; gap: 4px; padding-right: 5px; }
 
                 .linha-acao-data { font-size: 16px; white-space: nowrap; display: flex; align-items: center; gap: 4px;}
@@ -1677,8 +1693,8 @@
                 .val-label, .val-data { font-size: 20px; font-weight: 900; }
                 .validade-grande .val-label, .validade-grande .val-data { font-size: 32px !important; }
 
-                .print-footer { text-align: center; display: flex; flex-direction: column; gap: 2px; padding-top: 2px;}
-                .item-estabelecimento { font-weight: bold; font-size: 15px; white-space: nowrap; overflow: hidden;}
+                .print-rodape { position: absolute; bottom: 10px; left: 10px; right: 10px; text-align: center; }
+                .item-estabelecimento { font-weight: bold; font-size: 15px; white-space: nowrap; overflow: hidden; margin-top: 4px;}
                 .item-operador { font-size: 13px; }
             </style>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script>
@@ -1703,46 +1719,45 @@
 
             htmlContent += `
             <div class="etiqueta-print">
-                <div class="print-header">
-                    <div class="${classeHeader}">${nomeDisplay}</div>
-                </div>
-                
-                <div class="linha-divisoria"></div>
-                
-                <div class="print-body">
-                    <div class="info-esquerda">
-                        <div class="linha-acao-data">
-                            <span class="label-acao">${acaoImpressao}</span>
-                            <span>${manBR}</span>
-                        </div>
-                        
-                        <div class="linha-opcionais" style="display: ${displayOpcionais};">
-                            <div style="display: ${displayPeso};">Peso: <span class="bold">${pesoInput}g</span></div>
-                            <div style="display: ${displayLote};">Lote: <span class="bold">${lote || '-'}</span></div>
-                        </div>
-                        
-                        <div id="viz-box-preco-container-print" style="display: ${displayPreco};">
-                            TOTAL: R$ <span>${valorCalc}</span>
-                        </div>
-                        
-                        <div class="container-validade ${classeValidadeGrande}">
-                            <span class="val-label">VAL:</span><span class="val-data">${valBR}</span>
-                        </div>
-                        
-                        ${armazHTML}
+                <div class="etiqueta-wrapper">
+                    <div class="print-topo">
+                        <div class="${classeHeader}">${nomeDisplay}</div>
+                        <div class="linha-divisoria" style="margin-top: 4px;"></div>
                     </div>
                     
-                    <div style="display: ${showQR}; flex-direction: column; align-items: center; justify-content: flex-start; flex-shrink: 0; margin-left: 2px;">
-                        <div id="${idQR}"></div>
-                        <div style="font-size: 11px; margin-top: 2px; font-weight: bold;">${skus[i].slice(-5)}</div>
+                    <div class="print-meio">
+                        <div class="info-esquerda">
+                            <div class="linha-acao-data">
+                                <span class="label-acao">${acaoImpressao}</span>
+                                <span>${manBR}</span>
+                            </div>
+                            
+                            <div class="linha-opcionais" style="display: ${displayOpcionais};">
+                                <div style="display: ${displayPeso};">Peso: <span class="bold">${pesoInput}g</span></div>
+                                <div style="display: ${displayLote};">Lote: <span class="bold">${lote || '-'}</span></div>
+                            </div>
+                            
+                            <div id="viz-box-preco-container-print" style="display: ${displayPreco};">
+                                TOTAL: R$ <span>${valorCalc}</span>
+                            </div>
+                            
+                            <div class="container-validade ${classeValidadeGrande}">
+                                <span class="val-label">VAL:</span><span class="val-data">${valBR}</span>
+                            </div>
+                        </div>
+                        
+                        <div style="display: ${showQR}; flex-direction: column; align-items: center; justify-content: flex-start; flex-shrink: 0; margin-left: 2px;">
+                            <div id="${idQR}"></div>
+                            <div style="font-size: 11px; margin-top: 2px; font-weight: bold;">${skus[i].slice(-5)}</div>
+                        </div>
                     </div>
-                </div>
-                
-                <div class="linha-divisoria"></div>
-                
-                <div class="print-footer">
-                    <div class="item-estabelecimento">${est}</div>
-                    <div class="item-operador">Operador(a): <span class="bold">${op}</span></div>
+                    
+                    <div class="print-rodape">
+                        ${armazHTML}
+                        <div class="linha-divisoria"></div>
+                        <div class="item-estabelecimento">${est}</div>
+                        <div class="item-operador">Operador(a): <span class="bold">${op}</span></div>
+                    </div>
                 </div>
             </div>
             <script>
@@ -1834,7 +1849,7 @@
             dotsH = 320; 
         }
         
-        // FORÇA O TAMANHO EXATO DA ETIQUETA COM FLEXBOX E REMOVE DO MODO 'HIDDEN' TEMPORARIAMENTE
+        // MOSTRA A DIV E FORÇA O TAMANHO EXATO PRO HTML2CANVAS LER TUDO
         gab.style.left = "0px";
         gab.style.width = dotsW + "px";
         gab.style.height = dotsH + "px";
@@ -1849,7 +1864,6 @@
         for(let i = 0; i < qtd; i++) {
             if(usaQR) {
                 document.getElementById('viz-qrcode').innerHTML = ''; 
-                // QR Code 70px garantido
                 new QRCode(document.getElementById('viz-qrcode'), { text: skus[i], width: 70, height: 70 }); 
                 document.getElementById('viz-sku').innerText = skus[i].slice(-5); 
                 await new Promise(r => setTimeout(r, 100)); 
@@ -1867,12 +1881,17 @@
             if(i === 0) { 
                 finalCanvas.width = dotsW; 
                 finalCanvas.height = dotsH * qtd; 
-                ctx.fillStyle = "#fff"; 
+                ctx.fillStyle = "#ffffff"; 
                 ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height); 
             }
             
             ctx.imageSmoothingEnabled = true;
             ctx.drawImage(c, 0, 0, c.width, c.height, 0, currentY, dotsW, dotsH); 
+
+            // HACK DE SOBREVIVÊNCIA: FORÇA O RAWBT A NÃO CORTAR O BRANCO NO FINAL DO PAPEL
+            // Desenha uma linha 1px quase invisível de ponta a ponta na base exata da imagem gerada.
+            ctx.fillStyle = "#010101"; 
+            ctx.fillRect(0, currentY + dotsH - 1, dotsW, 1);
 
             currentY += dotsH;
         }
@@ -1883,7 +1902,7 @@
         btn.disabled = false; 
         fecharModal('modalImprimir'); 
         
-        // Joga a etiqueta de volta pro esconderijo
+        // ESCONDE A DIV DE NOVO
         gab.style.left = "-3000px";
         gab.style.width = ""; 
         gab.style.height = ""; 
