@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô_Etiqueta v1.0.3</title>
+    <title>Alô_Etiqueta v1.0.4</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -16,6 +16,20 @@
     <style>
         body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 0; display: flex; justify-content: center; }
         .app-container { width: 100%; max-width: 500px; background: #fff; min-height: 100vh; display: flex; flex-direction: column; position: relative; }
+        
+        /* SPLASH SCREEN */
+        #splash-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #1565C0; z-index: 99999; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; color: white;
+            transition: opacity 0.5s ease;
+        }
+        #splash-screen.hidden { opacity: 0; pointer-events: none; }
+        .splash-icon { font-size: 70px; margin-bottom: 15px; animation: pulse 1.5s infinite; }
+        .splash-title { font-size: 26px; font-weight: 900; margin-bottom: 5px; letter-spacing: 1px; }
+        .splash-version { font-size: 14px; font-weight: bold; opacity: 0.8; background: rgba(0,0,0,0.2); padding: 4px 10px; border-radius: 12px; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
         .header { background: #1565C0; color: white; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
         .header-op-container { display: flex; align-items: center; gap: 8px; flex: 1; }
         .header-op-container span { font-size: 14px; font-weight: bold; }
@@ -75,12 +89,13 @@
         .bg-green { background: #388E3C; }
 
         /* ============================================================
-           GABARITO v1.0.3 - VISUAL AJUSTADO (Linhas grossas, layout centralizado)
+           GABARITO v1.0.4 - Layout Reajustado (QR Embaixo da Ação)
            ============================================================ */
         #area-impressao-visual {
             position: fixed; top: 0; left: -3000px;
             background: white; color: black; font-family: 'Arial', sans-serif;
-            box-sizing: border-box; padding: 8px;
+            box-sizing: border-box; 
+            padding: 4px; /* Diminuí a borda lateral pra caber o QR de boa */
             display: flex; flex-direction: column; justify-content: space-between;
             width: 320px; height: 320px; min-width: 320px; min-height: 320px;
         }
@@ -95,6 +110,12 @@
 </head>
 <body>
 
+<div id="splash-screen">
+    <div class="splash-icon">🏷️</div>
+    <div class="splash-title">Alô_Etiqueta</div>
+    <div class="splash-version">v1.0.4</div>
+</div>
+
 <div id="area-impressao-visual">
     
     <div style="text-align: center; border-bottom: 4px solid black; padding-bottom: 4px;">
@@ -102,24 +123,25 @@
     </div>
     
     <div style="flex: 1; padding-top: 6px; display: flex; flex-direction: column;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%;">
+        
+        <div style="font-size: 16px; font-weight: bold; word-wrap: break-word; line-height: 1.2; text-align: left; width: 100%;">
+            <span id="viz-label-acao">AÇÃO:</span> <span id="viz-data-man">00/00/0000 00:00</span>
+        </div>
+        
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; margin-top: 6px;">
             
             <div style="flex: 1; min-width: 0;">
-                <div style="font-size: 16px; font-weight: bold; word-wrap: break-word; line-height: 1.2;">
-                    <span id="viz-label-acao">AÇÃO:</span> <span id="viz-data-man">00/00/0000 00:00</span>
-                </div>
-                
-                <div id="viz-linha-opcionais" style="font-size: 13px; display: none; gap: 10px; font-weight: bold; margin-top: 4px;">
+                <div id="viz-linha-opcionais" style="font-size: 13px; display: none; flex-direction: column; gap: 4px; font-weight: bold;">
                     <div id="viz-box-peso" style="display: none;">Peso: <span id="viz-peso">0g</span></div>
                     <div id="viz-row-lote" style="display: none;">Lote: <span id="viz-lote">---</span></div>
                 </div>
 
-                <div id="viz-box-preco-container" style="font-size: 17px; font-weight: bold; text-transform: uppercase; margin-top: 4px; display: none;">
+                <div id="viz-box-preco-container" style="font-size: 17px; font-weight: bold; text-transform: uppercase; margin-top: 8px; display: none;">
                     TOTAL: R$ <span id="viz-preco">0,00</span>
                 </div>
             </div>
 
-            <div id="viz-qrcode-container" style="display: none; flex-direction: column; align-items: center; justify-content: flex-start; width: 85px; flex-shrink: 0; margin-left: 10px;">
+            <div id="viz-qrcode-container" style="display: none; flex-direction: column; align-items: center; justify-content: flex-start; width: 80px; flex-shrink: 0; margin-left: 5px;">
                 <div id="viz-qrcode"></div>
                 <div id="viz-sku" style="font-size: 11px; margin-top: 2px; font-weight: bold;">SKU</div>
             </div>
@@ -192,7 +214,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.3</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.4</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
@@ -618,6 +640,15 @@
     }
 
     function iniciar() {
+        // Logica do Splash Screen
+        setTimeout(() => {
+            const splash = document.getElementById('splash-screen');
+            if (splash) {
+                splash.classList.add('hidden');
+                setTimeout(() => splash.style.display = 'none', 500);
+            }
+        }, 1500);
+
         document.getElementById('btnScannerQRHome').style.display = db.configs.controleQR ? 'flex' : 'none';
         renderizarOperadores(); 
         renderizarFiltros(); 
@@ -809,7 +840,10 @@
                 const regs = await navigator.serviceWorker.getRegistrations(); 
                 for(let reg of regs) { await reg.unregister(); } 
             } 
-            window.location.replace(window.location.pathname + '?nocache=' + new Date().getTime()); 
+            
+            // Injeta número aleatório pra forçar o navegador a pegar os arquivos novos
+            const novaUrl = window.location.href.split('?')[0] + '?v=' + new Date().getTime();
+            window.location.replace(novaUrl); 
         } catch(e) {
             window.location.reload(true);
         }
@@ -1630,7 +1664,7 @@
         <head>
             <style>
                 body { font-family: 'Arial', sans-serif; padding: 20px; background: #e0e0e0; margin: 0; display:flex; flex-direction:column; align-items:center; } 
-                .etiqueta-print { background: white; margin-bottom: 20px; box-sizing: border-box; ${dimensaoCSS} display: flex; flex-direction: column; padding: 8px; justify-content: space-between; } 
+                .etiqueta-print { background: white; margin-bottom: 20px; box-sizing: border-box; ${dimensaoCSS} display: flex; flex-direction: column; padding: 4px; justify-content: space-between; } 
                 
                 .item-nome { font-weight: 900; font-size: 20px; text-transform: uppercase; }
                 .item-nome.destaque { font-size: 28px !important; }
@@ -1663,23 +1697,23 @@
                 </div>
                 
                 <div style="flex: 1; padding-top: 6px; display: flex; flex-direction: column;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%;">
+                    <div style="font-size: 16px; font-weight: bold; word-wrap: break-word; line-height: 1.2; text-align: left; width: 100%;">
+                        <span>${acaoImpressao}</span> <span>${manBR}</span>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; margin-top: 6px;">
                         <div style="flex: 1; min-width: 0;">
-                            <div style="font-size: 16px; font-weight: bold; word-wrap: break-word; line-height: 1.2;">
-                                <span>${acaoImpressao}</span> <span>${manBR}</span>
-                            </div>
-                            
-                            <div style="font-size: 13px; display: ${displayOpcionais}; gap: 10px; font-weight: bold; margin-top: 4px;">
+                            <div style="font-size: 13px; display: ${displayOpcionais}; flex-direction: column; gap: 4px; font-weight: bold;">
                                 <div style="display: ${displayPeso};">Peso: <span>${pesoInput}g</span></div>
                                 <div style="display: ${displayLote};">Lote: <span>${lote || '-'}</span></div>
                             </div>
                             
-                            <div style="font-size: 17px; font-weight: bold; text-transform: uppercase; margin-top: 4px; display: ${displayPreco};">
+                            <div style="font-size: 17px; font-weight: bold; text-transform: uppercase; margin-top: 8px; display: ${displayPreco};">
                                 TOTAL: R$ <span>${valorCalc}</span>
                             </div>
                         </div>
                         
-                        <div style="display: ${showQR}; flex-direction: column; align-items: center; justify-content: flex-start; width: 85px; flex-shrink: 0; margin-left: 10px;">
+                        <div style="display: ${showQR}; flex-direction: column; align-items: center; justify-content: flex-start; width: 80px; flex-shrink: 0; margin-left: 5px;">
                             <div id="${idQR}"></div>
                             <div style="font-size: 11px; margin-top: 2px; font-weight: bold;">${skus[i].slice(-5)}</div>
                         </div>
@@ -1710,7 +1744,7 @@
             </div>
             <script>
                 if("${showQR}" === "flex") { 
-                    new QRCode(document.getElementById("${idQR}"), { text: "${skus[i]}", width: 85, height: 85 }); 
+                    new QRCode(document.getElementById("${idQR}"), { text: "${skus[i]}", width: 80, height: 80 }); 
                 }
             <\/script>`;
         }
@@ -1807,7 +1841,7 @@
         for(let i = 0; i < qtd; i++) {
             if(usaQR) {
                 document.getElementById('viz-qrcode').innerHTML = ''; 
-                new QRCode(document.getElementById('viz-qrcode'), { text: skus[i], width: 85, height: 85 }); 
+                new QRCode(document.getElementById('viz-qrcode'), { text: skus[i], width: 80, height: 80 }); 
                 document.getElementById('viz-sku').innerText = skus[i].slice(-5); 
                 await new Promise(r => setTimeout(r, 100)); 
             }
