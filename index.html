@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô_Etiqueta v1.1.0</title>
+    <title>Alô_Etiqueta v1.1.1</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -24,10 +24,10 @@
         .header-actions { display: flex; gap: 15px; align-items: center; }
         .header-actions button { background: none; border: none; color: white; font-size: 24px; cursor: pointer; padding: 0; }
         
-        .search-box { background: #E3F2FD; padding: 15px; display: flex; gap: 10px; width: 100%; box-sizing: border-box; align-items: center; }
-        .search-box input { flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; min-width: 0; }
-        .search-box .btn-buscar { background: #1976D2; color: white; border: none; padding: 0 15px; height: 44px; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; }
-        .search-box .btn-qr { background: transparent; color: #333; border: none; padding: 0 5px; cursor: pointer; font-size: 32px; display: none; align-items: center; justify-content: center; }
+        .search-box { background: #E3F2FD; padding: 12px 10px; display: flex; gap: 6px; width: 100%; box-sizing: border-box; align-items: center; }
+        .search-box input { flex: 1; padding: 12px 8px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; min-width: 0; }
+        .search-box .btn-buscar { background: #1976D2; color: white; border: none; padding: 0 10px; height: 44px; border-radius: 5px; cursor: pointer; font-size: 15px; font-weight: bold; }
+        .search-box .btn-icon { background: transparent; color: #333; border: none; padding: 0 2px; cursor: pointer; font-size: 28px; display: flex; align-items: center; justify-content: center; }
         
         .filters { padding: 10px 15px; display: flex; gap: 10px; overflow-x: auto; white-space: nowrap; border-bottom: 1px solid #eee; }
         .chip { background: #e0e0e0; color: #333; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 14px; font-weight: bold; border: 2px solid transparent; }
@@ -75,9 +75,7 @@
         .bg-green { background: #388E3C; }
 
         /* ============================================================
-           NOVO GABARITO DE IMPRESSÃO - POSICIONAMENTO ABSOLUTO (v1.1.0)
-           Garante que nada saia do lugar em etiquetas 40x40mm.
-           A largura e altura exatas são definidas no JS antes do html2canvas.
+           GABARITO DE IMPRESSÃO (v1.1.1) - CRAVADO NOS MILÍMETROS
            ============================================================ */
         #area-impressao-visual {
             position: fixed;
@@ -92,10 +90,10 @@
 
         .etiqueta-absoluta {
             position: absolute;
-            top: 10px;
-            left: 10px;
-            right: 10px;
-            bottom: 10px;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
             border: none;
             box-sizing: border-box;
         }
@@ -107,8 +105,11 @@
             height: 2px;
             background-color: black;
         }
+        
         .linha-topo { top: 35px; }
-        .linha-rodape { bottom: 35px; }
+        
+        /* LINHA DO RODAPÉ (8mm do fundo = 64px numa tela de 320px) */
+        .linha-rodape { bottom: 64px; }
 
         .centralizado-x {
             left: 50%;
@@ -129,10 +130,11 @@
         }
         .item-nome.destaque { font-size: 26px !important; }
 
+        /* Miolo entre as linhas */
         .bloco-central {
             position: absolute;
-            top: 42px;
-            bottom: 42px;
+            top: 38px;
+            bottom: 68px; /* Acima da linha de 64px */
             left: 0;
             right: 0;
             display: flex;
@@ -200,7 +202,7 @@
             font-weight: bold;
             font-size: 14px;
             text-transform: uppercase;
-            background-color: transparent;
+            background-color: transparent; /* Sem fundo preto */
         }
 
         #viz-box-preco-container {
@@ -209,18 +211,20 @@
             text-transform: uppercase;
         }
 
+        /* Estabelecimento no espaço do rodapé (64px) */
         .item-estabelecimento {
             position: absolute;
-            bottom: 18px;
+            bottom: 30px; /* Alinhado no topo dos 8mm finais */
             font-weight: bold;
-            font-size: 16px;
+            font-size: 15px;
             white-space: nowrap;
         }
 
+        /* Operador no espaço do rodapé (64px) */
         .item-operador {
             position: absolute;
-            bottom: 0;
-            font-size: 12px;
+            bottom: 6px; /* Grudado no fundo dos 8mm finais */
+            font-size: 13px;
         }
         
         #reader { width: 100%; background: #000; border-radius: 8px; overflow: hidden; }
@@ -283,15 +287,15 @@
         </div>
         <div id="indicadorConexao" class="status-conexao" title="Sincronização Automática">⚪</div>
         <div class="header-actions">
-            <button onclick="abrirPainelValidade()" title="Controle de Validade">⏳</button>
             <button onclick="abrirLoginAdmin()" title="Painel Administrativo">⚙️</button>
         </div>
     </div>
     
     <div class="search-box">
-        <input type="number" id="buscaCodigo" placeholder="Nº do Código" inputmode="numeric">
+        <input type="number" id="buscaCodigo" placeholder="Cód..." inputmode="numeric">
         <button class="btn-buscar" onclick="buscarPorCodigo()">Buscar</button>
-        <button class="btn-qr" id="btnScannerQRHome" onclick="abrirScannerQR()">📷</button>
+        <button class="btn-icon" onclick="abrirPainelValidade()" title="Controle de Validade">⏳</button>
+        <button class="btn-icon" id="btnScannerQRHome" onclick="abrirScannerQR()" style="display: none;">📷</button>
     </div>
     
     <div class="filters" id="containerFiltros"></div>
@@ -313,7 +317,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.1.0</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.1.1</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
@@ -1666,10 +1670,8 @@
         
         const hj = new Date(); 
         
-        // Data e hora na mesma linha formatada
         const manBR = `${String(hj.getDate()).padStart(2,'0')}/${String(hj.getMonth()+1).padStart(2,'0')}/${hj.getFullYear()} ${String(hj.getHours()).padStart(2,'0')}:${String(hj.getMinutes()).padStart(2,'0')}`;
         
-        // Mapeamento de nomes de ação para impressão (CAIXA ALTA)
         let acaoImpressao = "MANIPULADO:";
         if(acaoSelect === "Aberto em:") acaoImpressao = "ABERTO:";
         else if(acaoSelect === "Congelado em:") acaoImpressao = "CONGELADO:";
@@ -1717,14 +1719,12 @@
     function aplicarDestaquesVisuais() { 
         const tam = db.configs.tamanhoEtiqueta || "50x50"; 
         
-        // Destaque Produto
         if(db.configs.destaqueProd) {
             document.getElementById('viz-nome-produto').classList.add('destaque'); 
         } else {
             document.getElementById('viz-nome-produto').classList.remove('destaque'); 
         }
         
-        // Destaque Validade
         if(db.configs.destaqueVal) {
             document.getElementById('viz-container-validade').classList.add('validade-grande'); 
         } else {
@@ -1735,7 +1735,6 @@
     function gerarPDF(p, acaoImpressao, pesoInput, manBR, valBR, qtd, op, est, precoInput, marca, lote, skus) {
         let printWindow = window.open('', '', 'width=600,height=800');
         
-        // Formatação do armazenamento (Fundo transparente, borda preta)
         let armazHTML = "";
         if(p.armazenamento && p.armazenamento !== "ambiente") {
             let textoArm = p.armazenamento === "resfriado" ? "MANTER RESFRIADO" : "MANTER CONGELADO";
@@ -1762,10 +1761,10 @@
                 .etiqueta-absoluta { position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px; }
                 .linha-divisoria { position: absolute; left: 0; right: 0; height: 2px; background-color: black; }
                 .linha-topo { top: 35px; } 
-                .linha-rodape { bottom: 35px; }
+                .linha-rodape { bottom: 64px; }
                 .centralizado-x { left: 50%; transform: translateX(-50%); text-align: center; width: 100%; }
                 .${classeHeader} { position: absolute; top: 0; font-weight: 900; font-size: 18px; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-                .bloco-central { position: absolute; top: 42px; bottom: 42px; left: 0; right: 0; display: flex; justify-content: space-between; align-items: flex-start; }
+                .bloco-central { position: absolute; top: 38px; bottom: 68px; left: 0; right: 0; display: flex; justify-content: space-between; align-items: flex-start; }
                 .info-esquerda { flex: 1; display: flex; flex-direction: column; gap: 4px; padding-right: 5px; }
                 .linha-acao-data { font-size: 14px; white-space: nowrap; }
                 .label-acao { font-weight: bold; text-transform: uppercase; font-size: 16px; margin-right: 4px; }
@@ -1776,8 +1775,8 @@
                 .linha-opcionais { font-size: 12px; display: flex; gap: 10px; }
                 .bold { font-weight: bold; }
                 #viz-box-preco-container-print { font-size: 16px; font-weight: bold; text-transform: uppercase; }
-                .item-estabelecimento { position: absolute; bottom: 18px; font-weight: bold; font-size: 16px; white-space: nowrap; }
-                .item-operador { position: absolute; bottom: 0; font-size: 12px; }
+                .item-estabelecimento { position: absolute; bottom: 30px; font-weight: bold; font-size: 15px; white-space: nowrap; }
+                .item-operador { position: absolute; bottom: 6px; font-size: 13px; }
             </style>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script>
         </head>
@@ -1860,12 +1859,10 @@
     async function gerarRawBT(p, acaoImpressao, pesoInput, manBR, valBR, qtd, op, est, precoInput, marca, lote, skus, btn) {
         const gab = document.getElementById('area-impressao-visual'); 
         
-        // Prepara dados no gabarito HTML oculto
         document.getElementById('viz-nome-produto').innerText = marca !== "" ? `${p.nome} (${marca})` : p.nome;
         document.getElementById('viz-label-acao').innerText = acaoImpressao; 
-        document.getElementById('viz-data-man').innerText = manBR; // Mesma linha garantida pelo CSS e JS
+        document.getElementById('viz-data-man').innerText = manBR; 
         
-        // Peso e Lote Opcionais
         let hasOpcionais = false;
         if(pesoInput !== "") { 
             document.getElementById('viz-box-peso').style.display = "block"; 
@@ -1885,7 +1882,6 @@
         
         document.getElementById('viz-linha-opcionais').style.display = hasOpcionais ? "flex" : "none";
         
-        // Total formatado em CAIXA ALTA
         let calcPreco = ""; 
         if(precoInput !== "") { 
             let psNum = parseFloat(pesoInput); 
@@ -1899,12 +1895,10 @@
             document.getElementById('viz-box-preco-container').style.display = "none";
         }
         
-        // Validade e Rodapé
         document.getElementById('viz-data-val').innerText = valBR; 
         document.getElementById('viz-estabelecimento').innerText = est; 
         document.getElementById('viz-operador').innerText = op;
         
-        // Conservação (Borda, sem fundo)
         const bxArmaz = document.getElementById('viz-linha-armazenamento');
         if(p.armazenamento && p.armazenamento !== "ambiente") {
             bxArmaz.style.display = "block";
@@ -1913,20 +1907,17 @@
             bxArmaz.style.display = "none";
         }
         
-        // QR Code Container
         const qrCont = document.getElementById('viz-qrcode-container');
         const usaQR = db.configs.controleQR && p.usaQR;
         qrCont.style.display = usaQR ? 'flex' : 'none';
 
         aplicarDestaquesVisuais();
 
-        // Canvas final para múltiplas cópias
         const finalCanvas = document.createElement('canvas'); 
         const ctx = finalCanvas.getContext('2d'); 
         
-        // Define dimensões em pixels baseadas no mm
         const tam = db.configs.tamanhoEtiqueta || "50x50";
-        let dotsW = 400, dotsH = 400; // 50x50mm padrão
+        let dotsW = 400, dotsH = 400; 
         
         if(tam === "60x40") { 
             dotsW = 480; 
@@ -1936,7 +1927,6 @@
             dotsH = 320; 
         }
         
-        // Força tamanho do gabarito antes de renderizar
         gab.style.width = dotsW + "px";
         gab.style.height = dotsH + "px";
         gab.style.minWidth = dotsW + "px";
@@ -1948,15 +1938,13 @@
         window.scrollTo(0, 0);
         
         for(let i = 0; i < qtd; i++) {
-            // Gera QR Code de 55px
             if(usaQR) {
                 document.getElementById('viz-qrcode').innerHTML = ''; 
                 new QRCode(document.getElementById('viz-qrcode'), { text: skus[i], width: 55, height: 55 }); 
                 document.getElementById('viz-sku').innerText = skus[i].slice(-5); 
-                await new Promise(r => setTimeout(r, 100)); // Espera QR gerar
+                await new Promise(r => setTimeout(r, 100)); 
             }
             
-            // Renderiza gabarito para canvas
             let c = await html2canvas(gab, { 
                 scale: 2, 
                 backgroundColor: "#ffffff", 
@@ -1966,7 +1954,6 @@
                 height: dotsH 
             });
             
-            // Prepara canvas final na primeira cópia
             if(i === 0) { 
                 finalCanvas.width = dotsW; 
                 finalCanvas.height = dotsH * qtd; 
@@ -1974,20 +1961,17 @@
                 ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height); 
             }
             
-            // Desenha cópia no canvas final
             ctx.imageSmoothingEnabled = true;
             ctx.drawImage(c, 0, 0, c.width, c.height, 0, currentY, dotsW, dotsH); 
             currentY += dotsH;
         }
         
-        // Envia para RawBT via Intent
         const intent = "intent:" + finalCanvas.toDataURL("image/png") + "#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;";
         
         btn.innerText = "🖨️ IMPRIMIR"; 
         btn.disabled = false; 
         fecharModal('modalImprimir'); 
         
-        // Limpa estilos forçados do gabarito
         gab.style.width = ""; 
         gab.style.height = ""; 
         gab.style.minWidth = ""; 
@@ -2047,9 +2031,7 @@
         } 
     }
     
-    function onScanFailure() { 
-        // Silencioso enquanto busca
-    }
+    function onScanFailure() { }
     
     iniciar();
 </script>
