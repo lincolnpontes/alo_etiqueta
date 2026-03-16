@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô_Etiqueta v1.1.6</title>
+    <title>Alô_Etiqueta v1.1.7</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -75,15 +75,15 @@
         .bg-green { background: #388E3C; }
 
         /* ============================================================
-           GABARITO v1.1.6 - O FEIJÃO COM ARROZ PERFEITO (Baseado na Foto)
-           Estrutura travada: Topo -> Mola no Meio -> Rodapé fixo.
+           GABARITO v1.1.7
+           Ajuste específico da etiqueta 40x40 para o RawBT:
+           topo fixo, rodapé realmente ancorado no fundo.
            ============================================================ */
         #area-impressao-visual {
             position: fixed; top: 0; left: -3000px;
             background: white; color: black; font-family: 'Arial', sans-serif;
             box-sizing: border-box; padding: 8px;
             display: flex; flex-direction: column;
-            /* Medidas exatas forçadas via JS depois, mas já deixa preparadas */
             width: 320px; height: 320px;
         }
 
@@ -92,38 +92,48 @@
         .item-nome { font-weight: 900; font-size: 18px; text-transform: uppercase; }
         .item-nome.destaque { font-size: 26px !important; }
 
-        /* 2. MEIO (A mola que estica e salva o QR Code) */
+        /* 2. MEIO */
         .print-body { flex: 1; display: flex; justify-content: space-between; align-items: flex-start; padding: 6px 0; overflow: hidden; }
-        
-        /* O min-width: 0 é a mágica que impede o texto de empurrar o QR code pra fora */
         .info-esquerda { flex: 1; min-width: 0; padding-right: 5px; display: flex; flex-direction: column; gap: 4px;}
-        
-        /* E a mágica 2: word-wrap pra quebrar a linha da data se for gigante */
         .linha-acao-data { font-size: 14px; font-weight: bold; line-height: 1.2; word-wrap: break-word; }
-        
         .linha-opcionais { font-size: 12px; display: flex; gap: 10px; font-weight: bold; }
         #viz-box-preco-container { font-size: 15px; font-weight: bold; text-transform: uppercase; margin-top: 2px;}
-        
         .container-validade { margin-top: 4px; }
         .val-label, .val-data { font-size: 22px; font-weight: 900; }
         .validade-grande .val-label, .validade-grande .val-data { font-size: 32px !important; }
 
-        /* QR Code blindado de empurrões */
+        /* QR Code */
         #viz-qrcode-container { width: 70px; flex-shrink: 0; display: none; flex-direction: column; align-items: center; }
         #viz-sku { font-size: 10px; margin-top: 2px; font-weight: bold; }
 
-        /* 3. RODAPÉ (Travado embaixo com o visual da sua foto) */
+        /* 3. RODAPÉ */
         .print-footer { border-top: 2px solid black; padding-top: 6px; text-align: center; position: relative; }
-        
-        /* Joga a caixinha "MANTER CONGELADO" exatamente em cima da linha */
         #viz-linha-armazenamento { margin-top: -16px; margin-bottom: 4px; }
         #viz-armazenamento { background: white; padding: 0 6px; border: 2px solid black; border-radius: 4px; font-size: 12px; font-weight: bold; text-transform: uppercase; display: inline-block; }
-        
         .item-estabelecimento { font-weight: bold; font-size: 14px; white-space: nowrap; overflow: hidden; margin-bottom: 2px;}
         .item-operador { font-size: 12px; }
 
-        /* As âncoras na base garantem que a impressora enxergue a altura de 40mm */
+        /* Âncoras */
         .ancora-altura { position: absolute; bottom: 0; width: 1px; height: 1px; background: #010101; }
+
+        /* ===== AJUSTE ESPECÍFICO 40x40 ===== */
+        .body-40x40 {
+            padding-bottom: 72px !important;
+            box-sizing: border-box;
+        }
+
+        .footer-40x40 {
+            position: absolute !important;
+            left: 8px;
+            right: 8px;
+            bottom: 0;
+            height: 64px;
+            box-sizing: border-box;
+            background: #fff;
+            border-top: 2px solid black;
+            padding-top: 6px;
+            text-align: center;
+        }
 
         #reader { width: 100%; background: #000; border-radius: 8px; overflow: hidden; }
         .detalhes-estoque-lista li:last-child { border-bottom: none !important; }
@@ -213,7 +223,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.1.6</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.1.7</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
@@ -1410,7 +1420,7 @@
                 hoje.setHours(0,0,0,0); 
                 
                 itensAtivos.sort((a, b) => parseDataBR(a.validadeFinal) - parseDataBR(b.validadeFinal));
-                
+
                 itensAtivos.forEach(item => { 
                     let dVal = parseDataBR(item.validadeFinal);
                     let diffTime = dVal.getTime() - hoje.getTime();
@@ -1565,7 +1575,6 @@
         const valBR = `${valSplits[2]}/${valSplits[1]}/${valSplits[0]}`; 
         
         const hj = new Date(); 
-        
         const manBR = `${String(hj.getDate()).padStart(2,'0')}/${String(hj.getMonth()+1).padStart(2,'0')}/${hj.getFullYear()} ${String(hj.getHours()).padStart(2,'0')}:${String(hj.getMinutes()).padStart(2,'0')}`;
         
         let acaoImpressao = "MANIPULADO:";
@@ -1661,11 +1670,8 @@
                 .info-esquerda { flex: 1; min-width: 0; padding-right: 5px; display: flex; flex-direction: column; gap: 4px; }
 
                 .linha-acao-data { font-size: 14px; font-weight: bold; line-height: 1.2; word-wrap: break-word; }
-                
                 .linha-opcionais { font-size: 12px; display: flex; gap: 10px; font-weight: bold; }
-
                 #viz-box-preco-container-print { font-size: 15px; font-weight: bold; text-transform: uppercase; margin-top: 2px;}
-
                 .container-validade { margin-top: 4px; }
                 .val-label, .val-data { font-size: 22px; font-weight: 900; }
                 .validade-grande .val-label, .validade-grande .val-data { font-size: 32px !important; }
@@ -1732,6 +1738,7 @@
                     <div class="item-operador">Operador(a): <span>${op}</span></div>
                 </div>
             </div>
+
             <script>
                 if("${showQR}" === "flex") { 
                     new QRCode(document.getElementById("${idQR}"), { text: "${skus[i]}", width: 70, height: 70 }); 
@@ -1751,7 +1758,9 @@
     }
 
     async function gerarRawBT(p, acaoImpressao, pesoInput, manBR, valBR, qtd, op, est, precoInput, marca, lote, skus, btn) {
-        const gab = document.getElementById('area-impressao-visual'); 
+        const gab = document.getElementById('area-impressao-visual');
+        const printBody = gab.querySelector('.print-body');
+        const printFooter = gab.querySelector('.print-footer');
         
         document.getElementById('viz-nome-produto').innerText = marca !== "" ? `${p.nome} (${marca})` : p.nome;
         document.getElementById('viz-label-acao').innerText = acaoImpressao; 
@@ -1819,9 +1828,19 @@
         } else if(tam === "50x50") { 
             dotsW = 400; 
             dotsH = 400; 
+        } else if(tam === "40x40") {
+            dotsW = 320;
+            dotsH = 320;
+        }
+
+        if (tam === "40x40") {
+            printBody.classList.add('body-40x40');
+            printFooter.classList.add('footer-40x40');
+        } else {
+            printBody.classList.remove('body-40x40');
+            printFooter.classList.remove('footer-40x40');
         }
         
-        // Puxa a div pro campo de visão real e trava o tamanho 
         gab.style.left = "0px";
         gab.style.width = dotsW + "px";
         gab.style.height = dotsH + "px";
@@ -1865,8 +1884,9 @@
         btn.disabled = false; 
         fecharModal('modalImprimir'); 
         
-        // Esconde de novo
         gab.style.left = "-3000px";
+        printBody.classList.remove('body-40x40');
+        printFooter.classList.remove('footer-40x40');
 
         window.location.href = intent;
     }
@@ -1924,5 +1944,6 @@
     
     iniciar();
 </script>
+
 </body>
 </html>
