@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô_Etiqueta v1.0.10</title>
+    <title>Alô_Etiqueta v1.0.11</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -90,7 +90,7 @@
         .bg-green { background: #388E3C; }
 
         /* ============================================================
-           GABARITO v1.0.10 - Recuo 38mm, altura cravada em 40mm
+           GABARITO v1.0.11 - Altura cravada em 40mm
            ============================================================ */
         #area-impressao-visual {
             position: fixed; top: 0; left: -3000px;
@@ -115,7 +115,7 @@
     <img src="icon.png" class="splash-icon" alt="Alô Etiqueta" onerror="this.style.display='none'; document.getElementById('splash-emoji').style.display='block';">
     <div id="splash-emoji" class="splash-emoji">🏷️</div>
     <div class="splash-title">Alô_Etiqueta</div>
-    <div class="splash-version">v1.0.10</div>
+    <div class="splash-version">v1.0.11</div>
 </div>
 
 <div id="area-impressao-visual">
@@ -211,7 +211,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.10</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.11</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
@@ -256,7 +256,7 @@
                 </select>
             </div>
             <div class="form-group" style="flex:1;">
-                <label title="1mm = 8px. Padrão: 16px">Gap Extra (px):</label>
+                <label title="1mm = 8px. Padrão: 16">Espaço Gap (px):</label>
                 <input type="number" id="cfgGapPx" onchange="salvarEtiquetaConfigs()">
             </div>
         </div>
@@ -1670,8 +1670,9 @@
         <html>
         <head>
             <style>
-                body { font-family: 'Arial', sans-serif; padding: 20px; background: #e0e0e0; margin: 0; display:flex; flex-direction:column; align-items:center; } 
-                .etiqueta-print { background: white; margin-bottom: 20px; box-sizing: border-box; ${dimensaoCSS} display: flex; flex-direction: column; padding: 4px; justify-content: space-between; } 
+                @page { margin: 0; size: auto; } /* REMOVE O CABEÇALHO/RODAPÉ INJETADO PELO NAVEGADOR */
+                body { font-family: 'Arial', sans-serif; padding: 0; margin: 0; background: #fff; display:flex; flex-direction:column; align-items:center; } 
+                .etiqueta-print { background: white; margin-top: 5px; margin-bottom: 5px; box-sizing: border-box; ${dimensaoCSS} display: flex; flex-direction: column; padding: 4px; justify-content: space-between; page-break-after: always; } 
                 
                 .item-nome { font-weight: 900; font-size: 20px; text-transform: uppercase; margin: 0; }
                 .item-nome.destaque { font-size: 28px !important; }
