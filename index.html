@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô_Etiqueta v1.0.9</title>
+    <title>Alô_Etiqueta v1.0.10</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -90,7 +90,7 @@
         .bg-green { background: #388E3C; }
 
         /* ============================================================
-           GABARITO v1.0.9 - Recuo 38mm, altura cravada em 40mm
+           GABARITO v1.0.10 - Recuo 38mm, altura cravada em 40mm
            ============================================================ */
         #area-impressao-visual {
             position: fixed; top: 0; left: -3000px;
@@ -115,7 +115,7 @@
     <img src="icon.png" class="splash-icon" alt="Alô Etiqueta" onerror="this.style.display='none'; document.getElementById('splash-emoji').style.display='block';">
     <div id="splash-emoji" class="splash-emoji">🏷️</div>
     <div class="splash-title">Alô_Etiqueta</div>
-    <div class="splash-version">v1.0.9</div>
+    <div class="splash-version">v1.0.10</div>
 </div>
 
 <div id="area-impressao-visual">
@@ -141,7 +141,7 @@
                 </div>
             </div>
 
-            <div id="viz-qrcode-container" style="display: none; flex-direction: column; align-items: center; justify-content: flex-start; width: 80px; flex-shrink: 0; margin-left: 5px;">
+            <div id="viz-qrcode-container" style="display: none; flex-direction: column; align-items: center; justify-content: flex-start; width: 85px; flex-shrink: 0; margin-left: 5px;">
                 <div id="viz-qrcode"></div>
                 <div id="viz-sku" style="font-size: 11px; margin-top: 2px; font-weight: bold;">SKU</div>
             </div>
@@ -211,7 +211,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.9</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.10</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
@@ -256,8 +256,8 @@
                 </select>
             </div>
             <div class="form-group" style="flex:1;">
-                <label>Gap (mm):</label>
-                <input type="number" id="cfgGap" onchange="salvarEtiquetaConfigs()">
+                <label title="1mm = 8px. Padrão: 16px">Gap Extra (px):</label>
+                <input type="number" id="cfgGapPx" onchange="salvarEtiquetaConfigs()">
             </div>
         </div>
         <h3 style="font-size: 14px; margin-bottom:5px;">Aparência Visual</h3>
@@ -614,7 +614,7 @@
                 controleQR: false, 
                 senhaAdmin: "", 
                 ultimoWipe: 0,
-                gapEtiqueta: 2
+                gapEtiquetaPx: 16
             },
             historico: [], 
             filaRetentativaStatus: []
@@ -628,7 +628,11 @@
             if(typeof local.configs.controleQR === 'undefined') local.configs.controleQR = false;
             if(typeof local.configs.senhaAdmin === 'undefined') local.configs.senhaAdmin = "";
             if(typeof local.configs.ultimoWipe === 'undefined') local.configs.ultimoWipe = 0;
-            if(typeof local.configs.gapEtiqueta === 'undefined') local.configs.gapEtiqueta = 2;
+            
+            if(typeof local.configs.gapEtiquetaPx === 'undefined') {
+                local.configs.gapEtiquetaPx = (local.configs.gapEtiqueta !== undefined) ? local.configs.gapEtiqueta * 8 : 16;
+            }
+            
             local.produtos.forEach(p => { 
                 if(!p.acaoPadrao) p.acaoPadrao = "Manipulado em:"; 
                 if(typeof p.usaQR === 'undefined') p.usaQR = false; 
@@ -688,7 +692,7 @@
         document.getElementById('cfgEstabelecimento').value = db.configs.estabelecimento;
         document.getElementById('cfgTamanho').value = db.configs.tamanhoEtiqueta;
         document.getElementById('cfgModo').value = db.configs.modo;
-        document.getElementById('cfgGap').value = db.configs.gapEtiqueta !== undefined ? db.configs.gapEtiqueta : 2;
+        document.getElementById('cfgGapPx').value = db.configs.gapEtiquetaPx !== undefined ? db.configs.gapEtiquetaPx : 16;
         document.getElementById('cfgDestaqueProd').checked = db.configs.destaqueProd;
         document.getElementById('cfgDestaqueVal').checked = db.configs.destaqueVal;
         document.getElementById('cfgQRGlobal').checked = db.configs.controleQR;
@@ -699,7 +703,7 @@
         db.configs.estabelecimento = document.getElementById('cfgEstabelecimento').value.trim() || "Restaurante";
         db.configs.tamanhoEtiqueta = document.getElementById('cfgTamanho').value;
         db.configs.modo = document.getElementById('cfgModo').value;
-        db.configs.gapEtiqueta = parseInt(document.getElementById('cfgGap').value) || 0;
+        db.configs.gapEtiquetaPx = parseInt(document.getElementById('cfgGapPx').value) || 0;
         db.configs.destaqueProd = document.getElementById('cfgDestaqueProd').checked;
         db.configs.destaqueVal = document.getElementById('cfgDestaqueVal').checked;
         db.configs.controleQR = document.getElementById('cfgQRGlobal').checked;
@@ -1716,7 +1720,7 @@
                             </div>
                         </div>
                         
-                        <div style="display: ${showQR}; flex-direction: column; align-items: center; justify-content: flex-start; width: 80px; flex-shrink: 0; margin-left: 5px;">
+                        <div style="display: ${showQR}; flex-direction: column; align-items: center; justify-content: flex-start; width: 85px; flex-shrink: 0; margin-left: 5px;">
                             <div id="${idQR}"></div>
                             <div style="font-size: 11px; margin-top: 2px; font-weight: bold;">${skus[i].slice(-5)}</div>
                         </div>
@@ -1747,7 +1751,7 @@
             </div>
             <script>
                 if("${showQR}" === "flex") { 
-                    new QRCode(document.getElementById("${idQR}"), { text: "${skus[i]}", width: 80, height: 80 }); 
+                    new QRCode(document.getElementById("${idQR}"), { text: "${skus[i]}", width: 85, height: 85 }); 
                 }
             <\/script>`;
         }
@@ -1828,7 +1832,7 @@
         let htmlWidth = 304; 
         let dotsW = 320; 
         let dotsH = 320; 
-        let gapPx = db.configs.gapEtiqueta * 8;
+        let gapPx = db.configs.gapEtiquetaPx;
         
         if(tam === "60x40") { 
             htmlWidth = 464; 
@@ -1850,7 +1854,7 @@
         for(let i = 0; i < qtd; i++) {
             if(usaQR) {
                 document.getElementById('viz-qrcode').innerHTML = ''; 
-                new QRCode(document.getElementById('viz-qrcode'), { text: skus[i], width: 80, height: 80 }); 
+                new QRCode(document.getElementById('viz-qrcode'), { text: skus[i], width: 85, height: 85 }); 
                 document.getElementById('viz-sku').innerText = skus[i].slice(-5); 
                 await new Promise(r => setTimeout(r, 100)); 
             }
