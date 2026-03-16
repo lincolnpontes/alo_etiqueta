@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô_Etiqueta v1.0.7</title>
+    <title>Alô_Etiqueta v1.0.8</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -79,17 +79,20 @@
         
         .etiqueta-borda-interna { border: none; flex: 1; display: flex; flex-direction: column; padding: 4px; box-sizing: border-box; }
         
-        .etiqueta-header { text-align: center; font-weight: 900; font-size: 20px; text-transform: uppercase; line-height: 1.1; margin-bottom: 2px; }
+        .etiqueta-header { text-align: center; font-weight: 900; font-size: 20px; text-transform: uppercase; line-height: 1.1; margin-bottom: 0px; }
         .etiqueta-header.destaque { font-size: 30px !important; }
         
-        .etiqueta-linha { border-bottom: 2px solid black; margin: 4px 0; width: 100%; display: block; }
+        .etiqueta-linha { border-bottom: 2px solid black; margin: 2px 0 6px 0; width: 100%; display: block; } /* puxado pra cima */
         
         .etiqueta-body { flex: 1; display: flex; flex-direction: column; justify-content: space-between; font-size: 16px; padding: 0; }
         .etiqueta-meio { display: flex; justify-content: space-between; align-items: center; flex: 1; }
         
-        .etiqueta-info-textual { display: flex; flex-direction: column; justify-content: space-around; flex: 1; padding-right: 5px; height: 100%; }
-        .etiqueta-row { display: flex; align-items: center; justify-content: flex-start; margin-bottom: 4px; }
+        .etiqueta-info-textual { display: flex; flex-direction: column; justify-content: space-around; flex: 1; padding-right: 5px; height: 100%; gap: 2px; }
+        .etiqueta-row { display: flex; align-items: center; justify-content: flex-start; margin-bottom: 2px; }
         .etiqueta-label { font-weight: bold; margin-right: 5px; }
+        
+        #viz-label-acao { text-transform: uppercase; font-size: 18px; } /* Ação padrão maior e maiúscula */
+        #viz-box-preco-container { font-size: 18px !important; } /* Total maior */
         
         .etiqueta-val-container { display: flex; align-items: center; margin-top: 4px; gap: 5px; }
         .etiqueta-val-destaque { font-size: 24px; font-weight: 900; }
@@ -110,13 +113,13 @@
             <div class="etiqueta-meio">
                 <div class="etiqueta-info-textual">
                     <div class="etiqueta-row">
-                        <span class="etiqueta-label" id="viz-label-acao">Manipulado em:</span>
+                        <span class="etiqueta-label" id="viz-label-acao">MANIPULADO EM:</span>
                         <span id="viz-data-man">00/00/0000 - 00:00</span>
                     </div>
                     
                     <div class="etiqueta-row" id="viz-linha-opcionais" style="display:none; justify-content: flex-start; gap: 15px;">
                         <div id="viz-box-peso" style="display:none;"><span class="etiqueta-label">Peso:</span> <span id="viz-peso" style="font-weight:bold;">0g</span></div>
-                        <div id="viz-box-preco-container" style="display:none; font-weight: bold; font-size: 14px;">
+                        <div id="viz-box-preco-container" style="display:none; font-weight: bold; font-size: 18px;">
                             <span id="viz-label-preco">Total:</span> R$ <span id="viz-preco">0,00</span>
                         </div>
                     </div>
@@ -138,13 +141,13 @@
             </div>
             
             <div id="viz-linha-armazenamento" style="text-align: center; margin-top: 4px; display: none;">
-                <span id="viz-armazenamento" style="background-color: black !important; color: white !important; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 13px; display: inline-block;">Resfriado</span>
+                <span id="viz-armazenamento" style="background-color: black !important; color: white !important; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 16px; display: inline-block; text-transform: uppercase;">RESFRIADO</span>
             </div>
         </div>
         <div class="etiqueta-linha"></div>
         <div class="etiqueta-footer">
-            <div id="viz-estabelecimento" style="font-weight: bold; font-size:15px;">Estabelecimento</div>
-            <div style="font-size:13px; margin-top: 2px;">Op: <span id="viz-operador" style="font-weight:bold;">Nome</span></div>
+            <div id="viz-estabelecimento" style="font-weight: bold; font-size:18px;">Estabelecimento</div>
+            <div style="font-size:13px; margin-top: 2px;">Operador(a): <span id="viz-operador" style="font-weight:bold;">Nome</span></div>
         </div>
     </div>
 </div>
@@ -185,7 +188,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.7</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.8</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
@@ -439,7 +442,7 @@
     function fecharModal(id) { document.getElementById(id).style.display = 'none'; }
     
     function abrirLoginAdmin() { 
-        // SENHA DESATIVADA TEMPORARIAMENTE A SEU PEDIDO
+        // SENHA DESATIVADA TEMPORARIAMENTE
         abrirPainelUnificado(); return;
         /*
         if(db.configs.senhaAdmin === "") { abrirPainelUnificado(); return; }
@@ -482,7 +485,7 @@
     }
 
     function abrirModalAvancado() { 
-        // SENHA DESATIVADA TEMPORARIAMENTE A SEU PEDIDO
+        // SENHA DESATIVADA TEMPORARIAMENTE
         fecharModal('modalPainelUnificado'); 
         abrirZonaRisco(); return;
         /*
@@ -1245,8 +1248,8 @@
     function gerarPDF(p, acao, pesoInput, manBR, hrBR, valBR, qtd, op, est, precoInput, marca, lote, skus) {
         let printWindow = window.open('', '', 'width=450,height=600');
         let armaz = ""; 
-        if(p.armazenamento === "resfriado") armaz = "Manter Resfriado"; 
-        if(p.armazenamento === "congelado") armaz = "Manter Congelado";
+        if(p.armazenamento === "resfriado") armaz = "MANTER RESFRIADO"; 
+        if(p.armazenamento === "congelado") armaz = "MANTER CONGELADO";
         
         let dimensaoCSS = "width: 400px; height: 400px;"; 
         const tam = db.configs.tamanhoEtiqueta || "50x50"; 
@@ -1256,7 +1259,7 @@
         let classeHeader = db.configs.destaqueProd ? "etiqueta-header destaque" : "etiqueta-header"; 
         let classeVal = db.configs.destaqueVal ? "etiqueta-val-destaque destaque" : "etiqueta-val-destaque";
         
-        let htmlContent = `<html><head><style>body { font-family: 'Arial', sans-serif; padding: 20px; display: flex; flex-direction: column; align-items: center; background: #e0e0e0; margin: 0; } .etiqueta { background: white; padding: 8px; margin-bottom: 20px; box-sizing: border-box; display: flex; flex-direction: column; ${dimensaoCSS} overflow: hidden; } .etiqueta-borda-interna { border: none; flex: 1; display: flex; flex-direction: column; padding: 4px; box-sizing: border-box; } .etiqueta-header { text-align: center; font-weight: 900; font-size: 20px; text-transform: uppercase; line-height: 1.1; margin-bottom: 4px; } .etiqueta-header.destaque { font-size: 30px; } .etiqueta-linha { border-bottom: 2px solid black; margin: 4px 0; width: 100%; display: block; } .etiqueta-body { flex: 1; display: flex; flex-direction: column; justify-content: space-between; font-size: 16px; padding: 0; } .etiqueta-meio { display: flex; justify-content: space-between; align-items: center; flex: 1; } .etiqueta-info-textual { display: flex; flex-direction: column; justify-content: space-around; flex: 1; padding-right: 5px; height: 100%; } .etiqueta-row { display: flex; align-items: center; justify-content: flex-start; margin-bottom: 4px; } .etiqueta-label { font-weight: bold; margin-right: 5px; } .etiqueta-val-container { display: flex; align-items: center; margin-top: 4px; gap: 5px; } .etiqueta-val-destaque { font-size: 24px; font-weight: 900; } .etiqueta-val-destaque.destaque { font-size: 36px; } .etiqueta-footer { text-align: center; display: flex; flex-direction: column; align-items: center; margin-top: auto; }</style><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script></head><body>`;
+        let htmlContent = `<html><head><style>body { font-family: 'Arial', sans-serif; padding: 20px; display: flex; flex-direction: column; align-items: center; background: #e0e0e0; margin: 0; } .etiqueta { background: white; padding: 8px; margin-bottom: 20px; box-sizing: border-box; display: flex; flex-direction: column; ${dimensaoCSS} overflow: hidden; } .etiqueta-borda-interna { border: none; flex: 1; display: flex; flex-direction: column; padding: 4px; box-sizing: border-box; } .etiqueta-header { text-align: center; font-weight: 900; font-size: 20px; text-transform: uppercase; line-height: 1.1; margin-bottom: 0px; } .etiqueta-header.destaque { font-size: 30px; } .etiqueta-linha { border-bottom: 2px solid black; margin: 2px 0 6px 0; width: 100%; display: block; } .etiqueta-body { flex: 1; display: flex; flex-direction: column; justify-content: space-between; font-size: 16px; padding: 0; } .etiqueta-meio { display: flex; justify-content: space-between; align-items: center; flex: 1; } .etiqueta-info-textual { display: flex; flex-direction: column; justify-content: space-around; flex: 1; padding-right: 5px; height: 100%; gap: 2px; } .etiqueta-row { display: flex; align-items: center; justify-content: flex-start; margin-bottom: 2px; } .etiqueta-label { font-weight: bold; margin-right: 5px; } .etiqueta-val-container { display: flex; align-items: center; margin-top: 4px; gap: 5px; } .etiqueta-val-destaque { font-size: 24px; font-weight: 900; } .etiqueta-val-destaque.destaque { font-size: 36px; } .etiqueta-footer { text-align: center; display: flex; flex-direction: column; align-items: center; margin-top: auto; }</style><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script></head><body>`;
         
         for(let i = 0; i < qtd; i++) {
             let nomeDisplay = marca !== "" ? `${p.nome} (${marca})` : p.nome;
@@ -1281,7 +1284,7 @@
             let showQR = (db.configs.controleQR && p.usaQR) ? "block" : "none";
             let idQR = `qr_${Date.now()}_${i}`;
 
-            htmlContent += `<div class="etiqueta"><div class="etiqueta-borda-interna"><div class="${classeHeader}">${nomeDisplay}</div><div class="etiqueta-linha"></div><div class="etiqueta-body"><div class="etiqueta-meio"><div class="etiqueta-info-textual"><div class="etiqueta-row"><span class="etiqueta-label">${acao}</span><span>${manBR} - ${hrBR}</span></div><div class="etiqueta-row" style="display: ${displayOpcionais}; justify-content: flex-start; gap: 15px;"><div style="display: ${displayPeso};"><span class="etiqueta-label">Peso:</span> <span style="font-weight:bold;">${pesoInput}g</span></div><div style="display: ${displayPreco}; font-weight: bold; font-size: 14px;"><span>${rotuloPreco}</span> R$ <span>${valorCalc}</span></div></div><div class="etiqueta-row" style="display: ${displayLote};"><div><span class="etiqueta-label">Lote:</span> <span>${lote || '-'}</span></div></div><div class="etiqueta-val-container"><span class="${classeVal}">VAL:</span><span class="${classeVal}">${valBR}</span></div></div><div style="display: ${showQR}; text-align: center; flex-shrink: 0; padding-left: 5px;"><div id="${idQR}"></div><div style="font-size: 9px; margin-top: 2px; font-weight: bold;">${skus[i].slice(-5)}</div></div></div><div style="text-align: center; margin-top: 4px; margin-bottom: 2px; display: ${displayArmaz};"><span style="background-color: black !important; color: white !important; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 13px; display: inline-block;">${armaz}</span></div></div><div class="etiqueta-linha"></div><div class="etiqueta-footer"><div style="font-weight: bold; font-size:15px;">${est}</div><div style="font-size:13px; margin-top: 2px;">Operador(a): <span style="font-weight: bold;">${op}</span></div></div></div></div><script>if("${showQR}" === "block") { new QRCode(document.getElementById("${idQR}"), { text: "${skus[i]}", width: 65, height: 65 }); }<\/script>`;
+            htmlContent += `<div class="etiqueta"><div class="etiqueta-borda-interna"><div class="${classeHeader}">${nomeDisplay}</div><div class="etiqueta-linha"></div><div class="etiqueta-body"><div class="etiqueta-meio"><div class="etiqueta-info-textual"><div class="etiqueta-row"><span class="etiqueta-label" style="text-transform: uppercase; font-size: 18px;">${acao}</span><span>${manBR} - ${hrBR}</span></div><div class="etiqueta-row" style="display: ${displayOpcionais}; justify-content: flex-start; gap: 15px;"><div style="display: ${displayPeso};"><span class="etiqueta-label">Peso:</span> <span style="font-weight:bold;">${pesoInput}g</span></div><div style="display: ${displayPreco}; font-weight: bold; font-size: 18px;"><span>${rotuloPreco}</span> R$ <span>${valorCalc}</span></div></div><div class="etiqueta-row" style="display: ${displayLote};"><div><span class="etiqueta-label">Lote:</span> <span>${lote || '-'}</span></div></div><div class="etiqueta-val-container"><span class="${classeVal}">VAL:</span><span class="${classeVal}">${valBR}</span></div></div><div style="display: ${showQR}; text-align: center; flex-shrink: 0; padding-left: 2px;"><div id="${idQR}"></div><div style="font-size: 9px; margin-top: 2px; font-weight: bold;">${skus[i].slice(-5)}</div></div></div><div style="text-align: center; margin-top: 4px; margin-bottom: 2px; display: ${displayArmaz};"><span style="background-color: black !important; color: white !important; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 16px; display: inline-block; text-transform: uppercase;">${armaz}</span></div></div><div class="etiqueta-linha"></div><div class="etiqueta-footer"><div style="font-weight: bold; font-size:18px;">${est}</div><div style="font-size:13px; margin-top: 2px;">Operador(a): <span style="font-weight: bold;">${op}</span></div></div></div></div><script>if("${showQR}" === "block") { new QRCode(document.getElementById("${idQR}"), { text: "${skus[i]}", width: 55, height: 55 }); }<\/script>`;
         }
         
         htmlContent += `<script> setTimeout(function() { window.print(); window.close(); }, 600); <\/script></body></html>`;
@@ -1333,7 +1336,7 @@
         const rowOpcionais = document.getElementById('viz-linha-opcionais');
         if(hasPeso || hasPreco) { rowOpcionais.style.display = "flex"; } else { rowOpcionais.style.display = "none"; }
         
-        let arm = p.armazenamento === "resfriado" ? "Manter Resfriado" : (p.armazenamento === "congelado" ? "Manter Congelado" : "");
+        let arm = p.armazenamento === "resfriado" ? "MANTER RESFRIADO" : (p.armazenamento === "congelado" ? "MANTER CONGELADO" : "");
         const bxArmaz = document.getElementById('viz-linha-armazenamento');
         if(arm !== "") { bxArmaz.style.display = "block"; document.getElementById('viz-armazenamento').innerText = arm; } else { bxArmaz.style.display = "none"; }
         
@@ -1365,7 +1368,7 @@
         for(let i = 0; i < qtd; i++) {
             if(db.configs.controleQR && p.usaQR) {
                 document.getElementById('viz-qrcode').innerHTML = ''; 
-                new QRCode(document.getElementById('viz-qrcode'), { text: skus[i], width: 65, height: 65 }); 
+                new QRCode(document.getElementById('viz-qrcode'), { text: skus[i], width: 55, height: 55 }); 
                 document.getElementById('viz-sku').innerText = skus[i].slice(-5); 
                 await new Promise(r => setTimeout(r, 60)); 
             }
@@ -1376,7 +1379,7 @@
                 logging: false,
                 scrollX: 0,
                 scrollY: 0,
-                width: dotsW, // FORCANDO O HTML2CANVAS A OBEDECER
+                width: dotsW, 
                 height: dotsH
             });
             
