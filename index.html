@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô_Etiqueta v1.0.5</title>
+    <title>Alô_Etiqueta v1.0.6</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -90,7 +90,7 @@
         .bg-green { background: #388E3C; }
 
         /* ============================================================
-           GABARITO v1.0.5 - Recuo de 38mm p/ dar margem na direita
+           GABARITO v1.0.6 - Recuo de 38mm p/ dar margem na direita
            ============================================================ */
         #area-impressao-visual {
             position: fixed; top: 0; left: -3000px;
@@ -116,7 +116,7 @@
     <img src="icon.png" class="splash-icon" alt="Alô Etiqueta" onerror="this.style.display='none'; document.getElementById('splash-emoji').style.display='block';">
     <div id="splash-emoji" class="splash-emoji">🏷️</div>
     <div class="splash-title">Alô_Etiqueta</div>
-    <div class="splash-version">v1.0.5</div>
+    <div class="splash-version">v1.0.6</div>
 </div>
 
 <div id="area-impressao-visual">
@@ -217,7 +217,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.5</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.6</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
@@ -1830,7 +1830,7 @@
         let htmlWidth = 304; 
         let dotsW = 320; 
         let dotsH = 320; 
-        let gapPx = 24; // 3mm de espaço em branco físico na bobina
+        let gapPx = 16; // 2mm de espaço em branco físico na bobina (ajustado na v1.0.6)
         
         if(tam === "60x40") { 
             htmlWidth = 464; 
