@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô_Etiqueta v1.0.18</title>
+    <title>Alô_Etiqueta v1.0.19</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -39,7 +39,6 @@
         .header-actions { display: flex; gap: 15px; align-items: center; }
         .header-actions button { background: none; border: none; color: white; font-size: 24px; cursor: pointer; padding: 0; }
         
-        /* BARRA DE BUSCA +30% */
         .search-box { background: #E3F2FD; padding: 12px 10px; display: flex; gap: 8px; width: 100%; box-sizing: border-box; align-items: center; overflow: hidden; }
         .search-box input { width: 75px; flex-shrink: 0; padding: 14px 6px; border: 1px solid #ccc; border-radius: 6px; font-size: 20px; font-weight: bold; text-align: center; }
         .search-box .btn-buscar { background: #1976D2; color: white; border: none; padding: 0 18px; height: 52px; border-radius: 6px; cursor: pointer; font-size: 18px; font-weight: bold; flex-shrink: 0; }
@@ -92,22 +91,24 @@
         .bg-green { background: #388E3C; }
 
         /* ============================================================
-           GABARITO 60x40 COM 3MM EXATOS DE BORDA (24px padding), 
-           MUITO MAIS LEGÍVEL E ELEGANTE
+           GABARITO BLINDADO: 480x320 pixels (exatos 60x40mm) 
+           MARGEM CRAVADA DE 3MM (24 pixels)
            ============================================================ */
         #area-impressao-visual {
             position: fixed; top: 0; left: -3000px;
             background: white; color: black; font-family: 'Arial', sans-serif;
             box-sizing: border-box; 
-            padding: 24px; /* 3mm perfeitos em todos os 4 lados (8px * 3 = 24px) */
+            padding: 24px !important; /* Exatos 3mm de folga nas 4 bordas */
             display: flex; flex-direction: column; justify-content: space-between; align-items: center;
-            width: 480px; height: 320px; min-width: 480px; min-height: 320px; margin: 0;
-            overflow: hidden; text-align: center;
+            width: 480px !important; height: 320px !important; 
+            min-width: 480px !important; min-height: 320px !important; 
+            max-width: 480px !important; max-height: 320px !important; 
+            margin: 0; overflow: hidden; text-align: center;
         }
 
-        .item-nome { font-family: 'Arial Black', Impact, sans-serif; font-stretch: expanded; font-size: 34px; text-transform: uppercase; margin: 0; line-height: 1.1; letter-spacing: 0.5px; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .item-nome { font-family: 'Arial Black', Impact, sans-serif; font-stretch: expanded; font-size: 36px; text-transform: uppercase; margin: 0; line-height: 1.1; letter-spacing: -0.5px; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .item-nome.destaque { font-size: 42px !important; }
-        .validade-grande .val-label, .validade-grande .val-data { font-size: 28px !important; }
+        .validade-grande .val-label, .validade-grande .val-data { font-size: 30px !important; }
         
         #reader { width: 100%; background: #000; border-radius: 8px; overflow: hidden; }
         .detalhes-estoque-lista li:last-child { border-bottom: none !important; }
@@ -119,7 +120,7 @@
     <img src="icon.png" class="splash-icon" alt="Alô Etiqueta" onerror="this.style.display='none'; document.getElementById('splash-emoji').style.display='block';">
     <div id="splash-emoji" class="splash-emoji">🏷️</div>
     <div class="splash-title">Alô_Etiqueta</div>
-    <div class="splash-version">v1.0.18</div>
+    <div class="splash-version">v1.0.19</div>
 </div>
 
 <div id="area-impressao-visual">
@@ -130,11 +131,11 @@
     
     <div style="flex: 1; padding-top: 8px; display: flex; flex-direction: column; align-items: center; width: 100%; overflow: hidden;">
         
-        <div style="font-size: 20px; font-weight: 900; margin-bottom: 6px; letter-spacing: 0.5px;">
+        <div style="font-size: 22px; font-weight: 900; margin-bottom: 6px;">
             <span id="viz-label-acao">AÇÃO EM:</span> <span id="viz-data-man">00/00/0000 00:00</span>
         </div>
         
-        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; font-size: 16px; font-weight: bold; width: 100%; margin-bottom: 4px;">
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; font-size: 18px; font-weight: bold; width: 100%; margin-bottom: 4px;">
             <div id="viz-row-marca" style="display: none;">MARCA: <span id="viz-marca">---</span></div>
             <div id="viz-row-lote" style="display: none;">LOTE: <span id="viz-lote">---</span></div>
             <div id="viz-box-peso" style="display: none;">PESO: <span id="viz-peso">0g</span></div>
@@ -142,31 +143,31 @@
         
         <div style="display: flex; flex-direction: column; align-items: center; margin-top: 4px;">
             <div id="viz-box-preco" style="display: none; font-size: 16px; font-weight: bold;">PREÇO: R$ <span id="viz-preco-unit">0,00</span></div>
-            <div id="viz-box-preco-container" style="display: none; border: 2px solid black; padding: 4px 10px; font-size: 20px; font-weight: 900; margin-top: 6px; border-radius: 4px;">
+            <div id="viz-box-preco-container" style="display: none; border: 2px solid black; padding: 4px 10px; font-size: 22px; font-weight: 900; margin-top: 4px; border-radius: 4px;">
                 TOTAL: R$ <span id="viz-preco">0,00</span>
             </div>
         </div>
 
-        <div id="viz-qrcode-container" style="display: none; justify-content: center; width: 100%; margin-top: 8px;">
+        <div id="viz-qrcode-container" style="display: none; justify-content: center; width: 100%; margin-top: 6px;">
             <div id="viz-qrcode"></div>
         </div>
     </div>
     
     <div style="width: 100%; padding-top: 6px;">
         <div id="viz-container-validade" style="margin-bottom: 6px; line-height: 1.1;">
-            <span class="val-label" style="font-size: 26px; font-weight: 900;">VAL:</span> 
-            <span class="val-data" id="viz-data-val" style="font-size: 26px; font-weight: 900;">00/00/0000</span>
+            <span class="val-label" style="font-size: 28px; font-weight: 900;">VAL:</span> 
+            <span class="val-data" id="viz-data-val" style="font-size: 28px; font-weight: 900;">00/00/0000</span>
         </div>
         
         <div id="viz-linha-armazenamento" style="margin-bottom: 8px; display: none; line-height: 1.0;">
-            <span id="viz-armazenamento" style="font-size: 16px; font-weight: 900; text-transform: uppercase; border: 2px solid black; border-radius: 4px; padding: 3px 8px; display: inline-block;">MANTER CONGELADO</span>
+            <span id="viz-armazenamento" style="font-size: 18px; font-weight: 900; text-transform: uppercase; border: 2px solid black; border-radius: 4px; padding: 2px 8px; display: inline-block;">MANTER CONGELADO</span>
         </div>
         
         <div style="border-top: 2px solid black; width: 100%; margin-bottom: 4px;"></div>
         
         <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-            <div id="viz-estabelecimento" style="font-weight: bold; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 50%;">Estabelecimento</div>
-            <div style="font-size: 14px; text-align: right;">Op: <span id="viz-operador" style="font-weight: 900;">Nome</span></div>
+            <div id="viz-estabelecimento" style="font-weight: bold; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 50%;">Estabelecimento</div>
+            <div style="font-size: 16px; text-align: right;">Op: <span id="viz-operador" style="font-weight: 900;">Nome</span></div>
         </div>
     </div>
 </div>
@@ -224,7 +225,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.18</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.19</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
@@ -1733,29 +1734,28 @@
                 </div>`;
         }
 
-        // 60x40 via PDF
-        let dimensaoCSS = "width: 480px; height: 320px;"; 
+        // Para PDF eu travo a página em 60mm x 40mm
+        let pageSize = "60mm 40mm";
+        let dimensaoCSS = "width: 100%; height: 100%;"; 
+        
         const tam = db.configs.tamanhoEtiqueta || "60x40"; 
-        if(tam === "40x40") dimensaoCSS = "width: 304px; height: 320px;"; 
-        if(tam === "50x50") dimensaoCSS = "width: 384px; height: 400px;";
+        if(tam === "40x40") { pageSize = "38mm 40mm"; }
+        if(tam === "50x50") { pageSize = "50mm 50mm"; }
         
         let classeHeader = db.configs.destaqueProd ? "item-nome destaque" : "item-nome"; 
         let classeValidadeGrande = db.configs.destaqueVal ? "validade-grande" : "";
-        
-        let gapPx = db.configs.gapEtiquetaPx || 0;
-        let marginGap = gapPx > 0 ? `margin-bottom: ${gapPx}px;` : "";
 
         let htmlContent = `
         <html>
         <head>
             <style>
-                @page { margin: 0; size: auto; }
-                body { font-family: 'Arial', sans-serif; padding: 0; margin: 0; background: #fff; display:flex; flex-direction:column; align-items:center; } 
-                .etiqueta-print { background: white; ${marginGap} box-sizing: border-box; ${dimensaoCSS} display: flex; flex-direction: column; padding: 24px; justify-content: space-between; align-items: center; text-align: center; page-break-after: always; overflow: hidden;} 
+                @page { margin: 0; size: ${pageSize}; }
+                body { font-family: 'Arial', sans-serif; padding: 0; margin: 0; background: #fff; width: ${pageSize.split(' ')[0]}; height: ${pageSize.split(' ')[1]}; } 
+                .etiqueta-print { background: white; box-sizing: border-box; ${dimensaoCSS} display: flex; flex-direction: column; padding: 3mm; justify-content: space-between; align-items: center; text-align: center; overflow: hidden;} 
                 
-                .item-nome { font-family: 'Arial Black', Impact, sans-serif; font-stretch: expanded; font-size: 34px; text-transform: uppercase; margin: 0; line-height: 1.1; letter-spacing: 0.5px; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-                .item-nome.destaque { font-size: 42px !important; }
-                .validade-grande .val-label, .validade-grande .val-data { font-size: 28px !important; }
+                .item-nome { font-family: 'Arial Black', Impact, sans-serif; font-stretch: expanded; font-size: 16pt; text-transform: uppercase; margin: 0; line-height: 1.1; letter-spacing: -0.5px; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+                .item-nome.destaque { font-size: 20pt !important; }
+                .validade-grande .val-label, .validade-grande .val-data { font-size: 14pt !important; }
             </style>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script>
         </head>
@@ -1777,56 +1777,56 @@
             
             let blocoOpcionais = "";
             if (marcaStr || loteStr || pesoStr) {
-                blocoOpcionais = `<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; font-size: 16px; font-weight: bold; width: 100%; margin-bottom: 4px;">${marcaStr}${loteStr}${pesoStr}</div>`;
+                blocoOpcionais = `<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; font-size: 9pt; font-weight: bold; width: 100%; margin-bottom: 2px;">${marcaStr}${loteStr}${pesoStr}</div>`;
             }
             
-            let precoUnitStr = precoInput !== "" ? `<div style="font-size: 16px; font-weight: bold;">PREÇO: R$ <span>${formataDinheiro(parseFloat(precoInput))}</span></div>` : "";
-            let totalStr = precoInput !== "" ? `<div style="border: 2px solid black; border-radius: 4px; padding: 4px 10px; font-size: 20px; font-weight: 900; margin-top: 6px;">TOTAL: R$ <span>${valorCalc}</span></div>` : "";
+            let precoUnitStr = precoInput !== "" ? `<div style="font-size: 9pt; font-weight: bold;">PREÇO: R$ <span>${formataDinheiro(parseFloat(precoInput))}</span></div>` : "";
+            let totalStr = precoInput !== "" ? `<div style="border: 2px solid black; border-radius: 4px; padding: 2px 6px; font-size: 12pt; font-weight: 900; margin-top: 2px;">TOTAL: R$ <span>${valorCalc}</span></div>` : "";
 
             let nomeDisplay = marca !== "" ? `${p.nome} (${marca})` : p.nome;
 
             htmlContent += `
-            <div class="etiqueta-print">
-                <div style="border-bottom: 3px solid black; padding-bottom: 6px; width: 100%;">
+            <div class="etiqueta-print" ${i < qtd -1 ? 'style="page-break-after: always;"' : ''}>
+                <div style="border-bottom: 2px solid black; padding-bottom: 2px; width: 100%;">
                     <div class="${classeHeader}">${nomeDisplay}</div>
                 </div>
                 
-                <div style="flex: 1; padding-top: 8px; display: flex; flex-direction: column; align-items: center; width: 100%; overflow: hidden;">
-                    <div style="font-size: 20px; font-weight: 900; margin-bottom: 6px; letter-spacing: 0.5px;">
+                <div style="flex: 1; padding-top: 4px; display: flex; flex-direction: column; align-items: center; width: 100%; overflow: hidden;">
+                    <div style="font-size: 11pt; font-weight: 900; margin-bottom: 4px;">
                         <span>${acaoImpressao}</span> <span>${manBR}</span>
                     </div>
                     
                     ${blocoOpcionais}
                     
-                    <div style="display: flex; flex-direction: column; align-items: center; margin-top: 4px;">
+                    <div style="display: flex; flex-direction: column; align-items: center; margin-top: 2px;">
                         ${precoUnitStr}
                         ${totalStr}
                     </div>
                     
-                    <div style="display: ${showQR}; justify-content: center; width: 100%; margin-top: 8px;">
+                    <div style="display: ${showQR}; justify-content: center; width: 100%; margin-top: 4px;">
                         <div id="${idQR}"></div>
                     </div>
                 </div>
                 
-                <div style="width: 100%; padding-top: 6px;">
-                    <div class="${classeValidadeGrande}" style="margin-bottom: 6px; line-height: 1.1;">
-                        <span class="val-label" style="font-size: 26px; font-weight: 900;">VAL:</span> 
-                        <span class="val-data" style="font-size: 26px; font-weight: 900;">${valBR}</span>
+                <div style="width: 100%; padding-top: 4px;">
+                    <div class="${classeValidadeGrande}" style="margin-bottom: 2px; line-height: 1.1;">
+                        <span class="val-label" style="font-size: 12pt; font-weight: 900;">VAL:</span> 
+                        <span class="val-data" style="font-size: 12pt; font-weight: 900;">${valBR}</span>
                     </div>
                     
                     ${armazHTML}
                     
-                    <div style="border-top: 2px solid black; width: 100%; margin-bottom: 4px;"></div>
+                    <div style="border-top: 2px solid black; width: 100%; margin-bottom: 2px;"></div>
                     
                     <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                        <div style="font-weight: bold; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 50%;">${est}</div>
-                        <div style="font-size: 14px; text-align: right;">Op: <span style="font-weight: 900;">${op}</span></div>
+                        <div style="font-weight: bold; font-size: 8pt; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 50%;">${est}</div>
+                        <div style="font-size: 8pt; text-align: right;">Op: <span style="font-weight: 900;">${op}</span></div>
                     </div>
                 </div>
             </div>
             <script>
                 if("${showQR}" === "flex") { 
-                    new QRCode(document.getElementById("${idQR}"), { text: "${skus[i]}", width: 90, height: 90 }); 
+                    new QRCode(document.getElementById("${idQR}"), { text: "${skus[i]}", width: 60, height: 60 }); 
                 }
             <\/script>`;
         }
@@ -1917,13 +1917,9 @@
         let gapPx = db.configs.gapEtiquetaPx || 0;
         
         if(tam === "40x40") { 
-            htmlWidth = 304; 
-            dotsW = 304; 
-            dotsH = 320; 
+            htmlWidth = 304; dotsW = 304; dotsH = 320; 
         } else if(tam === "50x50") { 
-            htmlWidth = 384; 
-            dotsW = 384; 
-            dotsH = 400; 
+            htmlWidth = 384; dotsW = 384; dotsH = 400; 
         }
         
         gab.style.left = "0px";
@@ -1940,13 +1936,16 @@
                 await new Promise(r => setTimeout(r, 100)); 
             }
             
+            // Forçando a escala em 1 para evitar que o canvas fique doido na impressora
             let c = await html2canvas(gab, { 
-                scale: 2, 
+                scale: 1, 
                 backgroundColor: "#ffffff", 
                 logging: false,
                 useCORS: true,
                 width: htmlWidth, 
-                height: dotsH 
+                height: dotsH,
+                windowWidth: htmlWidth,
+                windowHeight: dotsH
             });
             
             if(i === 0) { 
@@ -1956,8 +1955,8 @@
                 ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height); 
             }
             
-            ctx.imageSmoothingEnabled = true;
-            ctx.drawImage(c, 0, 0, c.width, c.height, 0, currentY, htmlWidth, dotsH); 
+            ctx.imageSmoothingEnabled = false;
+            ctx.drawImage(c, 0, 0, htmlWidth, dotsH, 0, currentY, dotsW, dotsH); 
 
             currentY += dotsH + gapPx;
         }
