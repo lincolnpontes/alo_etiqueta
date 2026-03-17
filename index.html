@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô_Etiqueta v1.0.21</title>
+    <title>Alô_Etiqueta v1.0.22</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -91,7 +91,7 @@
         .bg-green { background: #388E3C; }
 
         /* ============================================================
-           GABARITO BLINDADO V21: 480x320 pixels (exatos 60x40mm) 
+           GABARITO BLINDADO V22: 480x320 pixels (exatos 60x40mm) 
            RECUOS: Esquerda (4px), Direita 6mm (48px), Topo/Base 3mm (24px)
            ============================================================ */
         #area-impressao-visual {
@@ -121,7 +121,7 @@
     <img src="icon.png" class="splash-icon" alt="Alô Etiqueta" onerror="this.style.display='none'; document.getElementById('splash-emoji').style.display='block';">
     <div id="splash-emoji" class="splash-emoji">🏷️</div>
     <div class="splash-title">Alô_Etiqueta</div>
-    <div class="splash-version">v1.0.21</div>
+    <div class="splash-version">v1.0.22</div>
 </div>
 
 <div id="area-impressao-visual">
@@ -138,17 +138,18 @@
                 <span id="viz-label-acao">AÇÃO EM:</span> <br> <span id="viz-data-man">00/00/0000 00:00</span>
             </div>
             
-            <div style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 16px; font-weight: bold; width: 100%; margin-bottom: 4px;">
-                <div id="viz-row-marca" style="display: none;">MARCA: <span id="viz-marca">---</span></div>
-                <div id="viz-row-lote" style="display: none;">LOTE: <span id="viz-lote">---</span></div>
-                <div id="viz-box-peso" style="display: none;">PESO: <span id="viz-peso">0g</span></div>
+            <div id="viz-linha-marcalote" style="display: none; font-size: 16px; font-weight: bold; width: 100%; margin-bottom: 4px; white-space: nowrap; overflow: hidden;">
+                <span id="viz-marca-container" style="display:none;">MARCA: <span id="viz-marca">---</span></span>
+                <span id="viz-lote-container" style="display:none; margin-left: 6px;"></span>
             </div>
             
-            <div style="display: flex; flex-direction: column; align-items: flex-start; margin-top: 4px;">
-                <div id="viz-box-preco" style="display: none; font-size: 16px; font-weight: bold;">PREÇO: R$ <span id="viz-preco-unit">0,00</span></div>
-                <div id="viz-box-preco-container" style="display: none; border: 2px solid black; padding: 4px 8px; font-size: 20px; font-weight: 900; margin-top: 4px; border-radius: 4px;">
-                    TOTAL: R$ <span id="viz-preco">0,00</span>
-                </div>
+            <div id="viz-linha-pesopreco" style="display: none; font-size: 16px; font-weight: bold; width: 100%; margin-bottom: 4px; white-space: nowrap; overflow: hidden;">
+                <span id="viz-peso-container" style="display:none;">PESO: <span id="viz-peso">0g</span></span>
+                <span id="viz-preco-container" style="display:none; margin-left: 6px;"></span>
+            </div>
+            
+            <div id="viz-box-total-container" style="display: none; font-size: 20px; font-weight: 900; margin-top: 4px;">
+                TOTAL: R$ <span id="viz-preco">0,00</span>
             </div>
 
         </div>
@@ -232,7 +233,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.21</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.22</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
@@ -1771,19 +1772,21 @@
             let showQR = (db.configs.controleQR && p.usaQR) ? "flex" : "none";
             let idQR = `qr_pdf_${Date.now()}_${i}`;
 
-            let marcaStr = marca !== "" ? `<div>MARCA: <span>${marca}</span></div>` : "";
-            let loteStr = lote !== "" ? `<div>LOTE: <span>${lote}</span></div>` : "";
-            let pesoStr = pesoInput !== "" ? `<div>PESO: <span>${pesoInput}g</span></div>` : "";
-            
-            let blocoOpcionais = "";
-            if (marcaStr || loteStr || pesoStr) {
-                blocoOpcionais = `<div style="display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 8px; font-size: 9pt; font-weight: bold; width: 100%; margin-bottom: 2px;">${marcaStr}${loteStr}${pesoStr}</div>`;
-            }
-            
-            let precoUnitStr = precoInput !== "" ? `<div style="font-size: 9pt; font-weight: bold;">PREÇO: R$ <span>${formataDinheiro(parseFloat(precoInput))}</span></div>` : "";
-            let totalStr = precoInput !== "" ? `<div style="border: 2px solid black; border-radius: 4px; padding: 2px 6px; font-size: 12pt; font-weight: 900; margin-top: 2px;">TOTAL: R$ <span>${valorCalc}</span></div>` : "";
+            let marcaStr = marca !== "" ? `<span>MARCA: ${marca}</span>` : "";
+            let loteStr = lote !== "" ? `<span>LOTE: ${lote}</span>` : "";
+            let divisorML = (marca !== "" && lote !== "") ? `<span style="margin: 0 4px;">|</span>` : "";
+            let linhaMarcaLote = (marcaStr || loteStr) ? `<div style="margin-bottom: 2px;">${marcaStr}${divisorML}${loteStr}</div>` : "";
 
-            let nomeDisplay = marca !== "" ? `${p.nome} (${marca})` : p.nome;
+            let pesoStr = pesoInput !== "" ? `<span>PESO: ${pesoInput}g</span>` : "";
+            let precoUnitStr = precoInput !== "" ? `<span>PREÇO: R$ ${formataDinheiro(parseFloat(precoInput))}</span>` : "";
+            let divisorPP = (pesoInput !== "" && precoInput !== "") ? `<span style="margin: 0 4px;">|</span>` : "";
+            let linhaPesoPreco = (pesoStr || precoUnitStr) ? `<div style="margin-bottom: 2px;">${pesoStr}${divisorPP}${precoUnitStr}</div>` : "";
+
+            let blocoOpcionais = (linhaMarcaLote || linhaPesoPreco) ? `<div style="font-size: 10pt; font-weight: bold; width: 100%; margin-bottom: 2px;">${linhaMarcaLote}${linhaPesoPreco}</div>` : "";
+
+            let totalStr = precoInput !== "" ? `<div style="font-size: 14pt; font-weight: 900; margin-top: 2px;">TOTAL: R$ <span>${valorCalc}</span></div>` : "";
+
+            let nomeDisplay = p.nome; // Removido a marca do título
 
             htmlContent += `
             <div class="etiqueta-print" ${i < qtd -1 ? 'style="page-break-after: always;"' : ''}>
@@ -1801,7 +1804,6 @@
                         ${blocoOpcionais}
                         
                         <div style="display: flex; flex-direction: column; align-items: flex-start; margin-top: 2px;">
-                            ${precoUnitStr}
                             ${totalStr}
                         </div>
                     </div>
@@ -1829,7 +1831,7 @@
             </div>
             <script>
                 if("${showQR}" === "flex") { 
-                    new QRCode(document.getElementById("${idQR}"), { text: "${skus[i]}", width: 65, height: 65 }); 
+                    new QRCode(document.getElementById("${idQR}"), { text: "${skus[i]}", width: 55, height: 55 }); 
                 }
             <\/script>`;
         }
@@ -1848,47 +1850,51 @@
     async function gerarRawBT(p, acaoImpressao, pesoInput, manBR, valBR, qtd, op, est, precoInput, marca, lote, skus, btn) {
         const gab = document.getElementById('area-impressao-visual'); 
         
-        document.getElementById('viz-nome-produto').innerText = marca !== "" ? `${p.nome} (${marca})` : p.nome;
+        // 1. Tira a marca do título
+        document.getElementById('viz-nome-produto').innerText = p.nome;
+        
         document.getElementById('viz-label-acao').innerText = acaoImpressao; 
         document.getElementById('viz-data-man').innerText = manBR; 
         
-        if(marca !== "") { 
-            document.getElementById('viz-row-marca').style.display = "block"; 
-            document.getElementById('viz-marca').innerText = marca; 
-        } else {
-            document.getElementById('viz-row-marca').style.display = "none";
-        }
+        // Lógica MARCA e LOTE na mesma linha
+        let hasMarca = marca !== "";
+        let hasLote = lote !== "";
+        document.getElementById('viz-linha-marcalote').style.display = (hasMarca || hasLote) ? "block" : "none";
+        
+        document.getElementById('viz-marca-container').style.display = hasMarca ? "inline-block" : "none";
+        if(hasMarca) document.getElementById('viz-marca').innerText = marca;
 
-        if(lote !== "") { 
-            document.getElementById('viz-row-lote').style.display = "block"; 
-            document.getElementById('viz-lote').innerText = lote || '-'; 
-        } else {
-            document.getElementById('viz-row-lote').style.display = "none";
+        document.getElementById('viz-lote-container').style.display = hasLote ? "inline-block" : "none";
+        if(hasLote) {
+            document.getElementById('viz-lote-container').innerHTML = hasMarca ? `| LOTE: <span id="viz-lote">${lote}</span>` : `LOTE: <span id="viz-lote">${lote}</span>`;
         }
         
-        if(pesoInput !== "") { 
-            document.getElementById('viz-box-peso').style.display = "block"; 
-            document.getElementById('viz-peso').innerText = `${pesoInput}g`; 
-        } else {
-            document.getElementById('viz-box-peso').style.display = "none";
+        // Lógica PESO e PREÇO na mesma linha
+        let hasPeso = pesoInput !== "";
+        let hasPreco = precoInput !== "";
+        document.getElementById('viz-linha-pesopreco').style.display = (hasPeso || hasPreco) ? "block" : "none";
+
+        document.getElementById('viz-peso-container').style.display = hasPeso ? "inline-block" : "none";
+        if(hasPeso) document.getElementById('viz-peso').innerText = `${pesoInput}g`;
+
+        document.getElementById('viz-preco-container').style.display = hasPreco ? "inline-block" : "none";
+        if(hasPreco) {
+            let precoFormatado = formataDinheiro(parseFloat(precoInput));
+            document.getElementById('viz-preco-container').innerHTML = hasPeso ? `| PREÇO: R$ <span id="viz-preco-unit">${precoFormatado}</span>` : `PREÇO: R$ <span id="viz-preco-unit">${precoFormatado}</span>`;
         }
         
+        // Lógica TOTAL
         let calcPreco = ""; 
-        if(precoInput !== "") { 
+        if(hasPreco) { 
             let psNum = parseFloat(pesoInput); 
             calcPreco = (!isNaN(psNum) && psNum > 0) ? formataDinheiro((psNum/1000)*parseFloat(precoInput)) : formataDinheiro(parseFloat(precoInput)); 
-            
-            document.getElementById('viz-box-preco').style.display = "block";
-            document.getElementById('viz-preco-unit').innerText = formataDinheiro(parseFloat(precoInput));
-        } else {
-            document.getElementById('viz-box-preco').style.display = "none";
         }
         
         if(calcPreco !== "") { 
-            document.getElementById('viz-box-preco-container').style.display = "block"; 
+            document.getElementById('viz-box-total-container').style.display = "block"; 
             document.getElementById('viz-preco').innerText = calcPreco; 
         } else {
-            document.getElementById('viz-box-preco-container').style.display = "none";
+            document.getElementById('viz-box-total-container').style.display = "none";
         }
         
         document.getElementById('viz-data-val').innerText = valBR; 
@@ -1918,6 +1924,9 @@
         let dotsW = 480; 
         let dotsH = 320; 
         
+        // Volta com a lógica do Gap de 3mm (24px) na imagem digital
+        let gapPx = db.configs.gapEtiquetaPx || 24; 
+        
         if(tam === "40x40") { 
             htmlWidth = 304; dotsW = 304; dotsH = 320; 
         } else if(tam === "50x50") { 
@@ -1935,7 +1944,6 @@
             if(usaQR) {
                 document.getElementById('viz-qrcode').innerHTML = ''; 
                 new QRCode(document.getElementById('viz-qrcode'), { text: skus[i], width: 95, height: 95 }); 
-                // Aumentei o timeout pro QR Code dar tempo de aparecer
                 await new Promise(r => setTimeout(r, 250)); 
             }
             
@@ -1950,11 +1958,10 @@
                 windowHeight: dotsH
             });
             
-            // O SEGREDO DO GAP TÁ AQUI
             if(i === 0) { 
                 finalCanvas.width = dotsW; 
-                // Removi a soma do gap aqui! A imagem morre na altura exata das etiquetas somadas.
-                finalCanvas.height = (dotsH * qtd); 
+                // A altura total é as etiquetas + o gap entre elas
+                finalCanvas.height = (dotsH * qtd) + (gapPx > 0 ? (gapPx * (qtd - 1)) : 0); 
                 ctx.fillStyle = "#ffffff"; 
                 ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height); 
             }
@@ -1962,8 +1969,8 @@
             ctx.imageSmoothingEnabled = false;
             ctx.drawImage(c, 0, 0, htmlWidth, dotsH, 0, currentY, dotsW, dotsH); 
 
-            // Removi a soma do gap aqui também. A próxima etiqueta cola direto no fim da anterior na imagem digital. O rolo físico pula o buraco sozinho!
-            currentY += dotsH;
+            // Dá o salto pra próxima etiqueta contanto o Gap físico
+            currentY += dotsH + gapPx;
         }
         
         const intent = "intent:" + finalCanvas.toDataURL("image/png") + "#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;";
@@ -1982,9 +1989,18 @@
         html5QrCode = new Html5Qrcode("reader"); 
         syncGeral(); 
         
+        // Configuração puxando a melhor câmera e foco contínuo
         html5QrCode.start(
             { facingMode: "environment" }, 
-            { fps: 10, qrbox: { width: 250, height: 250 } }, 
+            { 
+                fps: 10, 
+                qrbox: { width: 250, height: 250 },
+                videoConstraints: {
+                    facingMode: "environment",
+                    width: { ideal: 1920 },
+                    height: { ideal: 1080 }
+                }
+            }, 
             onScanSuccess, 
             onScanFailure
         ).catch(err => alert("Erro na câmera: " + err)); 
