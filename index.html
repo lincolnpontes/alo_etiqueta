@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô_Etiqueta v1.0.15</title>
+    <title>Alô_Etiqueta v1.0.16</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -39,9 +39,10 @@
         .header-actions { display: flex; gap: 15px; align-items: center; }
         .header-actions button { background: none; border: none; color: white; font-size: 24px; cursor: pointer; padding: 0; }
         
+        /* Barra de Busca - Nova formatação com margem no botão buscar */
         .search-box { background: #E3F2FD; padding: 10px; display: flex; gap: 6px; width: 100%; box-sizing: border-box; align-items: center; }
-        .search-box input { flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; min-width: 60px; max-width: 90px; }
-        .search-box .btn-buscar { background: #1976D2; color: white; border: none; padding: 0 10px; height: 44px; border-radius: 5px; cursor: pointer; font-size: 15px; font-weight: bold; flex-shrink: 0; }
+        .search-box input { flex: 0 0 65px; padding: 12px 5px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; text-align: center; }
+        .search-box .btn-buscar { background: #1976D2; color: white; border: none; padding: 0 10px; height: 44px; border-radius: 5px; cursor: pointer; font-size: 15px; font-weight: bold; margin-right: 15px; flex-shrink: 0; }
         .search-box .btn-icon { background: transparent; color: #333; border: none; padding: 0 3px; cursor: pointer; font-size: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         
         .filters { padding: 10px 15px; display: flex; gap: 10px; overflow-x: auto; white-space: nowrap; border-bottom: 1px solid #eee; }
@@ -116,7 +117,7 @@
     <img src="icon.png" class="splash-icon" alt="Alô Etiqueta" onerror="this.style.display='none'; document.getElementById('splash-emoji').style.display='block';">
     <div id="splash-emoji" class="splash-emoji">🏷️</div>
     <div class="splash-title">Alô_Etiqueta</div>
-    <div class="splash-version">v1.0.15</div>
+    <div class="splash-version">v1.0.16</div>
 </div>
 
 <div id="area-impressao-visual">
@@ -181,7 +182,7 @@
     </div>
     
     <div class="search-box">
-        <input type="number" id="buscaCodigo" placeholder="Cód" inputmode="numeric">
+        <input type="number" id="buscaCodigo" placeholder="Cód." inputmode="numeric">
         <button class="btn-buscar" onclick="buscarPorCodigo()">Buscar</button>
         <button class="btn-icon" onclick="abrirEstoqueAtivo()" title="Estoque Ativo (Com QR)">📈</button>
         <button class="btn-icon" onclick="abrirPainelValidade()" title="Controle de Validade Geral">⏳</button>
@@ -196,7 +197,7 @@
     <div class="modal" style="max-width: 500px;">
         <div class="modal-title" style="color:#2e7d32; border-color:#2e7d32;">📈 Estoque Físico Ativo</div>
         <div style="margin-bottom: 15px; font-size: 13px; color: #555; background: #e8f5e9; padding: 10px; border-radius: 5px; border-left: 4px solid #4CAF50;">
-            Apenas itens com <b>QR Code</b> impresso que ainda não receberam baixa.
+            Apenas itens com <b>QR Code</b> impresso que ainda não receberam baixa. Clique para baixar.
         </div>
         <ul class="list" id="listaEstoqueAtivo" style="max-height: 50vh; overflow-y: auto; border: 1px solid #eee; padding: 0; border-radius:5px; margin-bottom: 15px;"></ul>
         <div class="modal-actions">
@@ -220,7 +221,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.15</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.16</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
@@ -598,6 +599,7 @@
     let quantidadeAtual = 1;
     let operadorAnteriorSelect = null;
     let html5QrCode = null; 
+    let origemDetalhesEstoque = 'estoque'; // Rastreia de qual modal viemos
     
     const audioBeep = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
     const audioError = new Audio("https://actions.google.com/sounds/v1/alarms/bugle_tune.ogg");
@@ -718,7 +720,6 @@
         db.configs.controleQR = document.getElementById('cfgQRGlobal').checked;
         salvarBancoLocal();
         document.getElementById('btnScannerQRHome').style.display = db.configs.controleQR ? 'flex' : 'none';
-        aplicarDestaquesVisuais();
     }
 
     function abrirModalAvancado() { 
@@ -1385,7 +1386,7 @@
         
         Object.keys(stats).sort((a,b) => stats[b] - stats[a]).forEach(k => { 
             lista.innerHTML += `
-                <li style="display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:1px solid #eee;cursor:pointer;" onclick="abrirDetalhesEstoque('${k}')">
+                <li style="display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:1px solid #eee;cursor:pointer;" onclick="abrirDetalhesEstoque('${k}', 'estoque')">
                     <strong style="color: #333;">${k}</strong>
                     <span style="background:#e0e0e0;padding:4px 10px;border-radius:12px;font-weight:bold">${stats[k]}x ➡️</span>
                 </li>`; 
@@ -1394,7 +1395,9 @@
         document.getElementById('modalEstoque').style.display = 'flex'; 
     }
     
-    function abrirDetalhesEstoque(nome) { 
+    // --- NOVO DETALHES DE ESTOQUE (COM BOTÃO DE BAIXA) ---
+    function abrirDetalhesEstoque(nome, origem = 'estoque') { 
+        origemDetalhesEstoque = origem;
         document.getElementById('estoqueMain').style.display = 'none'; 
         document.getElementById('estoqueDetalhes').style.display = 'block'; 
         document.getElementById('estoqueDetTitulo').innerText = nome; 
@@ -1406,29 +1409,46 @@
         
         registros.forEach(r => { 
             let risco = r.baixado ? "text-decoration: line-through; opacity: 0.6;" : "";
+            let infoBaixa = r.baixado ? `<div style="font-size: 11px; color: #999; margin-top: 5px;">Baixado em: ${r.dataBaixa}</div>` : `<button onclick="darBaixaManual('${r.sku}')" style="margin-top: 5px; background:#4CAF50; color:white; border:none; padding:6px 12px; border-radius:4px; font-weight:bold; cursor:pointer; font-size:12px;">✅ Baixar Item</button>`;
             
             ul.innerHTML += `
                 <li style="padding: 12px; border-bottom: 1px solid #eee; ${risco}">
-                    <div style="font-size: 13px; color: #444; margin-bottom: 4px;">Manipulado: ${r.dataManipulado}</div>
-                    <div style="font-size: 14px; color: #1565C0;">Validade: <strong>${r.validadeFinal}</strong></div>
-                    <div style="font-size: 11px; color: #999; margin-top: 4px; font-weight: bold;">SKU: ${r.sku} ${r.baixado ? '✅ Baixado' : ''}</div>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                            <div style="font-size: 13px; color: #444; margin-bottom: 4px;">Manipulado: ${r.dataManipulado}</div>
+                            <div style="font-size: 14px; color: #1565C0;">Validade: <strong>${r.validadeFinal}</strong></div>
+                            <div style="font-size: 11px; color: #999; margin-top: 4px; font-weight: bold;">SKU: ${r.sku}</div>
+                        </div>
+                        <div style="text-align: right;">
+                            ${infoBaixa}
+                        </div>
+                    </div>
                 </li>`; 
         }); 
+        
+        if(origem === 'ativo') {
+            fecharModal('modalEstoqueAtivo');
+            document.getElementById('modalEstoque').style.display = 'flex';
+        }
     }
     
     function voltarEstoqueMain() { 
         document.getElementById('estoqueDetalhes').style.display = 'none'; 
-        document.getElementById('estoqueMain').style.display = 'block'; 
+        if(origemDetalhesEstoque === 'ativo') {
+            document.getElementById('modalEstoque').style.display = 'none';
+            abrirEstoqueAtivo();
+        } else {
+            document.getElementById('estoqueMain').style.display = 'block'; 
+        }
     }
 
-    // --- NOVA FUNÇÃO ESTOQUE ATIVO 📈 ---
+    // --- ESTOQUE ATIVO (NOVO) COM CLICK ---
     function abrirEstoqueAtivo() {
         const lista = document.getElementById('listaEstoqueAtivo');
         lista.innerHTML = '';
 
         if(!db.historico) db.historico = [];
 
-        // Filtra apenas itens não baixados de produtos que USAM QR Code
         let ativosQR = db.historico.filter(h => {
             if(h.baixado) return false;
             let p = db.produtos.find(prod => prod.nome === h.produto);
@@ -1441,16 +1461,16 @@
             let contagem = {};
             
             ativosQR.forEach(item => {
-                let chave = (item.marca && item.marca !== "-") ? `${item.produto} (${item.marca})` : item.produto;
+                let chave = item.produto; 
                 if(!contagem[chave]) contagem[chave] = 0;
                 contagem[chave]++;
             });
 
             Object.keys(contagem).sort().forEach(chave => {
                 lista.innerHTML += `
-                    <li style="padding: 12px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
+                    <li style="padding: 12px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="abrirDetalhesEstoque('${chave}', 'ativo')">
                         <strong style="font-size: 15px; color: #333;">${chave}</strong>
-                        <span style="background:#4CAF50; color:white; padding:4px 10px; border-radius:12px; font-weight:bold">${contagem[chave]} un</span>
+                        <span style="background:#4CAF50; color:white; padding:4px 10px; border-radius:12px; font-weight:bold">${contagem[chave]} un ➡️</span>
                     </li>`;
             });
         }
@@ -1524,6 +1544,7 @@
         }
     }
 
+    // --- NOVA LOGICA DE ATUALIZAR TELA AO DAR BAIXA ---
     function darBaixaManual(sku) { 
         if(confirm("Confirma que este item foi utilizado/descartado?")) { 
             let item = db.historico.find(x => x.sku === sku); 
@@ -1531,8 +1552,13 @@
                 item.baixado = true; 
                 item.dataBaixa = new Date().toLocaleString('pt-BR'); 
                 salvarBancoLocal(); 
-                abrirPainelValidade(); 
-                if(document.getElementById('modalEstoqueAtivo').style.display === 'flex'){
+                
+                // Atualiza a tela aberta
+                if (document.getElementById('estoqueDetalhes').style.display === 'block') {
+                    abrirDetalhesEstoque(document.getElementById('estoqueDetTitulo').innerText, origemDetalhesEstoque);
+                } else if(document.getElementById('modalValidade').style.display === 'flex') {
+                    abrirPainelValidade();
+                } else if(document.getElementById('modalEstoqueAtivo').style.display === 'flex'){
                     abrirEstoqueAtivo();
                 }
                 
@@ -1654,9 +1680,7 @@
         const hj = new Date(); 
         const manBR = `${String(hj.getDate()).padStart(2,'0')}/${String(hj.getMonth()+1).padStart(2,'0')}/${hj.getFullYear()} ${String(hj.getHours()).padStart(2,'0')}:${String(hj.getMinutes()).padStart(2,'0')}`;
         
-        let acaoImpressao = "MANIPULADO:";
-        if(acaoSelect === "Aberto em:") acaoImpressao = "ABERTO:";
-        else if(acaoSelect === "Congelado em:") acaoImpressao = "CONGELADO:";
+        let acaoImpressao = acaoSelect.toUpperCase(); 
 
         let skusGerados = [];
         for(let i = 0; i < quantidadeAtual; i++) {
@@ -1706,7 +1730,7 @@
             let textoArm = p.armazenamento === "resfriado" ? "MANTER RESFRIADO" : "MANTER CONGELADO";
             armazHTML = `
                 <div style="text-align: center; margin-bottom: 4px; line-height: 1.0;">
-                    <span style="background: white; border: 2px solid black; padding: 1px 5px; font-weight: bold; font-size: 12px; text-transform: uppercase; border-radius: 4px; white-space: nowrap; display: inline-block;">${textoArm}</span>
+                    <span style="background: white; border: 1px solid black; padding: 1px 5px; font-weight: bold; font-size: 13px; text-transform: uppercase; white-space: nowrap; display: inline-block;">${textoArm}</span>
                 </div>`;
         }
 
@@ -1738,51 +1762,44 @@
         <body>`;
         
         for(let i = 0; i < qtd; i++) {
-            let nomeDisplay = marca !== "" ? `${p.nome} (${marca})` : p.nome;
-            let displayPeso = pesoInput !== "" ? "block" : "none";
-            let displayLote = marca !== "" ? "block" : "none";
-            
             let valorCalc = ""; 
             if(precoInput !== "") { 
                 let psNum = parseFloat(pesoInput); 
                 valorCalc = (!isNaN(psNum) && psNum > 0) ? formataDinheiro((psNum/1000)*parseFloat(precoInput)) : formataDinheiro(parseFloat(precoInput)); 
             }
             
-            let displayPreco = valorCalc !== "" ? "block" : "none";
-            let displayOpcionais = (displayPeso === "block" || displayLote === "block") ? "flex" : "none";
             let showQR = (db.configs.controleQR && p.usaQR) ? "flex" : "none";
             let idQR = `qr_pdf_${Date.now()}_${i}`;
+
+            let marcaStr = marca !== "" ? `<div style="display: block;">MARCA: <span>${marca}</span></div>` : "";
+            let loteStr = lote !== "" ? `<div style="display: block;">LOTE: <span>${lote}</span></div>` : "";
+            let rowMarcaLote = (marca !== "" || lote !== "") ? `<div style="display: flex; gap: 8px; margin-top: 2px;">${marcaStr}${loteStr}</div>` : "";
+            
+            let pesoStr = pesoInput !== "" ? `<div style="display: block;">PESO: <span>${pesoInput}g</span></div>` : "";
+            let precoUnitStr = precoInput !== "" ? `<div style="display: block;">PREÇO: R$ <span>${formataDinheiro(parseFloat(precoInput))}</span></div>` : "";
+            let totalStr = precoInput !== "" ? `<div style="display: block; border: 1px solid black; padding: 2px 4px; width: max-content; margin-top: 2px;">TOTAL: R$ <span>${valorCalc}</span></div>` : "";
 
             htmlContent += `
             <div class="etiqueta-print">
                 <div style="text-align: center; border-bottom: 2px solid black; padding-bottom: 3px; max-height: 60px; overflow: hidden;">
-                    <div class="${classeHeader}">${nomeDisplay}</div>
+                    <div class="${classeHeader}">${p.nome}</div>
                 </div>
                 
-                <div style="flex: 1; padding-top: 4px; display: flex; flex-direction: column; justify-content: start; overflow: hidden;">
-                    <div style="font-size: 15px; font-weight: bold; word-wrap: break-word; line-height: 1.1; text-align: left; width: 100%;">
-                        <span>${acaoImpressao}</span> <span>${manBR}</span>
+                <div style="flex: 1; padding-top: 4px; display: flex; justify-content: space-between; overflow: hidden;">
+                    <div style="flex: 1; display: flex; flex-direction: column; gap: 3px; font-size: 13px; font-weight: bold; line-height: 1.1; min-width: 0;">
+                        <div style="font-size: 16px;"><span>${acaoImpressao}</span> <span>${manBR}</span></div>
+                        ${rowMarcaLote}
+                        ${pesoStr}
+                        ${precoUnitStr}
+                        ${totalStr}
                     </div>
                     
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; margin-top: 4px; gap: 3px;">
-                        <div style="flex: 1; min-width: 0; overflow: hidden;">
-                            <div style="font-size: 12px; display: ${displayOpcionais}; flex-direction: column; gap: 2px; font-weight: bold; line-height: 1.1;">
-                                <div style="display: ${displayPeso};">Peso: <span>${pesoInput}g</span></div>
-                                <div style="display: ${displayLote};">Lote: <span>${lote || '-'}</span></div>
-                            </div>
-                            
-                            <div style="font-size: 16px; font-weight: bold; text-transform: uppercase; margin-top: 5px; display: ${displayPreco}; line-height: 1.1;">
-                                TOTAL: R$ <span>${valorCalc}</span>
-                            </div>
-                        </div>
-                        
-                        <div style="display: ${showQR}; flex-direction: column; align-items: center; justify-content: flex-start; width: 90px; flex-shrink: 0; padding-top: 2px;">
-                            <div id="${idQR}"></div>
-                        </div>
+                    <div style="display: ${showQR}; align-items: center; justify-content: flex-end; width: 90px; flex-shrink: 0; padding-top: 2px;">
+                        <div id="${idQR}"></div>
                     </div>
                 </div>
                 
-                <div style="margin-top: auto; border-top: 2px solid #eee; padding-top: 2px;">
+                <div style="margin-top: auto; padding-top: 2px;">
                     <div class="${classeValidadeGrande}" style="text-align: center; margin-bottom: 3px; white-space: nowrap; line-height: 1.1;">
                         <span class="val-label" style="font-size: 20px; font-weight: 900;">VAL:</span> 
                         <span class="val-data" style="font-size: 20px; font-weight: 900;">${valBR}</span>
@@ -1792,13 +1809,13 @@
                     
                     <div style="border-top: 2px solid black; width: 100%; margin-bottom: 2px;"></div>
                     
-                    <div style="font-weight: bold; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 1px; text-align: center; line-height: 1.1;">${est}</div>
+                    <div style="font-weight: bold; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; line-height: 1.1;">${est}</div>
                     <div style="font-size: 13px; text-align: center; line-height: 1.1;">Operador(a): <span style="font-weight: bold;">${op}</span></div>
                 </div>
             </div>
             <script>
                 if("${showQR}" === "flex") { 
-                    new QRCode(document.getElementById("${idQR}"), { text: "${skus[i]}", width: 90, height: 90, colorDark : "#000000", colorLight : "#ffffff" }); 
+                    new QRCode(document.getElementById("${idQR}"), { text: "${skus[i]}", width: 90, height: 90 }); 
                 }
             <\/script>`;
         }
@@ -1817,39 +1834,43 @@
     async function gerarRawBT(p, acaoImpressao, pesoInput, manBR, valBR, qtd, op, est, precoInput, marca, lote, skus, btn) {
         const gab = document.getElementById('area-impressao-visual'); 
         
-        document.getElementById('viz-nome-produto').innerText = marca !== "" ? `${p.nome} (${marca})` : p.nome;
+        document.getElementById('viz-nome-produto').innerText = p.nome;
         document.getElementById('viz-label-acao').innerText = acaoImpressao; 
         document.getElementById('viz-data-man').innerText = manBR; 
         
-        let hasOpcionais = false;
-        if(pesoInput !== "") { 
-            document.getElementById('viz-box-peso').style.display = "block"; 
-            document.getElementById('viz-peso').innerText = `${pesoInput}g`; 
-            hasOpcionais = true; 
-        } else {
-            document.getElementById('viz-box-peso').style.display = "none";
-        }
-        
         if(marca !== "") { 
+            document.getElementById('viz-row-marca').style.display = "block"; 
+            document.getElementById('viz-marca').innerText = marca; 
+        } else {
+            document.getElementById('viz-row-marca').style.display = "none";
+        }
+
+        if(lote !== "") { 
             document.getElementById('viz-row-lote').style.display = "block"; 
-            document.getElementById('viz-lote').innerText = lote || '-'; 
-            hasOpcionais = true; 
+            document.getElementById('viz-lote').innerText = lote; 
         } else {
             document.getElementById('viz-row-lote').style.display = "none";
         }
         
-        document.getElementById('viz-linha-opcionais').style.display = hasOpcionais ? "flex" : "none";
+        if(pesoInput !== "") { 
+            document.getElementById('viz-box-peso').style.display = "block"; 
+            document.getElementById('viz-peso').innerText = `${pesoInput}g`; 
+        } else {
+            document.getElementById('viz-box-peso').style.display = "none";
+        }
         
         let calcPreco = ""; 
         if(precoInput !== "") { 
             let psNum = parseFloat(pesoInput); 
             calcPreco = (!isNaN(psNum) && psNum > 0) ? formataDinheiro((psNum/1000)*parseFloat(precoInput)) : formataDinheiro(parseFloat(precoInput)); 
-        }
-        
-        if(calcPreco !== "") { 
+            
+            document.getElementById('viz-box-preco').style.display = "block";
+            document.getElementById('viz-preco-unit').innerText = formataDinheiro(parseFloat(precoInput));
+            
             document.getElementById('viz-box-preco-container').style.display = "block"; 
             document.getElementById('viz-preco').innerText = calcPreco; 
         } else {
+            document.getElementById('viz-box-preco').style.display = "none";
             document.getElementById('viz-box-preco-container').style.display = "none";
         }
         
@@ -1876,7 +1897,7 @@
         
         const tam = db.configs.tamanhoEtiqueta || "40x40";
         
-        let htmlWidth = 304; // Exatos 38mm (38 * 8)
+        let htmlWidth = 304; 
         let dotsW = 304; 
         let dotsH = 320; 
         let gapPx = db.configs.gapEtiquetaPx || 0;
@@ -1901,7 +1922,7 @@
         for(let i = 0; i < qtd; i++) {
             if(usaQR) {
                 document.getElementById('viz-qrcode').innerHTML = ''; 
-                new QRCode(document.getElementById('viz-qrcode'), { text: skus[i], width: 90, height: 90, colorDark : "#000000", colorLight : "#ffffff" }); 
+                new QRCode(document.getElementById('viz-qrcode'), { text: skus[i], width: 90, height: 90 }); 
                 await new Promise(r => setTimeout(r, 100)); 
             }
             
