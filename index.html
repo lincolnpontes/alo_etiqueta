@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô_Etiqueta v1.0.20</title>
+    <title>Alô_Etiqueta v1.0.21</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -91,8 +91,8 @@
         .bg-green { background: #388E3C; }
 
         /* ============================================================
-           GABARITO BLINDADO: 480x320 pixels (exatos 60x40mm) 
-           RECUOS: Esquerda quase 0 (4px), Direita 6mm (48px), Topo/Base 3mm (24px)
+           GABARITO BLINDADO V21: 480x320 pixels (exatos 60x40mm) 
+           RECUOS: Esquerda (4px), Direita 6mm (48px), Topo/Base 3mm (24px)
            ============================================================ */
         #area-impressao-visual {
             position: fixed; top: 0; left: -3000px;
@@ -106,8 +106,8 @@
             margin: 0; overflow: hidden; text-align: left;
         }
 
-        /* NOME DO PRODUTO BEM NEGRITO */
-        .item-nome { font-family: 'Arial Black', Impact, sans-serif; font-weight: 900; font-stretch: expanded; font-size: 36px; text-transform: uppercase; margin: 0; line-height: 1.1; letter-spacing: -0.5px; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        /* NOME DO PRODUTO CENTRALIZADO E NEGRITO MAXIMO */
+        .item-nome { font-family: 'Arial Black', Impact, sans-serif; font-weight: 900; font-stretch: expanded; font-size: 36px; text-transform: uppercase; margin: 0; line-height: 1.1; letter-spacing: -0.5px; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; }
         .item-nome.destaque { font-size: 42px !important; }
         .validade-grande .val-label, .validade-grande .val-data { font-size: 30px !important; }
         
@@ -121,12 +121,12 @@
     <img src="icon.png" class="splash-icon" alt="Alô Etiqueta" onerror="this.style.display='none'; document.getElementById('splash-emoji').style.display='block';">
     <div id="splash-emoji" class="splash-emoji">🏷️</div>
     <div class="splash-title">Alô_Etiqueta</div>
-    <div class="splash-version">v1.0.20</div>
+    <div class="splash-version">v1.0.21</div>
 </div>
 
 <div id="area-impressao-visual">
     
-    <div style="border-bottom: 3px solid black; padding-bottom: 6px; width: 100%;">
+    <div style="border-bottom: 3px solid black; padding-bottom: 6px; width: 100%; text-align: center;">
         <div id="viz-nome-produto" class="item-nome">PRODUTO</div>
     </div>
     
@@ -153,19 +153,20 @@
 
         </div>
 
-        <div id="viz-qrcode-container" style="display: none; align-items: center; justify-content: center; padding-left: 10px;">
+        <div id="viz-qrcode-container" style="display: none; align-items: center; justify-content: center; padding-left: 10px; flex-shrink: 0;">
             <div id="viz-qrcode"></div>
         </div>
         
     </div>
     
-    <div style="width: 100%; padding-top: 6px;">
-        <div id="viz-container-validade" style="margin-bottom: 6px; line-height: 1.1; text-align: left;">
+    <div style="width: 100%; padding-top: 6px; text-align: center;">
+        
+        <div id="viz-container-validade" style="margin-bottom: 6px; line-height: 1.1; text-align: center; width: 100%;">
             <span class="val-label" style="font-size: 28px; font-weight: 900;">VAL:</span> 
             <span class="val-data" id="viz-data-val" style="font-size: 28px; font-weight: 900;">00/00/0000</span>
         </div>
         
-        <div id="viz-linha-armazenamento" style="margin-bottom: 8px; display: none; line-height: 1.0; text-align: left;">
+        <div id="viz-linha-armazenamento" style="margin-bottom: 8px; display: none; line-height: 1.0; text-align: center; width: 100%;">
             <span id="viz-armazenamento" style="font-size: 18px; font-weight: 900; text-transform: uppercase; border: 2px solid black; border-radius: 4px; padding: 2px 8px; display: inline-block;">MANTER CONGELADO</span>
         </div>
         
@@ -231,7 +232,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.20</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.21</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
@@ -274,10 +275,6 @@
                     <option value="pdf">PDF</option>
                     <option value="rawbt">RawBT</option>
                 </select>
-            </div>
-            <div class="form-group" style="flex:1;">
-                <label title="Apenas se precisar de espaço extra">Espaço Gap (px):</label>
-                <input type="number" id="cfgGapPx" placeholder="Ex: 24" onchange="salvarEtiquetaConfigs()">
             </div>
         </div>
         <h3 style="font-size: 14px; margin-bottom:5px;">Aparência Visual</h3>
@@ -713,7 +710,6 @@
         document.getElementById('cfgEstabelecimento').value = db.configs.estabelecimento;
         document.getElementById('cfgTamanho').value = db.configs.tamanhoEtiqueta;
         document.getElementById('cfgModo').value = db.configs.modo;
-        document.getElementById('cfgGapPx').value = db.configs.gapEtiquetaPx !== undefined ? db.configs.gapEtiquetaPx : 0;
         document.getElementById('cfgDestaqueProd').checked = db.configs.destaqueProd;
         document.getElementById('cfgDestaqueVal').checked = db.configs.destaqueVal;
         document.getElementById('cfgQRGlobal').checked = db.configs.controleQR;
@@ -724,7 +720,6 @@
         db.configs.estabelecimento = document.getElementById('cfgEstabelecimento').value.trim() || "Restaurante";
         db.configs.tamanhoEtiqueta = document.getElementById('cfgTamanho').value;
         db.configs.modo = document.getElementById('cfgModo').value;
-        db.configs.gapEtiquetaPx = parseInt(document.getElementById('cfgGapPx').value) || 0;
         db.configs.destaqueProd = document.getElementById('cfgDestaqueProd').checked;
         db.configs.destaqueVal = document.getElementById('cfgDestaqueVal').checked;
         db.configs.controleQR = document.getElementById('cfgQRGlobal').checked;
@@ -1735,7 +1730,7 @@
         if(p.armazenamento && p.armazenamento !== "ambiente") {
             let textoArm = p.armazenamento === "resfriado" ? "MANTER RESFRIADO" : "MANTER CONGELADO";
             armazHTML = `
-                <div style="margin-bottom: 8px; line-height: 1.0; text-align: left;">
+                <div style="margin-bottom: 8px; line-height: 1.0; text-align: center; width: 100%;">
                     <span style="background: white; border: 2px solid black; border-radius: 4px; padding: 3px 8px; font-weight: 900; font-size: 16px; text-transform: uppercase; white-space: nowrap; display: inline-block;">${textoArm}</span>
                 </div>`;
         }
@@ -1792,7 +1787,7 @@
 
             htmlContent += `
             <div class="etiqueta-print" ${i < qtd -1 ? 'style="page-break-after: always;"' : ''}>
-                <div style="border-bottom: 2px solid black; padding-bottom: 2px; width: 100%;">
+                <div style="border-bottom: 2px solid black; padding-bottom: 2px; width: 100%; text-align: center;">
                     <div class="${classeHeader}">${nomeDisplay}</div>
                 </div>
                 
@@ -1811,13 +1806,13 @@
                         </div>
                     </div>
 
-                    <div style="display: ${showQR}; align-items: center; justify-content: center; padding-left: 5px;">
+                    <div style="display: ${showQR}; align-items: center; justify-content: center; padding-left: 5px; flex-shrink: 0;">
                         <div id="${idQR}"></div>
                     </div>
                 </div>
                 
-                <div style="width: 100%; padding-top: 4px;">
-                    <div class="${classeValidadeGrande}" style="margin-bottom: 2px; line-height: 1.1; text-align: left;">
+                <div style="width: 100%; padding-top: 4px; text-align: center;">
+                    <div class="${classeValidadeGrande}" style="margin-bottom: 2px; line-height: 1.1; text-align: center; width: 100%;">
                         <span class="val-label" style="font-size: 12pt; font-weight: 900;">VAL:</span> 
                         <span class="val-data" style="font-size: 12pt; font-weight: 900;">${valBR}</span>
                     </div>
@@ -1834,7 +1829,7 @@
             </div>
             <script>
                 if("${showQR}" === "flex") { 
-                    new QRCode(document.getElementById("${idQR}"), { text: "${skus[i]}", width: 55, height: 55 }); 
+                    new QRCode(document.getElementById("${idQR}"), { text: "${skus[i]}", width: 65, height: 65 }); 
                 }
             <\/script>`;
         }
@@ -1923,9 +1918,6 @@
         let dotsW = 480; 
         let dotsH = 320; 
         
-        // CORREÇÃO DO DRIFT: Forçar gap físico de 3mm (24px) se o usuário não configurou nada diferente.
-        let gapPx = db.configs.gapEtiquetaPx || 24; 
-        
         if(tam === "40x40") { 
             htmlWidth = 304; dotsW = 304; dotsH = 320; 
         } else if(tam === "50x50") { 
@@ -1942,8 +1934,9 @@
         for(let i = 0; i < qtd; i++) {
             if(usaQR) {
                 document.getElementById('viz-qrcode').innerHTML = ''; 
-                new QRCode(document.getElementById('viz-qrcode'), { text: skus[i], width: 85, height: 85 }); 
-                await new Promise(r => setTimeout(r, 150)); // Tempo pro QR renderizar bem antes da foto
+                new QRCode(document.getElementById('viz-qrcode'), { text: skus[i], width: 95, height: 95 }); 
+                // Aumentei o timeout pro QR Code dar tempo de aparecer
+                await new Promise(r => setTimeout(r, 250)); 
             }
             
             let c = await html2canvas(gab, { 
@@ -1957,9 +1950,11 @@
                 windowHeight: dotsH
             });
             
+            // O SEGREDO DO GAP TÁ AQUI
             if(i === 0) { 
                 finalCanvas.width = dotsW; 
-                finalCanvas.height = (dotsH * qtd) + (gapPx > 0 ? (gapPx * (qtd - 1)) : 0); 
+                // Removi a soma do gap aqui! A imagem morre na altura exata das etiquetas somadas.
+                finalCanvas.height = (dotsH * qtd); 
                 ctx.fillStyle = "#ffffff"; 
                 ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height); 
             }
@@ -1967,8 +1962,8 @@
             ctx.imageSmoothingEnabled = false;
             ctx.drawImage(c, 0, 0, htmlWidth, dotsH, 0, currentY, dotsW, dotsH); 
 
-            // Soma a altura e adiciona o espaço vazio (gap) para a próxima etiqueta começar no lugar exato
-            currentY += dotsH + gapPx;
+            // Removi a soma do gap aqui também. A próxima etiqueta cola direto no fim da anterior na imagem digital. O rolo físico pula o buraco sozinho!
+            currentY += dotsH;
         }
         
         const intent = "intent:" + finalCanvas.toDataURL("image/png") + "#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;";
