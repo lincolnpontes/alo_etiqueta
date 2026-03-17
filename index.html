@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô_Etiqueta v1.0.22</title>
+    <title>Alô_Etiqueta v1.0.23</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -91,7 +91,7 @@
         .bg-green { background: #388E3C; }
 
         /* ============================================================
-           GABARITO BLINDADO V22: 480x320 pixels (exatos 60x40mm) 
+           GABARITO BLINDADO V23: 480x320 pixels (exatos 60x40mm) 
            RECUOS: Esquerda (4px), Direita 6mm (48px), Topo/Base 3mm (24px)
            ============================================================ */
         #area-impressao-visual {
@@ -121,7 +121,7 @@
     <img src="icon.png" class="splash-icon" alt="Alô Etiqueta" onerror="this.style.display='none'; document.getElementById('splash-emoji').style.display='block';">
     <div id="splash-emoji" class="splash-emoji">🏷️</div>
     <div class="splash-title">Alô_Etiqueta</div>
-    <div class="splash-version">v1.0.22</div>
+    <div class="splash-version">v1.0.23</div>
 </div>
 
 <div id="area-impressao-visual">
@@ -233,7 +233,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.22</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.23</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
@@ -415,7 +415,8 @@
     <div class="modal" style="width:100%; height:100%; max-height:100%; max-width:100%; border-radius:0; display:flex; flex-direction:column; padding:0; background: #000;">
         <div style="background:#1565C0; color:white; padding:15px; font-weight:bold; font-size:18px; text-align:center;">Posicione o QR Code</div>
         <div id="reader" style="flex:1; width:100%; display: flex; align-items: center; justify-content: center;"></div>
-        <div style="padding:20px; background: #000;">
+        <div style="padding:20px; background: #000; display: flex; flex-direction: column; gap: 10px;">
+            <button class="btn-outline" id="btnTrocarCamera" style="margin:0; font-size: 16px; padding: 12px; background: #333; color: white; border: 1px solid #555; display: none; justify-content: center;" onclick="trocarCamera()">🔄 Trocar Câmera (Foco)</button>
             <button class="btn-danger" style="margin:0; font-size: 18px; padding: 15px;" onclick="fecharLeitorQR()">Fechar Câmera</button>
         </div>
     </div>
@@ -608,6 +609,8 @@
     let operadorAnteriorSelect = null;
     let html5QrCode = null; 
     let origemDetalhesEstoque = 'estoque';
+    let camerasDisponiveis = [];
+    let cameraAtualIdx = 0;
     
     const audioBeep = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
     const audioError = new Audio("https://actions.google.com/sounds/v1/alarms/bugle_tune.ogg");
@@ -1786,7 +1789,7 @@
 
             let totalStr = precoInput !== "" ? `<div style="font-size: 14pt; font-weight: 900; margin-top: 2px;">TOTAL: R$ <span>${valorCalc}</span></div>` : "";
 
-            let nomeDisplay = p.nome; // Removido a marca do título
+            let nomeDisplay = p.nome;
 
             htmlContent += `
             <div class="etiqueta-print" ${i < qtd -1 ? 'style="page-break-after: always;"' : ''}>
@@ -1850,13 +1853,11 @@
     async function gerarRawBT(p, acaoImpressao, pesoInput, manBR, valBR, qtd, op, est, precoInput, marca, lote, skus, btn) {
         const gab = document.getElementById('area-impressao-visual'); 
         
-        // 1. Tira a marca do título
         document.getElementById('viz-nome-produto').innerText = p.nome;
         
         document.getElementById('viz-label-acao').innerText = acaoImpressao; 
         document.getElementById('viz-data-man').innerText = manBR; 
         
-        // Lógica MARCA e LOTE na mesma linha
         let hasMarca = marca !== "";
         let hasLote = lote !== "";
         document.getElementById('viz-linha-marcalote').style.display = (hasMarca || hasLote) ? "block" : "none";
@@ -1869,7 +1870,6 @@
             document.getElementById('viz-lote-container').innerHTML = hasMarca ? `| LOTE: <span id="viz-lote">${lote}</span>` : `LOTE: <span id="viz-lote">${lote}</span>`;
         }
         
-        // Lógica PESO e PREÇO na mesma linha
         let hasPeso = pesoInput !== "";
         let hasPreco = precoInput !== "";
         document.getElementById('viz-linha-pesopreco').style.display = (hasPeso || hasPreco) ? "block" : "none";
@@ -1883,7 +1883,6 @@
             document.getElementById('viz-preco-container').innerHTML = hasPeso ? `| PREÇO: R$ <span id="viz-preco-unit">${precoFormatado}</span>` : `PREÇO: R$ <span id="viz-preco-unit">${precoFormatado}</span>`;
         }
         
-        // Lógica TOTAL
         let calcPreco = ""; 
         if(hasPreco) { 
             let psNum = parseFloat(pesoInput); 
@@ -1924,7 +1923,6 @@
         let dotsW = 480; 
         let dotsH = 320; 
         
-        // Volta com a lógica do Gap de 3mm (24px) na imagem digital
         let gapPx = db.configs.gapEtiquetaPx || 24; 
         
         if(tam === "40x40") { 
@@ -1960,7 +1958,6 @@
             
             if(i === 0) { 
                 finalCanvas.width = dotsW; 
-                // A altura total é as etiquetas + o gap entre elas
                 finalCanvas.height = (dotsH * qtd) + (gapPx > 0 ? (gapPx * (qtd - 1)) : 0); 
                 ctx.fillStyle = "#ffffff"; 
                 ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height); 
@@ -1969,7 +1966,6 @@
             ctx.imageSmoothingEnabled = false;
             ctx.drawImage(c, 0, 0, htmlWidth, dotsH, 0, currentY, dotsW, dotsH); 
 
-            // Dá o salto pra próxima etiqueta contanto o Gap físico
             currentY += dotsH + gapPx;
         }
         
@@ -1987,23 +1983,57 @@
     function abrirScannerQR() { 
         document.getElementById('modalLeitorQR').style.display = 'flex'; 
         html5QrCode = new Html5Qrcode("reader"); 
-        syncGeral(); 
         
-        // Configuração puxando a melhor câmera e foco contínuo
+        Html5Qrcode.getCameras().then(devices => {
+            if (devices && devices.length > 0) {
+                camerasDisponiveis = devices;
+                cameraAtualIdx = devices.length > 1 ? devices.length - 1 : 0; 
+                
+                if(devices.length > 1) {
+                    document.getElementById('btnTrocarCamera').style.display = 'flex';
+                }
+                iniciarCameraPeloIdx();
+            } else {
+                iniciarCameraFallback();
+            }
+        }).catch(err => {
+            iniciarCameraFallback();
+        });
+        
+        syncGeral(); 
+    }
+
+    function iniciarCameraPeloIdx() {
+        if(html5QrCode && html5QrCode.isScanning) {
+            html5QrCode.stop().then(() => {
+                html5QrCode.start(
+                    camerasDisponiveis[cameraAtualIdx].id, 
+                    { fps: 10, qrbox: { width: 250, height: 250 } }, 
+                    onScanSuccess, onScanFailure
+                );
+            });
+        } else {
+            html5QrCode.start(
+                camerasDisponiveis[cameraAtualIdx].id, 
+                { fps: 10, qrbox: { width: 250, height: 250 } }, 
+                onScanSuccess, onScanFailure
+            ).catch(err => alert("Erro na câmera: " + err));
+        }
+    }
+
+    function iniciarCameraFallback() {
         html5QrCode.start(
             { facingMode: "environment" }, 
-            { 
-                fps: 10, 
-                qrbox: { width: 250, height: 250 },
-                videoConstraints: {
-                    facingMode: "environment",
-                    width: { ideal: 1920 },
-                    height: { ideal: 1080 }
-                }
-            }, 
-            onScanSuccess, 
-            onScanFailure
-        ).catch(err => alert("Erro na câmera: " + err)); 
+            { fps: 10, qrbox: { width: 250, height: 250 } }, 
+            onScanSuccess, onScanFailure
+        ).catch(err => alert("Erro na câmera: " + err));
+    }
+
+    function trocarCamera() {
+        if(camerasDisponiveis.length > 1) {
+            cameraAtualIdx = (cameraAtualIdx + 1) % camerasDisponiveis.length;
+            iniciarCameraPeloIdx();
+        }
     }
     
     function fecharLeitorQR() { 
@@ -2011,7 +2041,7 @@
             html5QrCode.stop().then(() => { 
                 html5QrCode.clear(); 
                 html5QrCode = null; 
-            });
+            }).catch(()=>{});
         }
         document.getElementById('modalLeitorQR').style.display = 'none'; 
     }
