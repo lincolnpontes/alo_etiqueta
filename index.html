@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô_Etiqueta v1.0.28</title>
+    <title>Alô_Etiqueta v1.0.29</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -91,7 +91,7 @@
         .bg-green { background: #388E3C; }
 
         /* ============================================================
-           GABARITO BLINDADO V28: 480x320 pixels (exatos 60x40mm) 
+           GABARITO BLINDADO V29: 480x320 pixels (exatos 60x40mm) 
            RECUOS: Esquerda (4px), Direita 6mm (48px), Topo/Base 3mm (24px)
            ============================================================ */
         #area-impressao-visual {
@@ -120,7 +120,7 @@
     <img src="icon.png" class="splash-icon" alt="Alô Etiqueta" onerror="this.style.display='none'; document.getElementById('splash-emoji').style.display='block';">
     <div id="splash-emoji" class="splash-emoji">🏷️</div>
     <div class="splash-title">Alô_Etiqueta</div>
-    <div class="splash-version">v1.0.28</div>
+    <div class="splash-version">v1.0.29</div>
 </div>
 
 <div id="area-impressao-visual">
@@ -129,9 +129,9 @@
         <div id="viz-nome-produto" class="item-nome">PRODUTO</div>
     </div>
     
-    <div style="flex: 1; padding-top: 8px; display: flex; width: 100%; overflow: hidden;">
+    <div style="flex: 1; padding-top: 8px; display: flex; width: 100%;">
         
-        <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; text-align: left; justify-content: center;">
+        <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; text-align: left; justify-content: center; overflow: hidden;">
             
             <div style="font-size: 20px; font-weight: 900; margin-bottom: 6px;">
                 <span id="viz-label-acao">AÇÃO:</span> <span id="viz-data-man">00/00/0000 00:00</span>
@@ -155,7 +155,7 @@
 
         <div id="viz-qrcode-container" style="display: none; flex-direction: column; align-items: center; justify-content: center; padding-left: 10px; flex-shrink: 0;">
             <div id="viz-qrcode"></div>
-            <div id="viz-sku-text" style="font-size: 12px; font-weight: 900; margin-top: 2px;"></div>
+            <div id="viz-sku-text" style="font-size: 11px; font-weight: 900; margin-top: 2px; line-height: 1;"></div>
         </div>
         
     </div>
@@ -233,7 +233,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.28</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.29</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
@@ -1955,7 +1955,7 @@
 
                     <div style="display: ${showQR}; flex-direction: column; align-items: center; justify-content: center; padding-left: 5px; flex-shrink: 0;">
                         <div id="${idQR}"></div>
-                        <div style="font-size: 8pt; font-weight: bold; margin-top: 2px;">${shortSku}</div>
+                        <div style="font-size: 8pt; font-weight: bold; margin-top: 2px; line-height: 1;">${shortSku}</div>
                     </div>
                 </div>
                 
@@ -2096,7 +2096,7 @@
                 document.getElementById('viz-qrcode').innerHTML = ''; 
                 let shortSku = skus[i].slice(-5);
                 document.getElementById('viz-sku-text').innerText = shortSku;
-                new QRCode(document.getElementById('viz-qrcode'), { text: skus[i], width: 95, height: 95 }); 
+                new QRCode(document.getElementById('viz-qrcode'), { text: skus[i], width: 85, height: 85 }); 
                 await new Promise(r => setTimeout(r, 250)); 
             }
             
