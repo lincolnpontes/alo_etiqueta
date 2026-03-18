@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô_Etiqueta v1.0.29</title>
+    <title>Alô_Etiqueta v1.0</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -15,7 +15,10 @@
 
     <style>
         body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 0; display: flex; justify-content: center; }
-        .app-container { width: 100%; max-width: 500px; background: #fff; min-height: 100vh; display: flex; flex-direction: column; position: relative; }
+        
+        /* LAYOUT RESPONSIVO E CABEÇALHO FIXO */
+        .app-container { width: 100%; max-width: 1200px; background: #fff; min-height: 100vh; display: flex; flex-direction: column; position: relative; margin: 0 auto; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
+        #sticky-header { position: sticky; top: 0; z-index: 100; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
         
         /* SPLASH SCREEN */
         #splash-screen {
@@ -33,31 +36,38 @@
 
         .header { background: #1565C0; color: white; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
         .header-op-container { display: flex; align-items: center; gap: 8px; flex: 1; }
-        .header-op-container span { font-size: 14px; font-weight: bold; }
-        .header select { height: 32px; border-radius: 4px; border: none; font-weight: bold; background: #fff; color: #1565C0; font-size: 14px; width: 100%; max-width: 140px; padding: 0 8px; }
+        
+        /* MODERNO SELECT OPERADOR */
+        .modern-select { height: 32px; border-radius: 20px !important; border: 1px solid rgba(255,255,255,0.4) !important; background: rgba(255,255,255,0.1) !important; color: white !important; font-size: 14px; font-weight: bold; width: 100%; max-width: 140px; padding: 0 12px !important; outline: none; cursor: pointer; }
+        .modern-select option { color: #333; background: #fff; }
+        
         .status-conexao { font-size: 14px; cursor: help; background: rgba(0,0,0,0.2); padding: 4px 8px; border-radius: 12px; }
         .header-actions { display: flex; gap: 15px; align-items: center; }
         .header-actions button { background: none; border: none; color: white; font-size: 24px; cursor: pointer; padding: 0; }
         
-        .search-box { background: #E3F2FD; padding: 12px 10px; display: flex; gap: 8px; width: 100%; box-sizing: border-box; align-items: center; overflow: hidden; }
-        .search-box input { width: 75px; flex-shrink: 0; padding: 14px 6px; border: 1px solid #ccc; border-radius: 6px; font-size: 20px; font-weight: bold; text-align: center; }
-        .search-box .btn-buscar { background: #1976D2; color: white; border: none; padding: 0 18px; height: 52px; border-radius: 6px; cursor: pointer; font-size: 18px; font-weight: bold; flex-shrink: 0; }
+        .search-box { background: #E3F2FD; padding: 10px; display: flex; gap: 6px; width: 100%; box-sizing: border-box; align-items: center; overflow: hidden; }
+        .search-box input { width: 60px; flex-shrink: 0; padding: 12px 4px; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; font-weight: bold; text-align: center; }
+        .search-box .btn-buscar { background: #1976D2; color: white; border: none; padding: 0 10px; height: 44px; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: bold; flex-shrink: 0; }
         .spacer { flex-grow: 1; } 
-        .search-box .btn-icon { background: transparent; color: #333; border: none; padding: 0 4px; cursor: pointer; font-size: 28px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .search-box .btn-icon { background: transparent; color: #333; border: none; padding: 0 2px; cursor: pointer; font-size: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         
         .filters { padding: 10px 15px; display: flex; gap: 10px; overflow-x: auto; white-space: nowrap; border-bottom: 1px solid #eee; }
         .chip { background: #e0e0e0; color: #333; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 14px; font-weight: bold; border: 2px solid transparent; }
         .chip.active { border: 2px solid #333; opacity: 0.9; }
         
-        .list { padding: 0; margin: 0; list-style: none; overflow-y: auto; flex: 1; }
-        .item { display: flex; align-items: center; padding: 15px; border-bottom: 1px solid #eee; cursor: pointer; }
+        /* GRID DE PRODUTOS RESPONSIVO */
+        .list { padding: 10px; margin: 0; list-style: none; overflow-y: auto; flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 10px; align-content: start; }
+        .item { display: flex; align-items: center; padding: 15px; border: 1px solid #eee; border-radius: 8px; cursor: pointer; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .item:hover { background: #f9f9f9; }
         .item-avatar { background: #BBDEFB; color: #1565C0; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 15px; flex-shrink: 0; }
         .item-info { flex: 1; min-width: 0; }
         .item-title { font-weight: bold; font-size: 18px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .item-subtitle { color: #666; font-size: 14px; }
         
+        .modal .list { display: block; padding: 0; border: 1px solid #eee; } /* Anula o grid dentro dos modais */
+        
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; z-index: 1000; }
-        .modal { background: white; padding: 20px; border-radius: 10px; width: 90%; max-width: 450px; max-height: 90vh; overflow-y: auto; box-sizing: border-box; }
+        .modal { background: white; padding: 20px; border-radius: 10px; width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto; box-sizing: border-box; }
         .modal-title { font-size: 20px; font-weight: bold; margin-bottom: 20px; color: #333; border-bottom: 2px solid #1976D2; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
         
         .form-group { margin-bottom: 15px; position: relative; }
@@ -91,14 +101,13 @@
         .bg-green { background: #388E3C; }
 
         /* ============================================================
-           GABARITO BLINDADO V29: 480x320 pixels (exatos 60x40mm) 
-           RECUOS: Esquerda (4px), Direita 6mm (48px), Topo/Base 3mm (24px)
+           GABARITO BLINDADO V1.0: 480x320 pixels (exatos 60x40mm) 
            ============================================================ */
         #area-impressao-visual {
             position: fixed; top: 0; left: -3000px;
             background: white; color: black; font-family: 'Arial', sans-serif;
             box-sizing: border-box; 
-            padding: 24px 48px 24px 4px !important; /* TOPO DIR BASE ESQ */
+            padding: 24px 48px 24px 4px !important; 
             display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start;
             width: 480px !important; height: 320px !important; 
             min-width: 480px !important; min-height: 320px !important; 
@@ -106,7 +115,6 @@
             margin: 0; overflow: hidden; text-align: left;
         }
 
-        /* NOME DO PRODUTO CENTRALIZADO E NEGRITO MAXIMO */
         .item-nome { font-family: 'Arial Black', Impact, sans-serif; font-weight: 900; font-stretch: expanded; font-size: 36px; text-transform: uppercase; margin: 0; line-height: 1.1; letter-spacing: -0.5px; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; }
         .validade-grande .val-label, .validade-grande .val-data { font-size: 30px !important; }
         
@@ -120,7 +128,7 @@
     <img src="icon.png" class="splash-icon" alt="Alô Etiqueta" onerror="this.style.display='none'; document.getElementById('splash-emoji').style.display='block';">
     <div id="splash-emoji" class="splash-emoji">🏷️</div>
     <div class="splash-title">Alô_Etiqueta</div>
-    <div class="splash-version">v1.0.29</div>
+    <div class="splash-version">v1.0</div>
 </div>
 
 <div id="area-impressao-visual">
@@ -132,7 +140,6 @@
     <div style="flex: 1; padding-top: 8px; display: flex; width: 100%;">
         
         <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; text-align: left; justify-content: center; overflow: hidden;">
-            
             <div style="font-size: 20px; font-weight: 900; margin-bottom: 6px;">
                 <span id="viz-label-acao">AÇÃO:</span> <span id="viz-data-man">00/00/0000 00:00</span>
             </div>
@@ -150,18 +157,16 @@
             <div id="viz-box-total-container" style="display: none; font-size: 20px; font-weight: 900; margin-top: 4px;">
                 TOTAL: R$ <span id="viz-preco">0,00</span>
             </div>
-
         </div>
 
         <div id="viz-qrcode-container" style="display: none; flex-direction: column; align-items: center; justify-content: center; padding-left: 10px; flex-shrink: 0;">
             <div id="viz-qrcode"></div>
-            <div id="viz-sku-text" style="font-size: 11px; font-weight: 900; margin-top: 2px; line-height: 1;"></div>
+            <div id="viz-sku-text" style="font-size: 14px; font-weight: 900; margin-top: 2px; line-height: 1;"></div>
         </div>
         
     </div>
     
     <div style="width: 100%; padding-top: 6px; text-align: center;">
-        
         <div id="viz-container-validade" style="margin-bottom: 6px; line-height: 1.1; text-align: center; width: 100%;">
             <span class="val-label" style="font-size: 28px; font-weight: 900;">VAL:</span> 
             <span class="val-data" id="viz-data-val" style="font-size: 28px; font-weight: 900;">00/00/0000</span>
@@ -181,27 +186,31 @@
 </div>
 
 <div class="app-container">
-    <div class="header">
-        <div class="header-op-container">
-            <span>Op:</span>
-            <select id="seletorOperador" onchange="verificarTrocaOperador(this)"></select>
+    <div id="sticky-header">
+        <div class="header">
+            <div class="header-op-container">
+                <span style="font-size: 18px;">👤</span>
+                <select id="seletorOperador" class="modern-select" onchange="verificarTrocaOperador(this)"></select>
+            </div>
+            <div id="indicadorConexao" class="status-conexao" title="Sincronização Automática">⚪</div>
+            <div class="header-actions">
+                <button onclick="abrirLoginAdmin()" title="Painel Administrativo">⚙️</button>
+            </div>
         </div>
-        <div id="indicadorConexao" class="status-conexao" title="Sincronização Automática">⚪</div>
-        <div class="header-actions">
-            <button onclick="abrirLoginAdmin()" title="Painel Administrativo">⚙️</button>
+        
+        <div class="search-box">
+            <input type="number" id="buscaCodigo" placeholder="Cód." inputmode="numeric">
+            <button class="btn-buscar" onclick="buscarPorCodigo()">Buscar</button>
+            <div class="spacer"></div>
+            <button class="btn-icon" onclick="abrirEstoqueAtivo()" title="Estoque Ativo (Com QR)">📈</button>
+            <button class="btn-icon" onclick="abrirPainelValidade()" title="Filtro de Validade">⏳</button>
+            <button class="btn-icon" onclick="abrirHistoricoDiario()" title="Movimentação Diária">📅</button>
+            <button class="btn-icon" id="btnScannerQRHome" onclick="abrirScannerQR()" style="display: none;">📷</button>
         </div>
+        
+        <div class="filters" id="containerFiltros"></div>
     </div>
     
-    <div class="search-box">
-        <input type="number" id="buscaCodigo" placeholder="Cód." inputmode="numeric">
-        <button class="btn-buscar" onclick="buscarPorCodigo()">Buscar</button>
-        <div class="spacer"></div>
-        <button class="btn-icon" onclick="abrirEstoqueAtivo()" title="Estoque Ativo (Com QR)">📈</button>
-        <button class="btn-icon" onclick="abrirPainelValidade()" title="Controle de Validade Geral">⏳</button>
-        <button class="btn-icon" id="btnScannerQRHome" onclick="abrirScannerQR()" style="display: none;">📷</button>
-    </div>
-    
-    <div class="filters" id="containerFiltros"></div>
     <ul class="list" id="listaProdutos"></ul>
 </div>
 
@@ -233,13 +242,12 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.29</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
         <button class="btn-outline" style="border-color:#f57f17; color:#f57f17;" onclick="abrirGerenciarEtiquetas()">🖨️ Gerenciar Etiquetas</button>
         <button class="btn-outline" style="border-color:#2e7d32; color:#2e7d32;" onclick="abrirEstoque()">📊 Relatório (Acumulado Total)</button>
-        <button class="btn-outline" style="border-color:#1976D2; color:#1976D2;" onclick="abrirHistoricoDiario()">📅 Movimentação Diária</button>
         
         <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
         <div class="form-group" style="text-align: left;">
@@ -260,7 +268,7 @@
         <div class="modal-title" style="color:#1976D2; border-color:#1976D2;">📅 Movimentação Diária</div>
         <div id="listaHistoricoDiario"></div>
         <div class="modal-actions">
-            <button class="btn-cancel" onclick="fecharModal('modalHistoricoDiario'); abrirPainelUnificado();">Voltar</button>
+            <button class="btn-cancel" onclick="fecharModal('modalHistoricoDiario')">Fechar</button>
         </div>
     </div>
 </div>
@@ -296,9 +304,6 @@
                 <span id="lblGapPx" style="font-weight: 900; background: white; padding: 2px 8px; border-radius: 4px;">24</span>
             </label>
             <input type="range" id="cfgGapPx" min="0" max="50" step="1" style="width:100%" oninput="document.getElementById('lblGapPx').innerText=this.value; salvarEtiquetaConfigs()">
-            <div style="font-size: 11px; color:#555; margin-top: 8px; line-height: 1.3;">
-                <b>Dica:</b> O padrão é 24 (equivale a 3mm). Se a impressão estiver "subindo" e cortando o nome ao imprimir várias, aumente para 25 ou 26. Se estiver descendo, diminua.
-            </div>
         </div>
 
         <h3 style="font-size: 14px; margin-bottom:5px;">Aparência Visual</h3>
@@ -353,9 +358,8 @@
         <div class="form-group">
             <label>URL Apps Script:</label>
             <input type="text" id="configUrlAppScript">
+            <button class="btn-action" style="margin-top:10px; width:100%; background:#4CAF50;" onclick="salvarUrlESincronizar(event)">💾 Salvar e Forçar Sincronia</button>
         </div>
-        <button class="btn-action" style="width:100%; margin-bottom:10px; background:#4CAF50;" onclick="salvarUrlEPuxar(event)">💾 Puxar e Mesclar Dados</button>
-        <button class="btn-outline" style="border-color:#2e7d32; color:#2e7d32; justify-content:center;" onclick="salvarTudoNaNuvem(event)">⬆️ Forçar Envio para Nuvem</button>
         
         <h3 style="font-size: 15px; color: #333; margin-top: 10px; margin-bottom: 10px;">Físico</h3>
         <div style="display: flex; gap: 10px; margin-top:10px;">
@@ -399,11 +403,14 @@
 </div>
 
 <div class="modal-overlay" id="modalValidade">
-    <div class="modal" style="max-width: 500px;">
-        <div class="modal-title" style="color:#d32f2f; border-color:#d32f2f;">⏳ Controle de Validade Geral</div>
-        <div style="margin-bottom: 15px; font-size: 13px; color: #555; background: #fff3e0; padding: 10px; border-radius: 5px; border-left: 4px solid #ff9800;">
-            Todos os itens manipulados que <b>ainda estão no estoque</b> (não foram baixados).
+    <div class="modal" style="max-width: 600px;">
+        <div class="modal-title" style="color:#d32f2f; border-color:#d32f2f;">⏳ Rastreados (QR Code)</div>
+        
+        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+            <button id="btnSortValidade" class="btn-outline" style="margin:0; padding: 8px; font-size: 13px; flex:1;" onclick="mudarSortValidade('validade')">Vencimento ⬇️</button>
+            <button id="btnSortProduzido" class="btn-outline" style="margin:0; padding: 8px; font-size: 13px; color:#555; border-color:#ccc; flex:1;" onclick="mudarSortValidade('produzido')">Produzido ↕️</button>
         </div>
+        
         <ul class="list" id="listaValidade" style="max-height: 50vh; overflow-y: auto; border: 1px solid #eee; padding: 0; border-radius:5px; margin-bottom: 15px;"></ul>
         <div class="modal-actions">
             <button class="btn-cancel" onclick="fecharModal('modalValidade')">Fechar Painel</button>
@@ -635,6 +642,9 @@
     let camerasDisponiveis = [];
     let cameraAtualIdx = 0;
     
+    let isSyncing = false;
+    let sortConfig = { campo: 'validade', dir: 'asc' }; // Para Ampulheta
+    
     const audioBeep = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
     const audioError = new Audio("https://actions.google.com/sounds/v1/alarms/bugle_tune.ogg");
 
@@ -661,8 +671,7 @@
                 ultimoWipe: 0,
                 gapEtiquetaPx: 24
             },
-            historico: [], 
-            filaRetentativaStatus: []
+            historico: []
         };
         
         let local = JSON.parse(localStorage.getItem('etiquetadora_db'));
@@ -674,9 +683,7 @@
             if(typeof local.configs.senhaAdmin === 'undefined') local.configs.senhaAdmin = "";
             if(typeof local.configs.ultimoWipe === 'undefined') local.configs.ultimoWipe = 0;
             
-            if(typeof local.configs.gapEtiquetaPx === 'undefined') {
-                local.configs.gapEtiquetaPx = 24;
-            }
+            if(typeof local.configs.gapEtiquetaPx === 'undefined') local.configs.gapEtiquetaPx = 24;
             
             local.produtos.forEach(p => { 
                 if(!p.acaoPadrao) p.acaoPadrao = "Manipulado:"; 
@@ -710,8 +717,8 @@
             if(e.key === 'Enter') buscarPorCodigo(); 
         });
         
-        setInterval(syncGeral, 20000); 
-        syncGeral();
+        setInterval(sincronizarComNuvemSilencioso, 20000); 
+        sincronizarComNuvemSilencioso();
     }
     
     function fecharModal(id) { 
@@ -773,7 +780,7 @@
         document.getElementById('modalZonaRisco').style.display = 'flex'; 
     }
     
-    async function salvarUrlEPuxar(event) { 
+    async function salvarUrlESincronizar(event) { 
         const url = document.getElementById('configUrlAppScript').value.trim(); 
         db.configs.urlAppScript = url; 
         salvarBancoLocal(); 
@@ -781,92 +788,22 @@
         if(!url) return alert("A URL do Google Apps Script está vazia!"); 
         
         const btn = event.target; 
-        btn.innerText = "Mesclando Dados..."; 
+        btn.innerText = "Sincronizando..."; 
         btn.disabled = true;
 
-        try {
-            let fetchUrl = url + (url.includes('?') ? '&' : '?') + 't=' + Date.now();
-            let resposta = await fetch(fetchUrl, { redirect: 'follow' });
-            let textoBruto = await resposta.text();
-            
-            try {
-                let dadosNuvem = JSON.parse(textoBruto);
-                if(dadosNuvem && dadosNuvem.produtos && Array.isArray(dadosNuvem.produtos)) { 
-                    if (dadosNuvem.configs && dadosNuvem.configs.ultimoWipe > (db.configs.ultimoWipe || 0)) { 
-                        db.historico = []; 
-                        db.configs.ultimoWipe = dadosNuvem.configs.ultimoWipe; 
-                    }
-
-                    let mapaProd = {};
-                    dadosNuvem.produtos.forEach(p => mapaProd[p.codigo] = p);
-                    db.produtos.forEach(p => mapaProd[p.codigo] = p); 
-                    db.produtos = Object.values(mapaProd);
-
-                    let mapaHist = {};
-                    dadosNuvem.historico.forEach(h => mapaHist[h.id] = h);
-                    db.historico.forEach(h => mapaHist[h.id] = h); 
-                    db.historico = Object.values(mapaHist);
-
-                    db.categorias = dadosNuvem.categorias;
-                    db.operadores = dadosNuvem.operadores;
-
-                    salvarBancoLocal(); 
-                    alert("✅ Banco de Dados mesclado com a Nuvem de forma segura!"); 
-                    location.reload(); 
-                } else { 
-                    alert("⚠️ O Google devolveu dados, mas o formato está incorreto. A célula A1 da planilha pode estar vazia."); 
-                }
-            } catch(erroParse) {
-                console.error("Retorno do Google que causou erro:", textoBruto);
-                alert("❌ Erro ao ler os dados da Nuvem. Verifique permissões do script.");
-            }
-        } catch(erro) { 
-            alert("❌ Erro de conexão: " + erro.message); 
-        }
+        await sincronizarComNuvemSilencioso();
         
-        btn.innerText = "💾 Puxar e Mesclar Dados"; 
+        btn.innerText = "💾 Salvar e Forçar Sincronia"; 
         btn.disabled = false;
-    }
-    
-    async function salvarTudoNaNuvem(event) { 
-        const url = document.getElementById('configUrlAppScript').value.trim(); 
-        db.configs.urlAppScript = url; 
-        salvarBancoLocal(); 
-        
-        if(!url) return alert("A URL está vazia!"); 
-        
-        const btn = event.target; 
-        btn.innerText = "Enviando..."; 
-        btn.disabled = true;
-        
-        try {
-            let pacote = { action: 'salvar_banco', dados: db };
-            await fetch(url, { method: 'POST', redirect: 'follow', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(pacote) });
-            alert("✅ Enviado com sucesso!");
-        } catch(erro) { 
-            alert("❌ Falha na requisição.\nErro: " + erro.message); 
-        }
-        
-        btn.innerText = "⬆️ Forçar Envio para Nuvem"; 
-        btn.disabled = false;
-    }
-
-    async function forcarEnvioNuvemOculto() {
-        const url = db.configs.urlAppScript;
-        if(!url) return;
-        try {
-            let pacote = { action: 'salvar_banco', dados: db };
-            await fetch(url, { method: 'POST', redirect: 'follow', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(pacote) });
-        } catch(e) {}
+        alert("Sincronia finalizada!");
     }
     
     function excluirHistoricoSeguro() { 
         if(document.getElementById('inputConfirmarExclusao').value === "quero excluir todo o histórico") { 
             db.historico = []; 
-            db.filaRetentativaStatus = []; 
             db.configs.ultimoWipe = Date.now();
             salvarBancoLocal(); 
-            forcarEnvioNuvemOculto(); 
+            sincronizarComNuvemSilencioso(); 
             alert("Apagado!"); 
             document.getElementById('inputConfirmarExclusao').value = '';
         } else { 
@@ -880,7 +817,7 @@
                 db.historico = []; 
                 db.configs.ultimoWipe = Date.now();
                 salvarBancoLocal(); 
-                forcarEnvioNuvemOculto(); 
+                sincronizarComNuvemSilencioso(); 
                 voltarEstoqueMain(); 
                 abrirEstoque(); 
             } 
@@ -918,9 +855,7 @@
                     await navigator.share({ files: [file], title: 'Backup Alô_Etiqueta' }); 
                     return; 
                 }
-            } catch (err) { 
-                console.log("Compartilhamento nativo cancelado.", err); 
-            }
+            } catch (err) { }
         }
         
         const url = URL.createObjectURL(blob); 
@@ -948,8 +883,9 @@
         reader.readAsText(file); 
     }
 
-    async function syncGeral() {
-        const ind = document.getElementById('indicadorConexao'); 
+    // A MÁGICA SILENCIOSA DA NUVEM (CRUZAMENTO DE DADOS)
+    async function sincronizarComNuvemSilencioso() {
+        const ind = document.getElementById('indicadorConexao');
         if(!db.configs.urlAppScript) { 
             ind.innerText = '⚪'; 
             return; 
@@ -958,37 +894,53 @@
             ind.innerText = '🔴'; 
             return; 
         }
+        if(isSyncing) return;
         
+        isSyncing = true;
         try { 
-            if(db.filaRetentativaStatus.length > 0) { 
-                const pacote = { action: 'syncImpressoes', data: db.filaRetentativaStatus };
-                const res = await fetch(db.configs.urlAppScript, { method: 'POST', redirect: 'follow', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(pacote) }); 
-                if(res.ok) { 
-                    db.filaRetentativaStatus = []; 
-                    salvarBancoLocal(); 
-                } 
-            } 
-            
             let fetchUrl = db.configs.urlAppScript + (db.configs.urlAppScript.includes('?') ? '&' : '?') + 't=' + Date.now();
             let resposta = await fetch(fetchUrl, { redirect: 'follow' });
             let textoBruto = await resposta.text();
             let dadosNuvem = JSON.parse(textoBruto);
 
             if (dadosNuvem && dadosNuvem.produtos) {
+                // Wipe global
                 if (dadosNuvem.configs && dadosNuvem.configs.ultimoWipe > (db.configs.ultimoWipe || 0)) {
                     db.historico = [];
                     db.configs.ultimoWipe = dadosNuvem.configs.ultimoWipe;
                 }
 
+                let mudouLocalmente = false;
+                let mapaNuvem = {};
+                
+                if(dadosNuvem.historico) {
+                    dadosNuvem.historico.forEach(h => mapaNuvem[h.id] = h);
+                }
+
+                // Cruzamento cronológico
+                db.historico.forEach(hLocal => {
+                    if(mapaNuvem[hLocal.id]) {
+                        // Se o meu tem baixa e a nuvem não, o meu sobrepõe
+                        if(hLocal.baixado && !mapaNuvem[hLocal.id].baixado) {
+                            mapaNuvem[hLocal.id] = hLocal;
+                            mudouLocalmente = true;
+                        }
+                    } else {
+                        // Item novo que criei aqui
+                        mapaNuvem[hLocal.id] = hLocal;
+                        mudouLocalmente = true;
+                    }
+                });
+                
+                db.historico = Object.values(mapaNuvem);
+
+                // Cadastros
                 let mapaProd = {};
                 dadosNuvem.produtos.forEach(p => mapaProd[p.codigo] = p);
-                db.produtos.forEach(p => mapaProd[p.codigo] = p);
+                db.produtos.forEach(p => { 
+                    if(!mapaProd[p.codigo]) { mapaProd[p.codigo] = p; mudouLocalmente = true; } 
+                });
                 db.produtos = Object.values(mapaProd);
-
-                let mapaHist = {};
-                dadosNuvem.historico.forEach(h => mapaHist[h.id] = h);
-                db.historico.forEach(h => mapaHist[h.id] = h); 
-                db.historico = Object.values(mapaHist);
 
                 db.categorias = dadosNuvem.categorias;
                 db.operadores = dadosNuvem.operadores;
@@ -996,16 +948,20 @@
                 salvarBancoLocal();
                 ind.innerText = '🟢';
                 
-                if(document.getElementById('modalValidade').style.display === 'flex') {
-                    abrirPainelValidade();
+                // Se eu gerei dados novos, empurro pra nuvem
+                if(mudouLocalmente) {
+                    let pacote = { action: 'salvar_banco', dados: db };
+                    await fetch(db.configs.urlAppScript, { method: 'POST', body: JSON.stringify(pacote) });
                 }
-                if(document.getElementById('modalEstoqueAtivo').style.display === 'flex') {
-                    abrirEstoqueAtivo();
-                }
+                
+                if(document.getElementById('modalValidade').style.display === 'flex') abrirPainelValidade();
+                if(document.getElementById('modalEstoqueAtivo').style.display === 'flex') abrirEstoqueAtivo();
+                if(document.getElementById('modalHistoricoDiario').style.display === 'flex') abrirHistoricoDiario();
             }
         } catch(e) { 
             ind.innerText = '🔴'; 
         }
+        isSyncing = false;
     }
 
     function renderizarOperadores() { 
@@ -1554,12 +1510,11 @@
         if(confirm("🚨 EXCLUIR ERRO DE IMPRESSÃO\n\nTem certeza que deseja apagar essa etiqueta completamente do histórico?\n(Use isso apenas se gerou a etiqueta sem querer ou ela saiu borrada).")) {
             db.historico = db.historico.filter(x => x.sku !== sku);
             salvarBancoLocal();
+            sincronizarComNuvemSilencioso();
             
             if(document.getElementById('estoqueDetalhes').style.display === 'block') {
                 abrirDetalhesEstoque(document.getElementById('estoqueDetTitulo').innerText, origemDetalhesEstoque);
             }
-            
-            forcarEnvioNuvemOculto();
         }
     }
 
@@ -1624,6 +1579,24 @@
         document.getElementById('modalEstoqueAtivo').style.display = 'flex';
     }
     
+    const parseDataHoraBR = (str) => { 
+        if(!str) return new Date(0); 
+        const p = str.split(' '); 
+        const d = p[0].split('/'); 
+        const t = p.length > 1 ? p[1].split(':') : ['00','00'];
+        return new Date(d[2], d[1]-1, d[0], t[0], t[1]); 
+    };
+
+    function mudarSortValidade(campo) {
+        if(sortConfig.campo === campo) {
+            sortConfig.dir = sortConfig.dir === 'asc' ? 'desc' : 'asc';
+        } else {
+            sortConfig.campo = campo;
+            sortConfig.dir = 'asc';
+        }
+        abrirPainelValidade();
+    }
+
     function abrirPainelValidade() {
         try { 
             const lista = document.getElementById('listaValidade'); 
@@ -1631,24 +1604,44 @@
             
             if(!db.historico) db.historico = []; 
             
-            let itensAtivos = db.historico.filter(x => !x.baixado);
+            // FILTRA APENAS ITENS COM QR
+            let itensAtivos = db.historico.filter(x => {
+                if(x.baixado) return false;
+                let p = db.produtos.find(prod => prod.nome === x.produto);
+                return p && p.usaQR;
+            });
             
             if (itensAtivos.length === 0) {
-                lista.innerHTML = '<div style="padding:20px; text-align:center; color:#666; font-weight:bold;">Tudo limpo! Nenhum item ativo no momento.</div>'; 
+                lista.innerHTML = '<div style="padding:20px; text-align:center; color:#666; font-weight:bold;">Tudo limpo! Nenhum item com QR ativo.</div>'; 
             } else { 
-                const parseDataBR = (str) => { 
-                    if(!str || typeof str !== 'string' || !str.includes('/')) return new Date(0); 
-                    const partes = str.split('/'); 
-                    return new Date(partes[2], partes[1]-1, partes[0]); 
-                }; 
-                
                 let hoje = new Date(); 
                 hoje.setHours(0,0,0,0); 
                 
-                itensAtivos.sort((a, b) => parseDataBR(a.validadeFinal) - parseDataBR(b.validadeFinal));
-                
+                // ORDENAÇÃO
+                itensAtivos.sort((a, b) => {
+                    let valA, valB;
+                    if(sortConfig.campo === 'validade') {
+                        valA = parseDataHoraBR(a.validadeFinal).getTime();
+                        valB = parseDataHoraBR(b.validadeFinal).getTime();
+                    } else {
+                        valA = parseDataHoraBR(a.dataManipulado).getTime();
+                        valB = parseDataHoraBR(b.dataManipulado).getTime();
+                    }
+                    if(sortConfig.dir === 'asc') return valA - valB;
+                    return valB - valA;
+                });
+
+                // ATUALIZA BOTÕES UI
+                document.getElementById('btnSortValidade').style.color = sortConfig.campo === 'validade' ? '#1976D2' : '#555';
+                document.getElementById('btnSortValidade').style.borderColor = sortConfig.campo === 'validade' ? '#1976D2' : '#ccc';
+                document.getElementById('btnSortValidade').innerText = sortConfig.campo === 'validade' ? (sortConfig.dir === 'asc' ? 'Vencimento ⬇️' : 'Vencimento ⬆️') : 'Vencimento ↕️';
+
+                document.getElementById('btnSortProduzido').style.color = sortConfig.campo === 'produzido' ? '#1976D2' : '#555';
+                document.getElementById('btnSortProduzido').style.borderColor = sortConfig.campo === 'produzido' ? '#1976D2' : '#ccc';
+                document.getElementById('btnSortProduzido').innerText = sortConfig.campo === 'produzido' ? (sortConfig.dir === 'asc' ? 'Produzido ⬇️' : 'Produzido ⬆️') : 'Produzido ↕️';
+
                 itensAtivos.forEach(item => { 
-                    let dVal = parseDataBR(item.validadeFinal);
+                    let dVal = parseDataHoraBR(item.validadeFinal);
                     let diffTime = dVal.getTime() - hoje.getTime();
                     let diffDias = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                     
@@ -1685,10 +1678,7 @@
             } 
             
             document.getElementById('modalValidade').style.display = 'flex'; 
-        } catch(err) { 
-            console.error(err);
-            alert("⚠️ Algum registro antigo está impedindo o cálculo da validade. Limpe seu estoque e tente novamente."); 
-        }
+        } catch(err) { }
     }
 
     function darBaixaManual(sku) { 
@@ -1707,8 +1697,7 @@
                     abrirEstoqueAtivo();
                 }
                 
-                db.filaRetentativaStatus.push(item); 
-                syncGeral(); 
+                sincronizarComNuvemSilencioso(); 
             } 
         } 
     }
@@ -1847,12 +1836,13 @@
             };
             
             db.historico.push(reg); 
-            db.filaRetentativaStatus.push(reg);
         }
         
         salvarBancoLocal(); 
         audioBeep.play().catch(()=>{}); 
-        syncGeral();
+        
+        // Sincronia ninja em background logo após criar
+        sincronizarComNuvemSilencioso();
         
         if(db.configs.modo === 'pdf') { 
             fecharModal('modalImprimir'); 
@@ -1955,7 +1945,7 @@
 
                     <div style="display: ${showQR}; flex-direction: column; align-items: center; justify-content: center; padding-left: 5px; flex-shrink: 0;">
                         <div id="${idQR}"></div>
-                        <div style="font-size: 8pt; font-weight: bold; margin-top: 2px; line-height: 1;">${shortSku}</div>
+                        <div style="font-size: 11pt; font-weight: bold; margin-top: 2px; line-height: 1;">${shortSku}</div>
                     </div>
                 </div>
                 
@@ -2155,7 +2145,7 @@
             iniciarCameraFallback();
         });
         
-        syncGeral(); 
+        sincronizarComNuvemSilencioso(); 
     }
 
     function iniciarCameraPeloIdx() {
@@ -2222,8 +2212,7 @@
                 salvarBancoLocal(); 
                 alert("Baixa confirmada!"); 
                 
-                db.filaRetentativaStatus.push(item); 
-                syncGeral(); 
+                sincronizarComNuvemSilencioso(); 
                 fecharLeitorQR(); 
             } else {
                 setTimeout(() => { if(html5QrCode) html5QrCode.resume(); }, 1500); 
