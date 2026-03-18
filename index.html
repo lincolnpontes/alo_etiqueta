@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô Etiquetas v1.0.2</title>
+    <title>Alô Etiquetas v1.0.3</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -47,8 +47,8 @@
         .search-box .btn-buscar { background: #1976D2; color: white; border: none; padding: 0 10px; height: 44px; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: bold; flex-shrink: 0; }
         .spacer { flex-grow: 1; } 
         
-        /* BOTÕES MAIS COMPACTOS PARA CABER A CÂMERA */
-        .icon-group { display: flex; gap: 8px; align-items: center; margin-left: 5px; }
+        /* BOTÕES COM GAP AJUSTADO */
+        .icon-group { display: flex; gap: 12px; align-items: center; margin-left: 8px; }
         .search-box .btn-icon { background: transparent; color: #333; border: none; padding: 0; cursor: pointer; font-size: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.1s; }
         .search-box .btn-icon:active { transform: scale(0.9); }
         
@@ -126,17 +126,15 @@
     <img src="icon.png" class="splash-icon" alt="Alô Etiquetas" onerror="this.style.display='none'; document.getElementById('splash-emoji').style.display='block';">
     <div id="splash-emoji" class="splash-emoji">🏷️</div>
     <div class="splash-title">Alô Etiquetas</div>
-    <div class="splash-version">v1.0.2</div>
+    <div class="splash-version">v1.0.3</div>
 </div>
 
 <div id="area-impressao-visual">
-    
     <div style="border-bottom: 3px solid black; padding-bottom: 6px; width: 100%; text-align: center;">
         <div id="viz-nome-produto" class="item-nome">PRODUTO</div>
     </div>
     
     <div style="flex: 1; padding-top: 8px; display: flex; width: 100%;">
-        
         <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; text-align: left; justify-content: center; overflow: hidden;">
             <div style="font-size: 20px; font-weight: 900; margin-bottom: 6px;">
                 <span id="viz-label-acao">AÇÃO:</span> <span id="viz-data-man">00/00/0000 00:00</span>
@@ -161,7 +159,6 @@
             <div id="viz-qrcode"></div>
             <div id="viz-sku-text" style="font-size: 16px; font-weight: 900; margin-top: 2px; line-height: 1;"></div>
         </div>
-        
     </div>
     
     <div style="width: 100%; padding-top: 6px; text-align: center;">
@@ -232,7 +229,7 @@
         <div class="modal-title">Acesso ao Painel</div>
         <div class="form-group">
             <label>Senha:</label>
-            <input type="password" id="senhaAdmin" placeholder="Digite para entrar..." inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(this.value === '1999' || (db.configs.senhaAdmin !== '' && this.value === db.configs.senhaAdmin)){this.blur();fecharModal('modalLoginAdmin');abrirPainelUnificado();this.value='';}">
+            <input type="password" id="senhaAdmin" placeholder="Digite para entrar..." inputmode="numeric" oninput="if(this.value === '1999' || (db.configs.senhaAdmin && db.configs.senhaAdmin !== '' && this.value === db.configs.senhaAdmin)){this.blur();fecharModal('modalLoginAdmin');abrirPainelUnificado();this.value='';}">
         </div>
         <div class="modal-actions">
             <button class="btn-cancel" onclick="fecharModal('modalLoginAdmin')">Cancelar</button>
@@ -242,7 +239,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô Etiquetas - v1.0.2</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô Etiquetas - v1.0.3</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
@@ -251,8 +248,8 @@
         
         <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
         <div class="form-group" style="text-align: left;">
-            <label>Senha das Configurações:</label>
-            <input type="password" id="cfgSenhaAdmin" placeholder="" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');" onchange="salvarSenhaPainel()">
+            <label>Senha das Configurações (Vazio = Livre):</label>
+            <input type="password" id="cfgSenhaAdmin" placeholder="Deixe em branco para remover senha" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');" onchange="salvarSenhaPainel()">
         </div>
 
         <h3 style="font-size: 16px; color: #d32f2f; margin-top: 25px;">Avançado</h3>
@@ -343,10 +340,10 @@
         <div class="modal-title" style="color:#d32f2f;">Acesso Restrito</div>
         <div class="form-group">
             <label>Exige Senha Mestra:</label>
-            <input type="password" id="senhaAvancada" placeholder="Somente a mestra" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(this.value === '1999'){this.blur();fecharModal('modalSenhaAvancada');abrirZonaRisco();this.value='';}">
+            <input type="password" id="senhaAvancada" placeholder="Somente a mestra" inputmode="numeric" oninput="if(this.value === '1999'){this.blur();fecharModal('modalSenhaAvancada');abrirZonaRisco();this.value='';}">
         </div>
         <div class="modal-actions">
-            <button class="btn-cancel" onclick="fecharModal('modalSenhaAvancada')">Cancelar</button>
+            <button class="btn-cancel" onclick="fecharModal('modalSenhaAvancada'); abrirPainelUnificado();">Cancelar</button>
         </div>
     </div>
 </div>
@@ -726,9 +723,15 @@
         document.getElementById(id).style.display = 'none'; 
     }
     
+    // SISTEMA DE LOGIN RESTAURADO (ENGRENAGEM E ZONA DE RISCO)
     function abrirLoginAdmin() { 
-        abrirPainelUnificado(); 
-        return; 
+        if(db.configs.senhaAdmin && db.configs.senhaAdmin.trim() !== "") {
+            document.getElementById('senhaAdmin').value = '';
+            document.getElementById('modalLoginAdmin').style.display = 'flex';
+            setTimeout(() => document.getElementById('senhaAdmin').focus(), 100);
+        } else {
+            abrirPainelUnificado(); 
+        }
     }
     
     function abrirPainelUnificado() { 
@@ -773,8 +776,9 @@
 
     function abrirModalAvancado() { 
         fecharModal('modalPainelUnificado'); 
-        abrirZonaRisco(); 
-        return; 
+        document.getElementById('senhaAvancada').value = '';
+        document.getElementById('modalSenhaAvancada').style.display = 'flex'; 
+        setTimeout(() => document.getElementById('senhaAvancada').focus(), 100);
     }
     
     function abrirZonaRisco() { 
@@ -1525,6 +1529,7 @@
     function excluirRegistroFisico(sku) {
         if(confirm("🚨 EXCLUIR ERRO DE IMPRESSÃO\n\nTem certeza que deseja apagar essa etiqueta completamente do histórico?\n(Use isso apenas se gerou a etiqueta sem querer ou ela saiu borrada).")) {
             db.historico = db.historico.filter(x => x.sku !== sku);
+            db.configs.ultimaModificacaoLocal = Date.now();
             salvarBancoLocal();
             sincronizarComNuvemSilencioso();
             
@@ -1700,6 +1705,7 @@
             if(item) { 
                 item.baixado = true; 
                 item.dataBaixa = new Date().toLocaleString('pt-BR'); 
+                db.configs.ultimaModificacaoLocal = Date.now();
                 salvarBancoLocal(); 
                 
                 if (document.getElementById('estoqueDetalhes').style.display === 'block') {
@@ -1851,6 +1857,7 @@
             db.historico.push(reg); 
         }
         
+        db.configs.ultimaModificacaoLocal = Date.now();
         salvarBancoLocal(); 
         audioBeep.play().catch(()=>{}); 
         
