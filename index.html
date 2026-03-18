@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô Etiquetas v1.0.3</title>
+    <title>Alô Etiquetas v1.0.4</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -47,7 +47,6 @@
         .search-box .btn-buscar { background: #1976D2; color: white; border: none; padding: 0 10px; height: 44px; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: bold; flex-shrink: 0; }
         .spacer { flex-grow: 1; } 
         
-        /* BOTÕES COM GAP AJUSTADO */
         .icon-group { display: flex; gap: 12px; align-items: center; margin-left: 8px; }
         .search-box .btn-icon { background: transparent; color: #333; border: none; padding: 0; cursor: pointer; font-size: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.1s; }
         .search-box .btn-icon:active { transform: scale(0.9); }
@@ -73,6 +72,8 @@
         .form-group { margin-bottom: 15px; position: relative; }
         .form-group label { display: block; margin-bottom: 5px; color: #555; font-weight: bold; font-size: 14px; }
         .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; }
+        /* CORREÇÃO PARA O INPUT DE COR APARECER CORRETAMENTE */
+        .form-group input[type="color"] { padding: 2px; height: 44px; cursor: pointer; }
         
         .qtd-control { display: flex; align-items: center; gap: 15px; }
         .qtd-btn { background: #e0e0e0; border: none; width: 35px; height: 35px; border-radius: 50%; font-size: 20px; cursor: pointer; }
@@ -126,7 +127,7 @@
     <img src="icon.png" class="splash-icon" alt="Alô Etiquetas" onerror="this.style.display='none'; document.getElementById('splash-emoji').style.display='block';">
     <div id="splash-emoji" class="splash-emoji">🏷️</div>
     <div class="splash-title">Alô Etiquetas</div>
-    <div class="splash-version">v1.0.3</div>
+    <div class="splash-version">v1.0.4</div>
 </div>
 
 <div id="area-impressao-visual">
@@ -200,7 +201,7 @@
                 <button class="btn-icon" onclick="abrirEstoqueAtivo()" title="Estoque Ativo (Com QR)">📈</button>
                 <button class="btn-icon" onclick="abrirPainelValidade()" title="Filtro de Validade">⏳</button>
                 <button class="btn-icon" onclick="abrirHistoricoDiario()" title="Movimentação Diária">📅</button>
-                <button class="btn-icon" id="btnScannerQRHome" onclick="abrirScannerQR()" style="display: none;">📷</button>
+                <button class="btn-icon" id="btnScannerQRHome" onclick="abrirScannerQR()" style="display: none; font-size: 32px;">📷</button>
             </div>
             <div class="spacer"></div>
         </div>
@@ -239,7 +240,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô Etiquetas - v1.0.3</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô Etiquetas - v1.0.4</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
@@ -340,7 +341,7 @@
         <div class="modal-title" style="color:#d32f2f;">Acesso Restrito</div>
         <div class="form-group">
             <label>Exige Senha Mestra:</label>
-            <input type="password" id="senhaAvancada" placeholder="Somente a mestra" inputmode="numeric" oninput="if(this.value === '1999'){this.blur();fecharModal('modalSenhaAvancada');abrirZonaRisco();this.value='';}">
+            <input type="password" id="senhaAvancada" placeholder="Digite a senha" inputmode="numeric" oninput="if(this.value === '1999'){this.blur();fecharModal('modalSenhaAvancada');abrirZonaRisco();this.value='';}">
         </div>
         <div class="modal-actions">
             <button class="btn-cancel" onclick="fecharModal('modalSenhaAvancada'); abrirPainelUnificado();">Cancelar</button>
@@ -723,7 +724,6 @@
         document.getElementById(id).style.display = 'none'; 
     }
     
-    // SISTEMA DE LOGIN RESTAURADO (ENGRENAGEM E ZONA DE RISCO)
     function abrirLoginAdmin() { 
         if(db.configs.senhaAdmin && db.configs.senhaAdmin.trim() !== "") {
             document.getElementById('senhaAdmin').value = '';
@@ -893,7 +893,6 @@
         reader.readAsText(file); 
     }
 
-    // A MÁGICA DA NUVEM COM CARIMBO DE TEMPO
     async function sincronizarComNuvemSilencioso() {
         const ind = document.getElementById('indicadorConexao');
         if(!db.configs.urlAppScript) { 
@@ -914,7 +913,6 @@
             let dadosNuvem = JSON.parse(textoBruto);
 
             if (dadosNuvem && dadosNuvem.produtos) {
-                // Wipe global
                 if (dadosNuvem.configs && dadosNuvem.configs.ultimoWipe > (db.configs.ultimoWipe || 0)) {
                     db.historico = [];
                     db.configs.ultimoWipe = dadosNuvem.configs.ultimoWipe;
@@ -922,7 +920,6 @@
 
                 let mudouLocalmente = false;
                 
-                // Mescla o Histórico (Cronológico ID por ID)
                 let mapaNuvem = {};
                 if(dadosNuvem.historico) {
                     dadosNuvem.historico.forEach(h => mapaNuvem[h.id] = h);
@@ -940,25 +937,21 @@
                 });
                 db.historico = Object.values(mapaNuvem);
 
-                // Mescla os Cadastros (Carimbo de Tempo)
                 let tsLocal = db.configs.ultimaModificacaoLocal || 0;
                 let tsNuvem = (dadosNuvem.configs && dadosNuvem.configs.ultimaModificacaoLocal) ? dadosNuvem.configs.ultimaModificacaoLocal : 0;
 
                 if (tsNuvem > tsLocal) {
-                    // A nuvem foi editada por último (em outro aparelho)
                     db.produtos = dadosNuvem.produtos || [];
                     db.categorias = dadosNuvem.categorias || [];
                     db.operadores = dadosNuvem.operadores || [];
                     db.configs.ultimaModificacaoLocal = tsNuvem;
                 } else if (tsLocal > tsNuvem) {
-                    // Nós editamos por último! Forçamos a nuvem a aceitar nossa versão.
                     mudouLocalmente = true;
                 }
 
                 salvarBancoLocal();
                 ind.innerText = '🟢';
                 
-                // Se mudou algo daqui, envia o pacotão atualizado pra nuvem
                 if(mudouLocalmente) {
                     let pacote = { action: 'salvar_banco', dados: db };
                     await fetch(db.configs.urlAppScript, { method: 'POST', body: JSON.stringify(pacote) });
@@ -1306,7 +1299,7 @@
             document.getElementById('catNomeOriginal').value = ''; 
             document.getElementById('catNome').value = ''; 
             document.getElementById('catCor').value = '#1976D2'; 
-            document.getElementById('catCorTexto').value = '#fff'; 
+            document.getElementById('catCorTexto').value = '#ffffff'; 
         } 
         
         document.getElementById('modalFormCategoria').style.display = 'flex'; 
