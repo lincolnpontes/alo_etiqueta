@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô Etiquetas v1.0.8</title>
+    <title>Alô Etiquetas v1.0.9</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -30,6 +30,14 @@
         .splash-emoji { font-size: 70px; margin-bottom: 15px; display: none; }
         .splash-title { font-size: 26px; font-weight: 900; margin-bottom: 5px; letter-spacing: 1px; }
         .splash-version { font-size: 14px; font-weight: bold; opacity: 0.8; background: rgba(21,101,192,0.1); padding: 4px 10px; border-radius: 12px; }
+
+        /* TELA DE LOGIN INICIAL */
+        #login-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #1565C0; z-index: 99998; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; color: white;
+            transition: opacity 0.5s ease;
+        }
 
         .header { background: #1565C0; color: white; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
         .header-op-container { display: flex; align-items: center; gap: 8px; flex: 1; }
@@ -130,7 +138,19 @@
     <img src="icon.png" class="splash-icon" alt="Alô Etiquetas" onerror="this.style.display='none'; document.getElementById('splash-emoji').style.display='block';">
     <div id="splash-emoji" class="splash-emoji">🏷️</div>
     <div class="splash-title">Alô Etiquetas</div>
-    <div class="splash-version">v1.0.8</div>
+    <div class="splash-version">v1.0.9</div>
+</div>
+
+<div id="login-screen">
+    <div style="font-size: 70px; margin-bottom: 20px;">👤</div>
+    <h2 style="margin-top: 0; margin-bottom: 20px; font-size: 24px;">Identificação</h2>
+    <select id="loginOperador" style="padding: 15px; font-size: 18px; width: 85%; max-width: 350px; border-radius: 8px; margin-bottom: 15px; border: none; outline: none; font-weight: bold; color: #333;" onchange="checarSenhaLoginInicial()"></select>
+    
+    <div id="loginSenhaContainer" style="display: none; flex-direction: column; align-items: center; width: 100%;">
+        <input type="password" id="loginSenha" inputmode="numeric" placeholder="Senha Numérica" style="padding: 15px; font-size: 20px; width: 85%; max-width: 350px; margin-bottom: 25px; border-radius: 8px; border: none; text-align: center; outline: none; font-weight: bold; color: #333;" onkeypress="if(event.key === 'Enter') fazerLoginInicial()">
+    </div>
+    
+    <button onclick="fazerLoginInicial()" style="padding: 15px 40px; font-size: 20px; font-weight: bold; border-radius: 8px; border: none; background: #4CAF50; color: white; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">ENTRAR</button>
 </div>
 
 <div id="area-impressao-visual">
@@ -236,7 +256,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô Etiquetas - v1.0.8</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô Etiquetas - v1.0.9</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
@@ -806,17 +826,79 @@
         localStorage.setItem('etiquetadora_db', JSON.stringify(db)); 
     }
 
+    function prepararTelaLogin() {
+        const selL = document.getElementById('loginOperador');
+        selL.innerHTML = '<option value="">Selecione o Operador...</option>';
+        db.operadores.forEach(op => { 
+            selL.innerHTML += `<option value="${op.nome}">${op.nome}</option>`; 
+        });
+        const ult = localStorage.getItem('etiquetadora_operadorAtual'); 
+        if(ult && db.operadores.find(o => o.nome === ult)) { 
+            selL.value = ult; 
+        }
+        checarSenhaLoginInicial();
+    }
+
+    function checarSenhaLoginInicial() {
+        const nome = document.getElementById('loginOperador').value;
+        const op = db.operadores.find(o => o.nome === nome);
+        const containerSenha = document.getElementById('loginSenhaContainer');
+        if(op && op.senha !== "") {
+            containerSenha.style.display = "flex";
+        } else {
+            containerSenha.style.display = "none";
+        }
+    }
+
+    function focarSenhaSePrecisar() {
+        const containerSenha = document.getElementById('loginSenhaContainer');
+        if(containerSenha.style.display === "flex") {
+            document.getElementById('loginSenha').focus();
+        } else {
+            document.getElementById('loginOperador').focus();
+        }
+    }
+
+    function fazerLoginInicial() {
+        const nome = document.getElementById('loginOperador').value;
+        if(!nome) return alert("Selecione um operador!");
+        
+        const op = db.operadores.find(o => o.nome === nome);
+        if(op && op.senha !== "") {
+            const senhaDigitada = document.getElementById('loginSenha').value;
+            if(senhaDigitada !== op.senha) {
+                alert("Senha Incorreta!");
+                document.getElementById('loginSenha').value = '';
+                document.getElementById('loginSenha').focus();
+                return;
+            }
+        }
+        
+        localStorage.setItem('etiquetadora_operadorAtual', nome);
+        document.getElementById('seletorOperador').value = nome;
+        operadorAnteriorSelect = nome;
+
+        const logScreen = document.getElementById('login-screen');
+        logScreen.style.opacity = '0';
+        setTimeout(() => logScreen.style.display = 'none', 500);
+    }
+
     function iniciar() {
+        renderizarOperadores(); 
+        prepararTelaLogin();
+        
         setTimeout(() => {
             const splash = document.getElementById('splash-screen');
             if (splash) {
                 splash.classList.add('hidden');
-                setTimeout(() => splash.style.display = 'none', 500);
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                    focarSenhaSePrecisar();
+                }, 500);
             }
         }, 1500);
 
         document.getElementById('btnScannerQRHome').style.display = db.configs.controleQR ? 'flex' : 'none';
-        renderizarOperadores(); 
         renderizarFiltros(); 
         renderizarLista();
         
@@ -1168,6 +1250,9 @@
         } else { 
             operadorAnteriorSelect = nome; 
             localStorage.setItem('etiquetadora_operadorAtual', nome); 
+            
+            const selL = document.getElementById('loginOperador');
+            if(selL) selL.value = nome;
         } 
     }
     
@@ -1179,6 +1264,10 @@
         if(op && op.senha === senha) { 
             operadorAnteriorSelect = alvo; 
             localStorage.setItem('etiquetadora_operadorAtual', alvo); 
+            
+            const selL = document.getElementById('loginOperador');
+            if(selL) selL.value = alvo;
+
             fecharModal('modalSenhaOperador'); 
         } else { 
             alert("Senha Incorreta!"); 
@@ -1678,7 +1767,6 @@
             lista.innerHTML = '<div style="padding:20px; text-align:center; color:#666; font-weight:bold;">Nenhuma movimentação registrada no período selecionado.</div>';
         }
 
-        // BLOCO DE COMPILAÇÃO TOTAL DO PERÍODO (EXCETO PARA O FILTRO DIÁRIO)
         if(filtroDiarioAtual !== 'diario' && datasOrdenadas.length > 0) {
             let totalEntradas = {};
             let totalSaidas = {};
@@ -2287,7 +2375,7 @@
         let printWindow = window.open('', '', 'width=600,height=800');
         
         let armazHTML = "";
-        if(p.armazenamento && p.armazenamento.toLowerCase() !== "ambiente" && p.armazenamento.toLowerCase() !== "nenhuma") {
+        if(p.armazenamento && p.armazenamento.toLowerCase() !== "nenhuma") {
             let textoArm = p.armazenamento.toUpperCase();
             if(!textoArm.startsWith("MANTER")) textoArm = "MANTER " + textoArm;
             armazHTML = `
@@ -2474,7 +2562,7 @@
         document.getElementById('viz-operador').innerText = op;
         
         const bxArmaz = document.getElementById('viz-linha-armazenamento');
-        if(p.armazenamento && p.armazenamento.toLowerCase() !== "ambiente" && p.armazenamento.toLowerCase() !== "nenhuma") {
+        if(p.armazenamento && p.armazenamento.toLowerCase() !== "nenhuma") {
             bxArmaz.style.display = "block";
             let txtArm = p.armazenamento.toUpperCase();
             if(!txtArm.startsWith("MANTER")) txtArm = "MANTER " + txtArm;
