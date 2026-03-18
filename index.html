@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô Etiquetas v1.0.1</title>
+    <title>Alô Etiquetas v1.0.2</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -16,11 +16,9 @@
     <style>
         body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 0; display: flex; justify-content: center; }
         
-        /* LAYOUT RESPONSIVO E CABEÇALHO FIXO */
         .app-container { width: 100%; max-width: 1200px; background: #fff; min-height: 100vh; display: flex; flex-direction: column; position: relative; margin: 0 auto; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
         #sticky-header { position: sticky; top: 0; z-index: 100; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
         
-        /* SPLASH SCREEN - FUNDO BRANCO PARA O ÍCONE BRILHAR */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #ffffff; z-index: 99999; display: flex; flex-direction: column;
@@ -37,7 +35,6 @@
         .header { background: #1565C0; color: white; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
         .header-op-container { display: flex; align-items: center; gap: 8px; flex: 1; }
         
-        /* MODERNO SELECT OPERADOR */
         .modern-select { height: 32px; border-radius: 20px !important; border: 1px solid rgba(255,255,255,0.4) !important; background: rgba(255,255,255,0.1) !important; color: white !important; font-size: 14px; font-weight: bold; width: 100%; max-width: 140px; padding: 0 12px !important; outline: none; cursor: pointer; }
         .modern-select option { color: #333; background: #fff; }
         
@@ -45,21 +42,20 @@
         .header-actions { display: flex; gap: 15px; align-items: center; }
         .header-actions button { background: none; border: none; color: white; font-size: 24px; cursor: pointer; padding: 0; }
         
-        /* SEARCH BOX E BOTÕES REORGANIZADOS */
-        .search-box { background: #E3F2FD; padding: 10px; display: flex; gap: 8px; width: 100%; box-sizing: border-box; align-items: center; overflow: hidden; }
-        .search-box input { width: 65px; flex-shrink: 0; padding: 12px 4px; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; font-weight: bold; text-align: center; }
-        .search-box .btn-buscar { background: #1976D2; color: white; border: none; padding: 0 12px; height: 44px; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: bold; flex-shrink: 0; }
+        .search-box { background: #E3F2FD; padding: 10px; display: flex; gap: 6px; width: 100%; box-sizing: border-box; align-items: center; overflow: hidden; }
+        .search-box input { width: 55px; flex-shrink: 0; padding: 12px 4px; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; font-weight: bold; text-align: center; }
+        .search-box .btn-buscar { background: #1976D2; color: white; border: none; padding: 0 10px; height: 44px; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: bold; flex-shrink: 0; }
         .spacer { flex-grow: 1; } 
         
-        .icon-group { display: flex; gap: 20px; align-items: center; margin-left: 10px; }
-        .search-box .btn-icon { background: transparent; color: #333; border: none; padding: 0; cursor: pointer; font-size: 30px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.1s; }
+        /* BOTÕES MAIS COMPACTOS PARA CABER A CÂMERA */
+        .icon-group { display: flex; gap: 8px; align-items: center; margin-left: 5px; }
+        .search-box .btn-icon { background: transparent; color: #333; border: none; padding: 0; cursor: pointer; font-size: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.1s; }
         .search-box .btn-icon:active { transform: scale(0.9); }
         
         .filters { padding: 10px 15px; display: flex; gap: 10px; overflow-x: auto; white-space: nowrap; border-bottom: 1px solid #eee; }
         .chip { background: #e0e0e0; color: #333; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 14px; font-weight: bold; border: 2px solid transparent; }
         .chip.active { border: 2px solid #333; opacity: 0.9; }
         
-        /* GRID DE PRODUTOS RESPONSIVO */
         .list { padding: 10px; margin: 0; list-style: none; overflow-y: auto; flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 10px; align-content: start; }
         .item { display: flex; align-items: center; padding: 15px; border: 1px solid #eee; border-radius: 8px; cursor: pointer; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         .item:hover { background: #f9f9f9; }
@@ -104,9 +100,7 @@
         .bg-yellow { background: #fbc02d; color: #333; }
         .bg-green { background: #388E3C; }
 
-        /* ============================================================
-           GABARITO BLINDADO V1.0.1: 480x320 pixels (exatos 60x40mm) 
-           ============================================================ */
+        /* GABARITO BLINDADO */
         #area-impressao-visual {
             position: fixed; top: 0; left: -3000px;
             background: white; color: black; font-family: 'Arial', sans-serif;
@@ -132,7 +126,7 @@
     <img src="icon.png" class="splash-icon" alt="Alô Etiquetas" onerror="this.style.display='none'; document.getElementById('splash-emoji').style.display='block';">
     <div id="splash-emoji" class="splash-emoji">🏷️</div>
     <div class="splash-title">Alô Etiquetas</div>
-    <div class="splash-version">v1.0.1</div>
+    <div class="splash-version">v1.0.2</div>
 </div>
 
 <div id="area-impressao-visual">
@@ -248,7 +242,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô Etiquetas - v1.0.1</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô Etiquetas - v1.0.2</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
@@ -675,7 +669,8 @@
                 controleQR: false, 
                 senhaAdmin: "", 
                 ultimoWipe: 0,
-                gapEtiquetaPx: 24
+                gapEtiquetaPx: 24,
+                ultimaModificacaoLocal: 0
             },
             historico: []
         };
@@ -688,7 +683,7 @@
             if(typeof local.configs.controleQR === 'undefined') local.configs.controleQR = false;
             if(typeof local.configs.senhaAdmin === 'undefined') local.configs.senhaAdmin = "";
             if(typeof local.configs.ultimoWipe === 'undefined') local.configs.ultimoWipe = 0;
-            
+            if(typeof local.configs.ultimaModificacaoLocal === 'undefined') local.configs.ultimaModificacaoLocal = 0;
             if(typeof local.configs.gapEtiquetaPx === 'undefined') local.configs.gapEtiquetaPx = 24;
             
             local.produtos.forEach(p => { 
@@ -770,8 +765,10 @@
         db.configs.controleQR = document.getElementById('cfgQRGlobal').checked;
         db.configs.gapEtiquetaPx = parseInt(document.getElementById('cfgGapPx').value);
         
+        db.configs.ultimaModificacaoLocal = Date.now();
         salvarBancoLocal();
         document.getElementById('btnScannerQRHome').style.display = db.configs.controleQR ? 'flex' : 'none';
+        sincronizarComNuvemSilencioso();
     }
 
     function abrirModalAvancado() { 
@@ -789,6 +786,7 @@
     async function salvarUrlESincronizar(event) { 
         const url = document.getElementById('configUrlAppScript').value.trim(); 
         db.configs.urlAppScript = url; 
+        db.configs.ultimaModificacaoLocal = Date.now();
         salvarBancoLocal(); 
         
         if(!url) return alert("A URL do Google Apps Script está vazia!"); 
@@ -808,6 +806,7 @@
         if(document.getElementById('inputConfirmarExclusao').value === "quero excluir todo o histórico") { 
             db.historico = []; 
             db.configs.ultimoWipe = Date.now();
+            db.configs.ultimaModificacaoLocal = Date.now();
             salvarBancoLocal(); 
             sincronizarComNuvemSilencioso(); 
             alert("Apagado!"); 
@@ -822,6 +821,7 @@
             if(prompt("Digite: quero excluir todo o histórico") === "quero excluir todo o histórico") { 
                 db.historico = []; 
                 db.configs.ultimoWipe = Date.now();
+                db.configs.ultimaModificacaoLocal = Date.now();
                 salvarBancoLocal(); 
                 sincronizarComNuvemSilencioso(); 
                 voltarEstoqueMain(); 
@@ -889,7 +889,7 @@
         reader.readAsText(file); 
     }
 
-    // A MÁGICA SILENCIOSA DA NUVEM (CRUZAMENTO DE DADOS)
+    // A MÁGICA DA NUVEM COM CARIMBO DE TEMPO
     async function sincronizarComNuvemSilencioso() {
         const ind = document.getElementById('indicadorConexao');
         if(!db.configs.urlAppScript) { 
@@ -917,44 +917,44 @@
                 }
 
                 let mudouLocalmente = false;
-                let mapaNuvem = {};
                 
+                // Mescla o Histórico (Cronológico ID por ID)
+                let mapaNuvem = {};
                 if(dadosNuvem.historico) {
                     dadosNuvem.historico.forEach(h => mapaNuvem[h.id] = h);
                 }
-
-                // Cruzamento cronológico
                 db.historico.forEach(hLocal => {
                     if(mapaNuvem[hLocal.id]) {
-                        // Se o meu tem baixa e a nuvem não, o meu sobrepõe
                         if(hLocal.baixado && !mapaNuvem[hLocal.id].baixado) {
                             mapaNuvem[hLocal.id] = hLocal;
                             mudouLocalmente = true;
                         }
                     } else {
-                        // Item novo que criei aqui
                         mapaNuvem[hLocal.id] = hLocal;
                         mudouLocalmente = true;
                     }
                 });
-                
                 db.historico = Object.values(mapaNuvem);
 
-                // Cadastros
-                let mapaProd = {};
-                dadosNuvem.produtos.forEach(p => mapaProd[p.codigo] = p);
-                db.produtos.forEach(p => { 
-                    if(!mapaProd[p.codigo]) { mapaProd[p.codigo] = p; mudouLocalmente = true; } 
-                });
-                db.produtos = Object.values(mapaProd);
+                // Mescla os Cadastros (Carimbo de Tempo)
+                let tsLocal = db.configs.ultimaModificacaoLocal || 0;
+                let tsNuvem = (dadosNuvem.configs && dadosNuvem.configs.ultimaModificacaoLocal) ? dadosNuvem.configs.ultimaModificacaoLocal : 0;
 
-                db.categorias = dadosNuvem.categorias;
-                db.operadores = dadosNuvem.operadores;
+                if (tsNuvem > tsLocal) {
+                    // A nuvem foi editada por último (em outro aparelho)
+                    db.produtos = dadosNuvem.produtos || [];
+                    db.categorias = dadosNuvem.categorias || [];
+                    db.operadores = dadosNuvem.operadores || [];
+                    db.configs.ultimaModificacaoLocal = tsNuvem;
+                } else if (tsLocal > tsNuvem) {
+                    // Nós editamos por último! Forçamos a nuvem a aceitar nossa versão.
+                    mudouLocalmente = true;
+                }
 
                 salvarBancoLocal();
                 ind.innerText = '🟢';
                 
-                // Se eu gerei dados novos, empurro pra nuvem
+                // Se mudou algo daqui, envia o pacotão atualizado pra nuvem
                 if(mudouLocalmente) {
                     let pacote = { action: 'salvar_banco', dados: db };
                     await fetch(db.configs.urlAppScript, { method: 'POST', body: JSON.stringify(pacote) });
@@ -1080,11 +1080,11 @@
             arr[idx+1] = temp; 
         } 
         
+        db.configs.ultimaModificacaoLocal = Date.now();
         salvarBancoLocal(); 
         abrirGerenciar(tipo); 
-        if(tipo === 'categorias') { 
-            renderizarFiltros(); 
-        } 
+        if(tipo === 'categorias') renderizarFiltros(); 
+        sincronizarComNuvemSilencioso();
     }
     
     function duplicarProduto(idx) { 
@@ -1093,8 +1093,10 @@
         novoProd.codigo = maxCod > 0 ? maxCod + 1 : 1; 
         
         db.produtos.push(novoProd); 
+        db.configs.ultimaModificacaoLocal = Date.now();
         salvarBancoLocal(); 
         abrirGerenciar('produtos'); 
+        sincronizarComNuvemSilencioso();
     }
     
     function abrirGerenciar(tipo) { 
@@ -1168,9 +1170,11 @@
         if(tipo === 'categorias') db.categorias = db.categorias.filter(i => i.nome !== id); 
         if(tipo === 'operadores') db.operadores = db.operadores.filter(i => i.nome !== id); 
         
+        db.configs.ultimaModificacaoLocal = Date.now();
         salvarBancoLocal(); 
         iniciar(); 
         abrirGerenciar(tipo); 
+        sincronizarComNuvemSilencioso();
     }
 
     function checarCodigoDisponivel() {
@@ -1278,9 +1282,11 @@
             db.produtos.push(obj); 
         } 
         
+        db.configs.ultimaModificacaoLocal = Date.now();
         salvarBancoLocal(); 
         fecharModal('modalFormProduto'); 
         abrirGerenciar('produtos'); 
+        sincronizarComNuvemSilencioso();
     }
     
     function abrirFormCategoria(idx) { 
@@ -1323,9 +1329,11 @@
             db.categorias.push({ nome: nm, cor: cor, corTexto: ct }); 
         } 
         
+        db.configs.ultimaModificacaoLocal = Date.now();
         salvarBancoLocal(); 
         fecharModal('modalFormCategoria'); 
         abrirGerenciar('categorias'); 
+        sincronizarComNuvemSilencioso();
     }
     
     function abrirFormOperador(idx) { 
@@ -1365,9 +1373,11 @@
             db.operadores.push({ nome: nm, senha: s }); 
         } 
         
+        db.configs.ultimaModificacaoLocal = Date.now();
         salvarBancoLocal(); 
         fecharModal('modalFormOperador'); 
         abrirGerenciar('operadores'); 
+        sincronizarComNuvemSilencioso();
     }
     
     function abrirEstoque() { 
@@ -2211,6 +2221,7 @@
             if(confirm("✅ ITEM IDENTIFICADO: " + item.produto + "\n\nDeseja confirmar a baixa desse item no estoque?")) {
                 item.baixado = true; 
                 item.dataBaixa = new Date().toLocaleString('pt-BR'); 
+                db.configs.ultimaModificacaoLocal = Date.now();
                 salvarBancoLocal(); 
                 alert("Baixa confirmada!"); 
                 
