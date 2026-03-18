@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô Etiquetas v1.0.4</title>
+    <title>Alô Etiquetas v1.0.5</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -72,8 +72,11 @@
         .form-group { margin-bottom: 15px; position: relative; }
         .form-group label { display: block; margin-bottom: 5px; color: #555; font-weight: bold; font-size: 14px; }
         .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; }
-        /* CORREÇÃO PARA O INPUT DE COR APARECER CORRETAMENTE */
-        .form-group input[type="color"] { padding: 2px; height: 44px; cursor: pointer; }
+        
+        /* BOTÕES DE COR ALONGADOS E PREENCHIDOS */
+        .form-group input[type="color"] { padding: 0; border: 1px solid #ccc; height: 44px; width: 100%; border-radius: 8px; cursor: pointer; overflow: hidden; }
+        .form-group input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+        .form-group input[type="color"]::-webkit-color-swatch { border: none; border-radius: 8px; }
         
         .qtd-control { display: flex; align-items: center; gap: 15px; }
         .qtd-btn { background: #e0e0e0; border: none; width: 35px; height: 35px; border-radius: 50%; font-size: 20px; cursor: pointer; }
@@ -127,53 +130,44 @@
     <img src="icon.png" class="splash-icon" alt="Alô Etiquetas" onerror="this.style.display='none'; document.getElementById('splash-emoji').style.display='block';">
     <div id="splash-emoji" class="splash-emoji">🏷️</div>
     <div class="splash-title">Alô Etiquetas</div>
-    <div class="splash-version">v1.0.4</div>
+    <div class="splash-version">v1.0.5</div>
 </div>
 
 <div id="area-impressao-visual">
     <div style="border-bottom: 3px solid black; padding-bottom: 6px; width: 100%; text-align: center;">
         <div id="viz-nome-produto" class="item-nome">PRODUTO</div>
     </div>
-    
     <div style="flex: 1; padding-top: 8px; display: flex; width: 100%;">
         <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; text-align: left; justify-content: center; overflow: hidden;">
             <div style="font-size: 20px; font-weight: 900; margin-bottom: 6px;">
                 <span id="viz-label-acao">AÇÃO:</span> <span id="viz-data-man">00/00/0000 00:00</span>
             </div>
-            
             <div id="viz-linha-marcalote" style="display: none; font-size: 16px; font-weight: bold; width: 100%; margin-bottom: 4px; white-space: nowrap; overflow: hidden;">
                 <span id="viz-marca-container" style="display:none;">MARCA: <span id="viz-marca">---</span></span>
                 <span id="viz-lote-container" style="display:none; margin-left: 6px;"></span>
             </div>
-            
             <div id="viz-linha-pesopreco" style="display: none; font-size: 16px; font-weight: bold; width: 100%; margin-bottom: 4px; white-space: nowrap; overflow: hidden;">
                 <span id="viz-peso-container" style="display:none;">PESO: <span id="viz-peso">0g</span></span>
                 <span id="viz-preco-container" style="display:none; margin-left: 6px;"></span>
             </div>
-            
             <div id="viz-box-total-container" style="display: none; font-size: 20px; font-weight: 900; margin-top: 4px;">
                 TOTAL: R$ <span id="viz-preco">0,00</span>
             </div>
         </div>
-
         <div id="viz-qrcode-container" style="display: none; flex-direction: column; align-items: center; justify-content: center; padding-left: 10px; flex-shrink: 0;">
             <div id="viz-qrcode"></div>
             <div id="viz-sku-text" style="font-size: 16px; font-weight: 900; margin-top: 2px; line-height: 1;"></div>
         </div>
     </div>
-    
     <div style="width: 100%; padding-top: 6px; text-align: center;">
         <div id="viz-container-validade" style="margin-bottom: 6px; line-height: 1.1; text-align: center; width: 100%;">
             <span class="val-label" style="font-size: 28px; font-weight: 900;">VAL:</span> 
             <span class="val-data" id="viz-data-val" style="font-size: 28px; font-weight: 900;">00/00/0000</span>
         </div>
-        
         <div id="viz-linha-armazenamento" style="margin-bottom: 8px; display: none; line-height: 1.0; text-align: center; width: 100%;">
             <span id="viz-armazenamento" style="font-size: 18px; font-weight: 900; text-transform: uppercase; border: 2px solid black; border-radius: 4px; padding: 2px 8px; display: inline-block;">MANTER CONGELADO</span>
         </div>
-        
         <div style="border-top: 2px solid black; width: 100%; margin-bottom: 4px;"></div>
-        
         <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
             <div id="viz-estabelecimento" style="font-weight: bold; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 50%; text-align: left;">Estabelecimento</div>
             <div style="font-size: 16px; text-align: right;">Op: <span id="viz-operador" style="font-weight: 900;">Nome</span></div>
@@ -201,7 +195,7 @@
                 <button class="btn-icon" onclick="abrirEstoqueAtivo()" title="Estoque Ativo (Com QR)">📈</button>
                 <button class="btn-icon" onclick="abrirPainelValidade()" title="Filtro de Validade">⏳</button>
                 <button class="btn-icon" onclick="abrirHistoricoDiario()" title="Movimentação Diária">📅</button>
-                <button class="btn-icon" id="btnScannerQRHome" onclick="abrirScannerQR()" style="display: none; font-size: 32px;">📷</button>
+                <button class="btn-icon" id="btnScannerQRHome" onclick="abrirScannerQR()" style="display: none; font-size: 35px; margin-left: 10px; line-height: 1; padding: 0;">📷</button>
             </div>
             <div class="spacer"></div>
         </div>
@@ -240,7 +234,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô Etiquetas - v1.0.4</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô Etiquetas - v1.0.5</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
@@ -539,11 +533,11 @@
             <input type="text" id="catNome">
         </div>
         <div style="display: flex; gap: 10px;">
-            <div class="form-group">
+            <div class="form-group" style="flex: 1;">
                 <label>Fundo:</label>
                 <input type="color" id="catCor" value="#1976D2">
             </div>
-            <div class="form-group">
+            <div class="form-group" style="flex: 1;">
                 <label>Texto:</label>
                 <input type="color" id="catCorTexto" value="#ffffff">
             </div>
@@ -1126,10 +1120,11 @@
             btn.onclick = () => abrirFormCategoria(-1); 
             
             db.categorias.forEach((c,idx) => { 
+                // AQUI FOI AJUSTADO PARA FICAR COMO ETIQUETA COLORIDA NA LISTA
                 lista.innerHTML += `
                     <div class="gerenciar-item">
                         <div class="gerenciar-info">
-                            <strong>${c.nome}</strong>
+                            <span style="background:${c.cor}; color:${c.corTexto || '#000'}; padding: 6px 12px; border-radius: 20px; font-weight: bold; font-size: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">${c.nome}</span>
                         </div>
                         <div class="gerenciar-actions">
                             <button onclick="moverItem('categorias',${idx},'cima')">🔼</button>
