@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô Etiquetas v1.0.5</title>
+    <title>Alô Etiquetas v1.0.6</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -37,6 +37,7 @@
         
         .modern-select { height: 32px; border-radius: 20px !important; border: 1px solid rgba(255,255,255,0.4) !important; background: rgba(255,255,255,0.1) !important; color: white !important; font-size: 14px; font-weight: bold; width: 100%; max-width: 140px; padding: 0 12px !important; outline: none; cursor: pointer; }
         .modern-select option { color: #333; background: #fff; }
+        .modal-select { height: 38px; border-radius: 8px !important; border: 1px solid #ccc !important; background: #fff !important; color: #333 !important; padding: 0 12px !important; width: 100%; max-width: none; font-size: 14px; font-weight: bold; outline: none; margin-bottom: 10px; }
         
         .status-conexao { font-size: 14px; cursor: help; background: rgba(0,0,0,0.2); padding: 4px 8px; border-radius: 12px; }
         .header-actions { display: flex; gap: 15px; align-items: center; }
@@ -54,6 +55,7 @@
         .filters { padding: 10px 15px; display: flex; gap: 10px; overflow-x: auto; white-space: nowrap; border-bottom: 1px solid #eee; }
         .chip { background: #e0e0e0; color: #333; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 14px; font-weight: bold; border: 2px solid transparent; }
         .chip.active { border: 2px solid #333; opacity: 0.9; }
+        .chip-diario { padding: 6px 12px; font-size: 13px; }
         
         .list { padding: 10px; margin: 0; list-style: none; overflow-y: auto; flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 10px; align-content: start; }
         .item { display: flex; align-items: center; padding: 15px; border: 1px solid #eee; border-radius: 8px; cursor: pointer; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
@@ -73,7 +75,6 @@
         .form-group label { display: block; margin-bottom: 5px; color: #555; font-weight: bold; font-size: 14px; }
         .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; }
         
-        /* BOTÕES DE COR ALONGADOS E PREENCHIDOS */
         .form-group input[type="color"] { padding: 0; border: 1px solid #ccc; height: 44px; width: 100%; border-radius: 8px; cursor: pointer; overflow: hidden; }
         .form-group input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
         .form-group input[type="color"]::-webkit-color-swatch { border: none; border-radius: 8px; }
@@ -130,7 +131,7 @@
     <img src="icon.png" class="splash-icon" alt="Alô Etiquetas" onerror="this.style.display='none'; document.getElementById('splash-emoji').style.display='block';">
     <div id="splash-emoji" class="splash-emoji">🏷️</div>
     <div class="splash-title">Alô Etiquetas</div>
-    <div class="splash-version">v1.0.5</div>
+    <div class="splash-version">v1.0.6</div>
 </div>
 
 <div id="area-impressao-visual">
@@ -212,6 +213,8 @@
         <div style="margin-bottom: 15px; font-size: 13px; color: #555; background: #e8f5e9; padding: 10px; border-radius: 5px; border-left: 4px solid #4CAF50;">
             Acompanhe o saldo de todos os itens com controle por <b>QR Code</b>. Clique para gerenciar.
         </div>
+        <select id="filtroCatEstoqueAtivo" class="modal-select" onchange="abrirEstoqueAtivo()">
+            </select>
         <ul class="list" id="listaEstoqueAtivo" style="max-height: 50vh; overflow-y: auto; border: 1px solid #eee; padding: 0; border-radius:5px; margin-bottom: 15px;"></ul>
         <div class="modal-actions">
             <button class="btn-cancel" onclick="fecharModal('modalEstoqueAtivo')">Fechar</button>
@@ -234,7 +237,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô Etiquetas - v1.0.5</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô Etiquetas - v1.0.6</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
@@ -258,6 +261,19 @@
 <div class="modal-overlay" id="modalHistoricoDiario">
     <div class="modal" style="max-height: 90vh; overflow-y: auto;">
         <div class="modal-title" style="color:#1976D2; border-color:#1976D2;">📅 Movimentação Diária</div>
+        <div style="display:flex; gap:5px; margin-bottom:10px; overflow-x:auto; padding-bottom:5px;">
+            <button class="chip chip-diario" id="btnFiltroTodos" onclick="mudarFiltroDiario('todos')">Tudo</button>
+            <button class="chip chip-diario" id="btnFiltroHoje" onclick="mudarFiltroDiario('hoje')">Hoje</button>
+            <button class="chip chip-diario" id="btnFiltro7" onclick="mudarFiltroDiario('7')">7 Dias</button>
+            <button class="chip chip-diario" id="btnFiltro15" onclick="mudarFiltroDiario('15')">15 Dias</button>
+            <button class="chip chip-diario" id="btnFiltro30" onclick="mudarFiltroDiario('30')">30 Dias</button>
+            <button class="chip chip-diario" id="btnFiltroCustom" onclick="mudarFiltroDiario('custom')">Personalizado</button>
+        </div>
+        <div id="filtroDataCustom" style="display:none; gap:5px; margin-bottom:15px; background: #f5f5f5; padding: 10px; border-radius: 8px;">
+            <input type="date" id="dataInicioMov" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px; flex:1;"> 
+            <input type="date" id="dataFimMov" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px; flex:1;">
+            <button onclick="mudarFiltroDiario('aplicarCustom')" style="background: #1976D2; color: white; border: none; padding: 0 15px; border-radius: 4px; font-weight: bold;">OK</button>
+        </div>
         <div id="listaHistoricoDiario"></div>
         <div class="modal-actions">
             <button class="btn-cancel" onclick="fecharModal('modalHistoricoDiario')">Fechar</button>
@@ -455,6 +471,104 @@
     </div>
 </div>
 
+<div class="modal-overlay" id="modalImprimir">
+    <div class="modal">
+        <div class="modal-title" id="imprimirNomeProduto" style="font-size:18px;">Produto</div>
+        <input type="hidden" id="imprimirCodigoProduto">
+        <div style="display:flex; gap:10px;">
+            <div class="form-group" style="flex:0.6;">
+                <label>Ação:</label>
+                <select id="imprimirAcao">
+                    <option value="Manipulado:">Manipulado</option>
+                    <option value="Aberto:">Aberto</option>
+                    <option value="Congelado:">Congelado</option>
+                </select>
+            </div>
+            <div class="form-group" style="flex:0.4;">
+                <label>Qtd:</label>
+                <div class="qtd-control">
+                    <button class="qtd-btn" onclick="mudarQtd(-1)">-</button>
+                    <span id="imprimirQtd" style="font-size: 18px; font-weight: bold;">1</span>
+                    <button class="qtd-btn" onclick="mudarQtd(1)">+</button>
+                </div>
+            </div>
+        </div>
+        <div style="display:flex; gap:10px;">
+            <div class="form-group" style="flex:1;" id="boxMarcaSelect">
+                <label>Marca:</label>
+                <select id="imprimirMarca" onchange="toggleLote()"></select>
+            </div>
+            <div class="form-group" style="flex:1; display:none;" id="boxLote">
+                <label>Lote:</label>
+                <input type="text" id="imprimirLote">
+            </div>
+        </div>
+        <div style="display:flex; gap:10px;">
+            <div class="form-group" style="flex:1;">
+                <label>Peso (g):</label>
+                <input type="number" id="imprimirPeso" placeholder="Opcional" oninput="calcularTotalPagar()">
+            </div>
+            <div class="form-group" style="flex:1;">
+                <label>Preço (R$):</label>
+                <input type="number" id="imprimirPreco" step="0.01" oninput="calcularTotalPagar()">
+            </div>
+        </div>
+        <div id="boxCalculoTotal" style="background:#e8f5e9; padding:10px; border-radius:5px; text-align:center; font-weight:bold; color:#2e7d32; margin-bottom:15px; display:none;">
+            Total Calc: R$ <span id="imprimirCalculo">0,00</span>
+        </div>
+        <div class="form-group">
+            <label>Validade Final:</label>
+            <input type="date" id="imprimirValidade">
+        </div>
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="fecharModal('modalImprimir')">Cancelar</button>
+            <button class="btn-action" id="btnProcessarImpressao" onclick="processarImpressao()">🖨️ IMPRIMIR</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="modalImprimirPers">
+    <div class="modal">
+        <div class="modal-title" style="color: #1976D2;">Etiqueta Personalizada</div>
+        <div class="form-group">
+            <label>Nome do Produto:</label>
+            <input type="text" id="impPersNome" placeholder="Digite o nome do item avulso...">
+        </div>
+        <div style="display:flex; gap:10px;">
+            <div class="form-group" style="flex:0.6;">
+                <label>Ação:</label>
+                <input type="text" id="impPersAcao" value="Manipulado:" placeholder="Ex: Manipulado:">
+            </div>
+            <div class="form-group" style="flex:0.4;">
+                <label>Qtd:</label>
+                <div class="qtd-control">
+                    <button class="qtd-btn" onclick="mudarQtdPers(-1)">-</button>
+                    <span id="impPersQtd" style="font-size: 18px; font-weight: bold;">1</span>
+                    <button class="qtd-btn" onclick="mudarQtdPers(1)">+</button>
+                </div>
+            </div>
+        </div>
+        <div style="display:flex; gap:10px;">
+            <div class="form-group" style="flex:1;">
+                <label>Peso (g):</label>
+                <input type="number" id="impPersPeso" placeholder="Opcional">
+            </div>
+            <div class="form-group" style="flex:1;">
+                <label>Preço/Total (R$):</label>
+                <input type="number" id="impPersPreco" step="0.01" placeholder="Opcional">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Validade Final:</label>
+            <input type="date" id="impPersValidade">
+        </div>
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="fecharModal('modalImprimirPers')">Cancelar</button>
+            <button class="btn-action" id="btnPersImprimir" onclick="processarImpressaoPers()">🖨️ IMPRIMIR</button>
+        </div>
+    </div>
+</div>
+
 <div class="modal-overlay" id="modalFormProduto">
     <div class="modal">
         <div class="modal-title">Produto</div>
@@ -568,66 +682,11 @@
     </div>
 </div>
 
-<div class="modal-overlay" id="modalImprimir">
-    <div class="modal">
-        <div class="modal-title" id="imprimirNomeProduto" style="font-size:18px;">Produto</div>
-        <input type="hidden" id="imprimirCodigoProduto">
-        <div style="display:flex; gap:10px;">
-            <div class="form-group" style="flex:0.6;">
-                <label>Ação:</label>
-                <select id="imprimirAcao">
-                    <option value="Manipulado:">Manipulado</option>
-                    <option value="Aberto:">Aberto</option>
-                    <option value="Congelado:">Congelado</option>
-                </select>
-            </div>
-            <div class="form-group" style="flex:0.4;">
-                <label>Qtd:</label>
-                <div class="qtd-control">
-                    <button class="qtd-btn" onclick="mudarQtd(-1)">-</button>
-                    <span id="imprimirQtd" style="font-size: 18px; font-weight: bold;">1</span>
-                    <button class="qtd-btn" onclick="mudarQtd(1)">+</button>
-                </div>
-            </div>
-        </div>
-        <div style="display:flex; gap:10px;">
-            <div class="form-group" style="flex:1;" id="boxMarcaSelect">
-                <label>Marca:</label>
-                <select id="imprimirMarca" onchange="toggleLote()"></select>
-            </div>
-            <div class="form-group" style="flex:1; display:none;" id="boxLote">
-                <label>Lote:</label>
-                <input type="text" id="imprimirLote">
-            </div>
-        </div>
-        <div style="display:flex; gap:10px;">
-            <div class="form-group" style="flex:1;">
-                <label>Peso (g):</label>
-                <input type="number" id="imprimirPeso" placeholder="Opcional" oninput="calcularTotalPagar()">
-            </div>
-            <div class="form-group" style="flex:1;">
-                <label>Preço (R$):</label>
-                <input type="number" id="imprimirPreco" step="0.01" oninput="calcularTotalPagar()">
-            </div>
-        </div>
-        <div id="boxCalculoTotal" style="background:#e8f5e9; padding:10px; border-radius:5px; text-align:center; font-weight:bold; color:#2e7d32; margin-bottom:15px; display:none;">
-            Total Calc: R$ <span id="imprimirCalculo">0,00</span>
-        </div>
-        <div class="form-group">
-            <label>Validade Final:</label>
-            <input type="date" id="imprimirValidade">
-        </div>
-        <div class="modal-actions">
-            <button class="btn-cancel" onclick="fecharModal('modalImprimir')">Cancelar</button>
-            <button class="btn-action" id="btnProcessarImpressao" onclick="processarImpressao()">🖨️ IMPRIMIR</button>
-        </div>
-    </div>
-</div>
-
 <script>
     let db = carregarBanco();
     let categoriaAtual = null;
     let quantidadeAtual = 1;
+    let qtdPers = 1;
     let operadorAnteriorSelect = null;
     let html5QrCode = null; 
     let origemDetalhesEstoque = 'estoque';
@@ -636,6 +695,7 @@
     
     let isSyncing = false;
     let sortConfig = { campo: 'validade', dir: 'asc' }; 
+    let filtroDiarioAtual = 'todos';
     
     const audioBeep = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
     const audioError = new Audio("https://actions.google.com/sounds/v1/alarms/bugle_tune.ogg");
@@ -1043,6 +1103,19 @@
                     <div class="print-icon">🖨️</div>
                 </li>`; 
         }); 
+
+        // ETIQUETA PERSONALIZADA NO FIM DA LISTA APENAS NO FILTRO 'TODOS'
+        if (categoriaAtual === null) {
+            lista.innerHTML += `
+                <li class="item" style="border: 2px dashed #1976D2; background: #E3F2FD;" onclick="abrirModalImprimirPersonalizada()">
+                    <div class="item-avatar" style="background: #1976D2; color: white;">*</div>
+                    <div class="item-info">
+                        <div class="item-title" style="color: #1976D2;">Etiqueta Personalizada</div>
+                        <div class="item-subtitle">Imprimir item avulso (sem QR)</div>
+                    </div>
+                    <div class="print-icon" style="font-size:20px;">🖨️</div>
+                </li>`;
+        }
     }
     
     function buscarPorCodigo() { 
@@ -1120,7 +1193,6 @@
             btn.onclick = () => abrirFormCategoria(-1); 
             
             db.categorias.forEach((c,idx) => { 
-                // AQUI FOI AJUSTADO PARA FICAR COMO ETIQUETA COLORIDA NA LISTA
                 lista.innerHTML += `
                     <div class="gerenciar-item">
                         <div class="gerenciar-info">
@@ -1401,20 +1473,71 @@
         document.getElementById('modalEstoque').style.display = 'flex'; 
     }
 
+    function mudarFiltroDiario(tipo) {
+        filtroDiarioAtual = tipo;
+        if(tipo === 'custom') {
+            document.getElementById('filtroDataCustom').style.display = 'flex';
+        } else {
+            document.getElementById('filtroDataCustom').style.display = 'none';
+            abrirHistoricoDiario();
+        }
+    }
+
     function abrirHistoricoDiario() {
         fecharModal('modalPainelUnificado');
         const lista = document.getElementById('listaHistoricoDiario');
         lista.innerHTML = '';
         
+        document.querySelectorAll('.chip-diario').forEach(b => b.classList.remove('active'));
+        if(filtroDiarioAtual !== 'aplicarCustom') {
+            document.getElementById('btnFiltro' + filtroDiarioAtual.charAt(0).toUpperCase() + filtroDiarioAtual.slice(1)).classList.add('active');
+        } else {
+            document.getElementById('btnFiltroCustom').classList.add('active');
+        }
+
         let dias = {};
+        let dtHoje = new Date();
+        dtHoje.setHours(0,0,0,0);
+
+        let dataCustomIni = null;
+        let dataCustomFim = null;
+        if(filtroDiarioAtual === 'aplicarCustom') {
+            let vIni = document.getElementById('dataInicioMov').value;
+            let vFim = document.getElementById('dataFimMov').value;
+            if(vIni) { let p = vIni.split('-'); dataCustomIni = new Date(p[0], p[1]-1, p[2]); }
+            if(vFim) { let p = vFim.split('-'); dataCustomFim = new Date(p[0], p[1]-1, p[2], 23, 59, 59); }
+        }
         
         db.historico.forEach(r => {
-            if(r.dataManipulado) {
+            let dEntradaObj = parseDataHoraBR(r.dataManipulado);
+            let dSaidaObj = r.baixado && r.dataBaixa ? parseDataHoraBR(r.dataBaixa) : null;
+
+            const verificaData = (dObj) => {
+                if(!dObj || isNaN(dObj.getTime())) return false;
+                let dtSemHora = new Date(dObj.getFullYear(), dObj.getMonth(), dObj.getDate());
+                let dif = (dtHoje - dtSemHora) / (1000*60*60*24);
+                
+                if(filtroDiarioAtual === 'hoje') return dif === 0;
+                if(filtroDiarioAtual === '7') return dif <= 7 && dif >= 0;
+                if(filtroDiarioAtual === '15') return dif <= 15 && dif >= 0;
+                if(filtroDiarioAtual === '30') return dif <= 30 && dif >= 0;
+                if(filtroDiarioAtual === 'aplicarCustom') {
+                    if(dataCustomIni && dtSemHora < dataCustomIni) return false;
+                    if(dataCustomFim && dtSemHora > dataCustomFim) return false;
+                    return true;
+                }
+                return true; 
+            };
+
+            let considerEntry = verificaData(dEntradaObj);
+            let considerSaida = verificaData(dSaidaObj);
+
+            if(considerEntry && r.dataManipulado) {
                 let dEntrada = r.dataManipulado.split(' ')[0];
                 if(!dias[dEntrada]) dias[dEntrada] = { entradas: [], saidas: [] };
                 dias[dEntrada].entradas.push(r);
             }
-            if(r.baixado && r.dataBaixa) {
+            if(considerSaida && r.baixado && r.dataBaixa) {
                 let dataBaixaStr = r.dataBaixa.replace(',', '').trim();
                 let dSaida = dataBaixaStr.split(' ')[0];
                 if(!dias[dSaida]) dias[dSaida] = { entradas: [], saidas: [] };
@@ -1429,7 +1552,7 @@
         });
 
         if(datasOrdenadas.length === 0) {
-            lista.innerHTML = '<div style="padding:20px; text-align:center; color:#666; font-weight:bold;">Nenhuma movimentação registrada no sistema ainda.</div>';
+            lista.innerHTML = '<div style="padding:20px; text-align:center; color:#666; font-weight:bold;">Nenhuma movimentação registrada no período selecionado.</div>';
         }
 
         datasOrdenadas.forEach(data => {
@@ -1541,10 +1664,19 @@
         const lista = document.getElementById('listaEstoqueAtivo');
         lista.innerHTML = '';
 
+        const filtroCat = document.getElementById('filtroCatEstoqueAtivo') ? document.getElementById('filtroCatEstoqueAtivo').value : "";
+        const selectCat = document.getElementById('filtroCatEstoqueAtivo');
+        let selHtml = '<option value="">Todas as Categorias</option>';
+        db.categorias.forEach(c => {
+            selHtml += `<option value="${c.nome}" ${filtroCat === c.nome ? 'selected' : ''}>${c.nome}</option>`;
+        });
+        selectCat.innerHTML = selHtml;
+
         let prodsQR = db.produtos.filter(p => p.usaQR);
+        if(filtroCat) prodsQR = prodsQR.filter(p => p.categoria === filtroCat);
 
         if (prodsQR.length === 0) {
-            lista.innerHTML = '<div style="padding:20px; text-align:center; color:#666; font-weight:bold;">Tudo limpo! Nenhum produto configurado para usar QR Code.</div>';
+            lista.innerHTML = '<div style="padding:20px; text-align:center; color:#666; font-weight:bold;">Tudo limpo ou sem itens nesta categoria.</div>';
         } else {
             let catMap = {};
             
@@ -1560,7 +1692,7 @@
             
             ativosQR.forEach(item => {
                 let p = db.produtos.find(prod => prod.nome === item.produto);
-                if(p && p.usaQR) {
+                if(p && p.usaQR && (!filtroCat || p.categoria === filtroCat)) {
                     let cat = p.categoria || 'Sem Categoria';
                     if(catMap[cat] && catMap[cat][item.produto]) {
                         catMap[cat][item.produto].contagem++;
@@ -1568,8 +1700,23 @@
                 }
             });
 
-            Object.keys(catMap).sort().forEach(cat => {
-                lista.innerHTML += `<div style="background:#1565C0; color:white; padding:6px 12px; font-weight:900; font-size:14px; margin-top:10px; border-radius: 4px;">📁 ${cat.toUpperCase()}</div>`;
+            let catOrder = db.categorias.map(c => c.nome);
+            catOrder.push('Sem Categoria');
+
+            let sortedCats = Object.keys(catMap).sort((a,b) => {
+                let idxA = catOrder.indexOf(a);
+                let idxB = catOrder.indexOf(b);
+                if(idxA === -1) idxA = 999;
+                if(idxB === -1) idxB = 999;
+                return idxA - idxB;
+            });
+
+            sortedCats.forEach(cat => {
+                let catObj = db.categorias.find(c => c.nome === cat);
+                let bg = catObj ? catObj.cor : '#1565C0';
+                let co = catObj ? catObj.corTexto : '#fff';
+
+                lista.innerHTML += `<div style="background:${bg}; color:${co}; padding:6px 12px; font-weight:900; font-size:14px; margin-top:10px; border-radius: 4px;">📁 ${cat.toUpperCase()}</div>`;
                 
                 let prods = Object.keys(catMap[cat]).sort((a,b) => catMap[cat][a].codigo - catMap[cat][b].codigo);
                 
@@ -1758,6 +1905,20 @@
         
         document.getElementById('modalImprimir').style.display = 'flex'; 
     }
+
+    function abrirModalImprimirPersonalizada() {
+        if(!document.getElementById('seletorOperador').value) {
+            return alert("Selecione um Operador(a)!"); 
+        }
+        qtdPers = 1;
+        document.getElementById('impPersQtd').innerText = qtdPers;
+        document.getElementById('impPersNome').value = '';
+        document.getElementById('impPersAcao').value = 'Manipulado:';
+        document.getElementById('impPersPeso').value = '';
+        document.getElementById('impPersPreco').value = '';
+        document.getElementById('impPersValidade').value = new Date().toISOString().split('T')[0];
+        document.getElementById('modalImprimirPers').style.display = 'flex';
+    }
     
     function toggleLote() { 
         const box = document.getElementById('boxLote'); 
@@ -1774,6 +1935,13 @@
             quantidadeAtual += v; 
             document.getElementById('imprimirQtd').innerText = quantidadeAtual; 
         } 
+    }
+
+    function mudarQtdPers(v) {
+        if(qtdPers + v > 0) {
+            qtdPers += v;
+            document.getElementById('impPersQtd').innerText = qtdPers;
+        }
     }
     
     function calcularTotalPagar() { 
@@ -1858,6 +2026,75 @@
             btn.disabled = false; 
         } else {
             await gerarRawBT(p, acaoImpressao, pesoInput, manBR, valBR, quantidadeAtual, op, est, precoInput, marca, lote, skusGerados, btn); 
+            fecharModal('modalImprimir');
+        }
+    }
+
+    async function processarImpressaoPers() {
+        const nome = document.getElementById('impPersNome').value.trim();
+        if(!nome) return alert("Digite o nome do produto!");
+        if(!document.getElementById('seletorOperador').value) return alert("Selecione um Operador(a)!");
+
+        const btn = document.getElementById('btnPersImprimir');
+        btn.innerText = "Aguarde..."; btn.disabled = true;
+
+        const acaoSelect = document.getElementById('impPersAcao').value.trim() || "Manipulado:";
+        const pesoInput = document.getElementById('impPersPeso').value.trim();
+        const precoInput = document.getElementById('impPersPreco').value.trim();
+        const op = document.getElementById('seletorOperador').value;
+        const est = db.configs.estabelecimento;
+
+        const valBruto = document.getElementById('impPersValidade').value;
+        let valBR = "00/00/0000";
+        if(valBruto) {
+            const valSplits = valBruto.split('-');
+            valBR = `${valSplits[2]}/${valSplits[1]}/${valSplits[0]}`;
+        }
+
+        const hj = new Date();
+        const manBR = `${String(hj.getDate()).padStart(2,'0')}/${String(hj.getMonth()+1).padStart(2,'0')}/${hj.getFullYear()} ${String(hj.getHours()).padStart(2,'0')}:${String(hj.getMinutes()).padStart(2,'0')}`;
+
+        let acaoImpressao = acaoSelect.toUpperCase().replace(" EM:", ":").replace(" EM", ":");
+
+        let skusGerados = [];
+        for(let i = 0; i < qtdPers; i++) {
+            let skuCode = `PERS${Date.now()}${i}`;
+            skusGerados.push(skuCode);
+            
+            let reg = {
+                id: Date.now() + i,
+                produto: nome + " (Avulso)",
+                sku: skuCode,
+                baixado: true,
+                acaoImpressao: acaoImpressao,
+                acaoSelect: acaoSelect,
+                peso: (pesoInput === "" ? "-" : `${pesoInput}g`),
+                marca: "",
+                lote: "",
+                preco: (precoInput === "" ? "" : formataDinheiro(precoInput)),
+                dataManipulado: manBR,
+                validadeFinal: valBR,
+                quantidade: 1,
+                operador: op
+            };
+            db.historico.push(reg);
+        }
+
+        db.configs.ultimaModificacaoLocal = Date.now();
+        salvarBancoLocal();
+        audioBeep.play().catch(()=>{});
+        sincronizarComNuvemSilencioso();
+
+        let pFalso = { nome: nome, armazenamento: 'ambiente', usaQR: false };
+
+        if(db.configs.modo === 'pdf') {
+            fecharModal('modalImprimirPers');
+            gerarPDF(pFalso, acaoImpressao, pesoInput, manBR, valBR, qtdPers, op, est, precoInput, "", "", skusGerados);
+            btn.innerText = "🖨️ IMPRIMIR"; btn.disabled = false;
+        } else {
+            await gerarRawBT(pFalso, acaoImpressao, pesoInput, manBR, valBR, qtdPers, op, est, precoInput, "", "", skusGerados, btn);
+            fecharModal('modalImprimirPers');
+            btn.innerText = "🖨️ IMPRIMIR"; btn.disabled = false;
         }
     }
 
@@ -2086,6 +2323,7 @@
         gab.style.height = dotsH + "px";
 
         let currentY = 0; 
+        let lastScrollY = window.scrollY; // SALVA A POSIÇÃO DA TELA ANTES DE SUBIR
         window.scrollTo(0, 0);
         
         for(let i = 0; i < qtd; i++) {
@@ -2125,9 +2363,9 @@
         
         btn.innerText = "🖨️ IMPRIMIR"; 
         btn.disabled = false; 
-        fecharModal('modalImprimir'); 
         
         gab.style.left = "-3000px";
+        window.scrollTo(0, lastScrollY); // DEVOLVE A TELA PRO LUGAR EXATO QUE ESTAVA
 
         window.location.href = intent;
     }
@@ -2209,8 +2447,18 @@
             setTimeout(() => { if(html5QrCode) html5QrCode.resume(); }, 2000); 
         } else if (item.baixado) { 
             audioError.play().catch(()=>{}); 
-            alert("⚠️ Este item já foi baixado em: " + item.dataBaixa); 
-            setTimeout(() => { if(html5QrCode) html5QrCode.resume(); }, 2000); 
+            // PERGUNTA SE DESEJA REINCLUIR
+            if(confirm("⚠️ Este item foi baixado em: " + item.dataBaixa + "\n\nDeseja REINCLUIR este item no estoque (desfazer a baixa)?")) {
+                item.baixado = false;
+                item.dataBaixa = null;
+                db.configs.ultimaModificacaoLocal = Date.now();
+                salvarBancoLocal();
+                sincronizarComNuvemSilencioso();
+                alert("✅ Item reincluído com sucesso!");
+                fecharLeitorQR();
+            } else {
+                setTimeout(() => { if(html5QrCode) html5QrCode.resume(); }, 1500); 
+            }
         } else { 
             audioBeep.play().catch(()=>{}); 
             if(confirm("✅ ITEM IDENTIFICADO: " + item.produto + "\n\nDeseja confirmar a baixa desse item no estoque?")) {
