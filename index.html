@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô_Etiqueta v1.0.23</title>
+    <title>Alô_Etiqueta v1.0.24</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -91,7 +91,7 @@
         .bg-green { background: #388E3C; }
 
         /* ============================================================
-           GABARITO BLINDADO V23: 480x320 pixels (exatos 60x40mm) 
+           GABARITO BLINDADO V24: 480x320 pixels (exatos 60x40mm) 
            RECUOS: Esquerda (4px), Direita 6mm (48px), Topo/Base 3mm (24px)
            ============================================================ */
         #area-impressao-visual {
@@ -121,7 +121,7 @@
     <img src="icon.png" class="splash-icon" alt="Alô Etiqueta" onerror="this.style.display='none'; document.getElementById('splash-emoji').style.display='block';">
     <div id="splash-emoji" class="splash-emoji">🏷️</div>
     <div class="splash-title">Alô_Etiqueta</div>
-    <div class="splash-version">v1.0.23</div>
+    <div class="splash-version">v1.0.24</div>
 </div>
 
 <div id="area-impressao-visual">
@@ -233,7 +233,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.23</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.24</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
@@ -1923,8 +1923,6 @@
         let dotsW = 480; 
         let dotsH = 320; 
         
-        let gapPx = db.configs.gapEtiquetaPx || 24; 
-        
         if(tam === "40x40") { 
             htmlWidth = 304; dotsW = 304; dotsH = 320; 
         } else if(tam === "50x50") { 
@@ -1958,7 +1956,8 @@
             
             if(i === 0) { 
                 finalCanvas.width = dotsW; 
-                finalCanvas.height = (dotsH * qtd) + (gapPx > 0 ? (gapPx * (qtd - 1)) : 0); 
+                // A altura total é apenas as etiquetas cravadas. O sensor resolve o resto.
+                finalCanvas.height = (dotsH * qtd); 
                 ctx.fillStyle = "#ffffff"; 
                 ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height); 
             }
@@ -1966,7 +1965,8 @@
             ctx.imageSmoothingEnabled = false;
             ctx.drawImage(c, 0, 0, htmlWidth, dotsH, 0, currentY, dotsW, dotsH); 
 
-            currentY += dotsH + gapPx;
+            // Pula exatamente o tamanho da etiqueta, sem adicionar nenhum gap virtual
+            currentY += dotsH;
         }
         
         const intent = "intent:" + finalCanvas.toDataURL("image/png") + "#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;";
