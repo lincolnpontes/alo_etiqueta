@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô Etiquetas v1.0.6</title>
+    <title>Alô Etiquetas v1.0.7</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -26,11 +26,11 @@
             transition: opacity 0.5s ease;
         }
         #splash-screen.hidden { opacity: 0; pointer-events: none; }
-        .splash-icon { width: 110px; height: 110px; object-fit: contain; margin-bottom: 15px; animation: pulse 1.5s infinite; }
-        .splash-emoji { font-size: 70px; margin-bottom: 15px; animation: pulse 1.5s infinite; display: none; }
+        /* TIREI A ANIMAÇÃO DO ÍCONE E AJUSTEI O TAMANHO */
+        .splash-icon { width: 130px; height: 130px; object-fit: contain; margin-bottom: 15px; }
+        .splash-emoji { font-size: 70px; margin-bottom: 15px; display: none; }
         .splash-title { font-size: 26px; font-weight: 900; margin-bottom: 5px; letter-spacing: 1px; }
         .splash-version { font-size: 14px; font-weight: bold; opacity: 0.8; background: rgba(21,101,192,0.1); padding: 4px 10px; border-radius: 12px; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
         .header { background: #1565C0; color: white; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
         .header-op-container { display: flex; align-items: center; gap: 8px; flex: 1; }
@@ -131,7 +131,7 @@
     <img src="icon.png" class="splash-icon" alt="Alô Etiquetas" onerror="this.style.display='none'; document.getElementById('splash-emoji').style.display='block';">
     <div id="splash-emoji" class="splash-emoji">🏷️</div>
     <div class="splash-title">Alô Etiquetas</div>
-    <div class="splash-version">v1.0.6</div>
+    <div class="splash-version">v1.0.7</div>
 </div>
 
 <div id="area-impressao-visual">
@@ -237,7 +237,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô Etiquetas - v1.0.6</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô Etiquetas - v1.0.7</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
@@ -298,7 +298,7 @@
                 </select>
             </div>
             <div class="form-group" style="flex:1;">
-                <label>Modo Impr.:</label>
+                <label>Modo de Impressão:</label>
                 <select id="cfgModo" onchange="salvarEtiquetaConfigs()">
                     <option value="pdf">PDF</option>
                     <option value="rawbt">RawBT</option>
@@ -329,6 +329,14 @@
                 <span class="slider"></span>
             </label>
         </div>
+        
+        <h3 style="font-size: 14px; margin-bottom:5px;">Ações Padrões</h3>
+        <div style="display:flex; gap:10px; margin-bottom: 10px;">
+            <input type="text" id="novaAcaoInput" placeholder="Ex: Fabricado:" style="flex:1; padding:8px; border:1px solid #ccc; border-radius:4px;">
+            <button class="btn-action" style="flex:none; padding: 0 15px;" onclick="adicionarAcaoCfg()">+ Add</button>
+        </div>
+        <div id="listaAcoesCfg" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom: 15px;"></div>
+
         <h3 style="font-size: 14px; margin-bottom:5px;">Rastreabilidade</h3>
         <div class="switch-container">
             <div style="display:flex; flex-direction:column;">
@@ -478,11 +486,7 @@
         <div style="display:flex; gap:10px;">
             <div class="form-group" style="flex:0.6;">
                 <label>Ação:</label>
-                <select id="imprimirAcao">
-                    <option value="Manipulado:">Manipulado</option>
-                    <option value="Aberto:">Aberto</option>
-                    <option value="Congelado:">Congelado</option>
-                </select>
+                <select id="imprimirAcao"></select>
             </div>
             <div class="form-group" style="flex:0.4;">
                 <label>Qtd:</label>
@@ -537,7 +541,7 @@
         <div style="display:flex; gap:10px;">
             <div class="form-group" style="flex:0.6;">
                 <label>Ação:</label>
-                <input type="text" id="impPersAcao" value="Manipulado:" placeholder="Ex: Manipulado:">
+                <select id="impPersAcao"></select>
             </div>
             <div class="form-group" style="flex:0.4;">
                 <label>Qtd:</label>
@@ -551,12 +555,15 @@
         <div style="display:flex; gap:10px;">
             <div class="form-group" style="flex:1;">
                 <label>Peso (g):</label>
-                <input type="number" id="impPersPeso" placeholder="Opcional">
+                <input type="number" id="impPersPeso" placeholder="Opcional" oninput="calcularTotalPagarPers()">
             </div>
             <div class="form-group" style="flex:1;">
-                <label>Preço/Total (R$):</label>
-                <input type="number" id="impPersPreco" step="0.01" placeholder="Opcional">
+                <label>Preço (R$):</label>
+                <input type="number" id="impPersPreco" step="0.01" placeholder="Opcional" oninput="calcularTotalPagarPers()">
             </div>
+        </div>
+        <div id="boxCalculoTotalPers" style="background:#e8f5e9; padding:10px; border-radius:5px; text-align:center; font-weight:bold; color:#2e7d32; margin-bottom:15px; display:none;">
+            Total Calc: R$ <span id="impPersCalculo">0,00</span>
         </div>
         <div class="form-group">
             <label>Validade Final:</label>
@@ -597,11 +604,7 @@
         </div>
         <div class="form-group">
             <label>Ação Padrão (Etiqueta):</label>
-            <select id="prodAcaoPadrao">
-                <option value="Manipulado:">Manipulado</option>
-                <option value="Aberto:">Aberto</option>
-                <option value="Congelado:">Congelado</option>
-            </select>
+            <select id="prodAcaoPadrao"></select>
         </div>
         <div class="form-group">
             <label>Marcas (Separe por vírgula):</label>
@@ -697,8 +700,32 @@
     let sortConfig = { campo: 'validade', dir: 'asc' }; 
     let filtroDiarioAtual = 'todos';
     
-    const audioBeep = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
-    const audioError = new Audio("https://actions.google.com/sounds/v1/alarms/bugle_tune.ogg");
+    let audioCtx = null;
+
+    function tocarBeep(tipo) {
+        try {
+            if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            if(tipo === 'sucesso') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                osc.start(); 
+                osc.stop(audioCtx.currentTime + 0.1); 
+            } else {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                osc.start(); 
+                osc.stop(audioCtx.currentTime + 0.3); 
+            }
+        } catch(e){}
+    }
 
     function carregarBanco() {
         let def = {
@@ -722,6 +749,7 @@
                 senhaAdmin: "", 
                 ultimoWipe: 0,
                 gapEtiquetaPx: 24,
+                acoes: ["Manipulado:", "Aberto:", "Congelado:"],
                 ultimaModificacaoLocal: 0
             },
             historico: []
@@ -737,6 +765,7 @@
             if(typeof local.configs.ultimoWipe === 'undefined') local.configs.ultimoWipe = 0;
             if(typeof local.configs.ultimaModificacaoLocal === 'undefined') local.configs.ultimaModificacaoLocal = 0;
             if(typeof local.configs.gapEtiquetaPx === 'undefined') local.configs.gapEtiquetaPx = 24;
+            if(!local.configs.acoes) local.configs.acoes = ["Manipulado:", "Aberto:", "Congelado:"];
             
             local.produtos.forEach(p => { 
                 if(!p.acaoPadrao) p.acaoPadrao = "Manipulado:"; 
@@ -798,6 +827,43 @@
         salvarBancoLocal(); 
     }
 
+    function popularSelectAcoes(idSelect) {
+        let sel = document.getElementById(idSelect);
+        if(!sel) return;
+        let valorAtual = sel.value;
+        sel.innerHTML = '';
+        db.configs.acoes.forEach(a => {
+            sel.innerHTML += `<option value="${a}">${a}</option>`;
+        });
+        if(valorAtual && db.configs.acoes.includes(valorAtual)) sel.value = valorAtual;
+    }
+
+    function renderizarAcoesCfg() {
+        let list = document.getElementById('listaAcoesCfg');
+        list.innerHTML = '';
+        db.configs.acoes.forEach((acao, i) => {
+            list.innerHTML += `<div style="background:#e0e0e0; padding:6px 12px; border-radius:12px; font-size:13px; font-weight:bold; display:flex; align-items:center; gap:8px;">${acao} <span style="cursor:pointer; color:#d32f2f; font-weight:900;" onclick="removerAcaoCfg(${i})">X</span></div>`;
+        });
+    }
+
+    function adicionarAcaoCfg() {
+        let v = document.getElementById('novaAcaoInput').value.trim();
+        if(v) {
+            if(!v.endsWith(":")) v += ":";
+            db.configs.acoes.push(v);
+            document.getElementById('novaAcaoInput').value = '';
+            salvarEtiquetaConfigs();
+            renderizarAcoesCfg();
+        }
+    }
+
+    function removerAcaoCfg(i) {
+        if(db.configs.acoes.length <= 1) return alert("Você precisa ter pelo menos uma Ação!");
+        db.configs.acoes.splice(i, 1);
+        salvarEtiquetaConfigs();
+        renderizarAcoesCfg();
+    }
+
     function abrirGerenciarEtiquetas() {
         fecharModal('modalPainelUnificado');
         document.getElementById('cfgEstabelecimento').value = db.configs.estabelecimento;
@@ -809,6 +875,8 @@
         
         document.getElementById('cfgGapPx').value = db.configs.gapEtiquetaPx !== undefined ? db.configs.gapEtiquetaPx : 24;
         document.getElementById('lblGapPx').innerText = document.getElementById('cfgGapPx').value;
+
+        renderizarAcoesCfg();
 
         document.getElementById('modalGerenciarEtiquetas').style.display = 'flex';
     }
@@ -998,6 +1066,7 @@
                     db.produtos = dadosNuvem.produtos || [];
                     db.categorias = dadosNuvem.categorias || [];
                     db.operadores = dadosNuvem.operadores || [];
+                    if(dadosNuvem.configs.acoes) db.configs.acoes = dadosNuvem.configs.acoes;
                     db.configs.ultimaModificacaoLocal = tsNuvem;
                 } else if (tsLocal > tsNuvem) {
                     mudouLocalmente = true;
@@ -1104,7 +1173,6 @@
                 </li>`; 
         }); 
 
-        // ETIQUETA PERSONALIZADA NO FIM DA LISTA APENAS NO FILTRO 'TODOS'
         if (categoriaAtual === null) {
             lista.innerHTML += `
                 <li class="item" style="border: 2px dashed #1976D2; background: #E3F2FD;" onclick="abrirModalImprimirPersonalizada()">
@@ -1271,6 +1339,8 @@
         db.categorias.forEach(c => {
             cb.innerHTML += `<option value="${c.nome}">${c.nome}</option>`;
         }); 
+
+        popularSelectAcoes('prodAcaoPadrao');
         
         document.getElementById('msgCodigoDisponivel').innerHTML = '';
         
@@ -1297,7 +1367,7 @@
             document.getElementById('prodArmazenamento').value = 'ambiente'; 
             document.getElementById('prodPreco').value = ''; 
             document.getElementById('prodMarcas').value = ''; 
-            document.getElementById('prodAcaoPadrao').value = 'Manipulado:'; 
+            document.getElementById('prodAcaoPadrao').value = db.configs.acoes[0]; 
             document.getElementById('prodUsaQR').checked = false; 
         } 
         
@@ -1553,6 +1623,39 @@
 
         if(datasOrdenadas.length === 0) {
             lista.innerHTML = '<div style="padding:20px; text-align:center; color:#666; font-weight:bold;">Nenhuma movimentação registrada no período selecionado.</div>';
+        }
+
+        // BLOCO DE COMPILAÇÃO TOTAL DO PERÍODO
+        if(filtroDiarioAtual !== 'hoje' && datasOrdenadas.length > 0) {
+            let totalEntradas = {};
+            let totalSaidas = {};
+            datasOrdenadas.forEach(data => {
+                dias[data].entradas.forEach(e => { totalEntradas[e.produto] = (totalEntradas[e.produto] || 0) + 1; });
+                dias[data].saidas.forEach(s => { totalSaidas[s.produto] = (totalSaidas[s.produto] || 0) + 1; });
+            });
+            
+            let htmlResumoE = '';
+            for(let p in totalEntradas) htmlResumoE += `<div style="font-size:13px; color:#555; margin-bottom:2px;">+ ${totalEntradas[p]}x ${p}</div>`;
+            if(!htmlResumoE) htmlResumoE = '<div style="font-size:13px; color:#999;">Nenhuma entrada</div>';
+            
+            let htmlResumoS = '';
+            for(let p in totalSaidas) htmlResumoS += `<div style="font-size:13px; color:#555; margin-bottom:2px;">- ${totalSaidas[p]}x ${p}</div>`;
+            if(!htmlResumoS) htmlResumoS = '<div style="font-size:13px; color:#999;">Nenhuma saída</div>';
+            
+            lista.innerHTML += `
+                <div style="background:#e3f2fd; border:2px solid #1976D2; border-radius:8px; margin-bottom:20px; overflow:hidden;">
+                    <div style="background:#1976D2; padding:8px 12px; font-weight:900; color:white; text-align:center;">📊 COMPILAÇÃO DO PERÍODO</div>
+                    <div style="display:flex; justify-content:space-between; background:white;">
+                        <div style="flex:1; padding:12px; border-right:1px solid #eee;">
+                            <div style="color:#2e7d32; font-weight:900; font-size:12px; margin-bottom:8px;">🟢 PRODUZIDOS</div>
+                            ${htmlResumoE}
+                        </div>
+                        <div style="flex:1; padding:12px;">
+                            <div style="color:#d32f2f; font-weight:900; font-size:12px; margin-bottom:8px;">🔴 CONSUMIDOS</div>
+                            ${htmlResumoS}
+                        </div>
+                    </div>
+                </div>`;
         }
 
         datasOrdenadas.forEach(data => {
@@ -1869,6 +1972,8 @@
             return alert("Selecione um Operador(a)!"); 
         }
         
+        popularSelectAcoes('imprimirAcao');
+
         const p = db.produtos.find(x => x.codigo === cod); 
         quantidadeAtual = 1; 
         document.getElementById('imprimirQtd').innerText = quantidadeAtual; 
@@ -1879,7 +1984,7 @@
         document.getElementById('imprimirCodigoProduto').value = p.codigo; 
         document.getElementById('imprimirNomeProduto').innerText = p.nome; 
         
-        let acaoPadraoSelect = p.acaoPadrao ? p.acaoPadrao.replace(/ em:/i, ':').replace(/ em/i, ':') : "Manipulado:";
+        let acaoPadraoSelect = p.acaoPadrao ? p.acaoPadrao.replace(/ em:/i, ':').replace(/ em/i, ':') : db.configs.acoes[0];
         document.getElementById('imprimirAcao').value = acaoPadraoSelect; 
         
         document.getElementById('imprimirPeso').value = ''; 
@@ -1910,12 +2015,15 @@
         if(!document.getElementById('seletorOperador').value) {
             return alert("Selecione um Operador(a)!"); 
         }
+        
+        popularSelectAcoes('impPersAcao');
+
         qtdPers = 1;
         document.getElementById('impPersQtd').innerText = qtdPers;
         document.getElementById('impPersNome').value = '';
-        document.getElementById('impPersAcao').value = 'Manipulado:';
         document.getElementById('impPersPeso').value = '';
         document.getElementById('impPersPreco').value = '';
+        document.getElementById('boxCalculoTotalPers').style.display = 'none';
         document.getElementById('impPersValidade').value = new Date().toISOString().split('T')[0];
         document.getElementById('modalImprimirPers').style.display = 'flex';
     }
@@ -1949,6 +2057,24 @@
         const peso = parseFloat(document.getElementById('imprimirPeso').value); 
         const span = document.getElementById('imprimirCalculo'); 
         const box = document.getElementById('boxCalculoTotal'); 
+        
+        if (!isNaN(preco)) { 
+            let total = preco; 
+            if (!isNaN(peso) && peso > 0) {
+                total = (peso / 1000) * preco; 
+            }
+            span.innerText = total.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2}); 
+            box.style.display = 'block'; 
+        } else {
+            box.style.display = 'none'; 
+        }
+    }
+
+    function calcularTotalPagarPers() { 
+        const preco = parseFloat(document.getElementById('impPersPreco').value); 
+        const peso = parseFloat(document.getElementById('impPersPeso').value); 
+        const span = document.getElementById('impPersCalculo'); 
+        const box = document.getElementById('boxCalculoTotalPers'); 
         
         if (!isNaN(preco)) { 
             let total = preco; 
@@ -2015,7 +2141,7 @@
         
         db.configs.ultimaModificacaoLocal = Date.now();
         salvarBancoLocal(); 
-        audioBeep.play().catch(()=>{}); 
+        tocarBeep('sucesso');
         
         sincronizarComNuvemSilencioso();
         
@@ -2038,7 +2164,7 @@
         const btn = document.getElementById('btnPersImprimir');
         btn.innerText = "Aguarde..."; btn.disabled = true;
 
-        const acaoSelect = document.getElementById('impPersAcao').value.trim() || "Manipulado:";
+        const acaoSelect = document.getElementById('impPersAcao').value.trim() || db.configs.acoes[0];
         const pesoInput = document.getElementById('impPersPeso').value.trim();
         const precoInput = document.getElementById('impPersPreco').value.trim();
         const op = document.getElementById('seletorOperador').value;
@@ -2082,7 +2208,7 @@
 
         db.configs.ultimaModificacaoLocal = Date.now();
         salvarBancoLocal();
-        audioBeep.play().catch(()=>{});
+        tocarBeep('sucesso');
         sincronizarComNuvemSilencioso();
 
         let pFalso = { nome: nome, armazenamento: 'ambiente', usaQR: false };
@@ -2442,12 +2568,11 @@
         let item = db.historico.find(x => x.sku === decodedText); 
         
         if(!item) { 
-            audioError.play().catch(()=>{}); 
+            tocarBeep('erro'); 
             alert("❌ Etiqueta não encontrada no sistema!"); 
             setTimeout(() => { if(html5QrCode) html5QrCode.resume(); }, 2000); 
         } else if (item.baixado) { 
-            audioError.play().catch(()=>{}); 
-            // PERGUNTA SE DESEJA REINCLUIR
+            tocarBeep('erro'); 
             if(confirm("⚠️ Este item foi baixado em: " + item.dataBaixa + "\n\nDeseja REINCLUIR este item no estoque (desfazer a baixa)?")) {
                 item.baixado = false;
                 item.dataBaixa = null;
@@ -2460,7 +2585,7 @@
                 setTimeout(() => { if(html5QrCode) html5QrCode.resume(); }, 1500); 
             }
         } else { 
-            audioBeep.play().catch(()=>{}); 
+            tocarBeep('sucesso'); 
             if(confirm("✅ ITEM IDENTIFICADO: " + item.produto + "\n\nDeseja confirmar a baixa desse item no estoque?")) {
                 item.baixado = true; 
                 item.dataBaixa = new Date().toLocaleString('pt-BR'); 
