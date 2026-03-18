@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô_Etiqueta v1.0.27</title>
+    <title>Alô_Etiqueta v1.0.28</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -91,7 +91,7 @@
         .bg-green { background: #388E3C; }
 
         /* ============================================================
-           GABARITO BLINDADO V27: 480x320 pixels (exatos 60x40mm) 
+           GABARITO BLINDADO V28: 480x320 pixels (exatos 60x40mm) 
            RECUOS: Esquerda (4px), Direita 6mm (48px), Topo/Base 3mm (24px)
            ============================================================ */
         #area-impressao-visual {
@@ -120,7 +120,7 @@
     <img src="icon.png" class="splash-icon" alt="Alô Etiqueta" onerror="this.style.display='none'; document.getElementById('splash-emoji').style.display='block';">
     <div id="splash-emoji" class="splash-emoji">🏷️</div>
     <div class="splash-title">Alô_Etiqueta</div>
-    <div class="splash-version">v1.0.27</div>
+    <div class="splash-version">v1.0.28</div>
 </div>
 
 <div id="area-impressao-visual">
@@ -155,7 +155,7 @@
 
         <div id="viz-qrcode-container" style="display: none; flex-direction: column; align-items: center; justify-content: center; padding-left: 10px; flex-shrink: 0;">
             <div id="viz-qrcode"></div>
-            <div id="viz-sku-text" style="font-size: 11px; font-weight: bold; margin-top: 2px;"></div>
+            <div id="viz-sku-text" style="font-size: 12px; font-weight: 900; margin-top: 2px;"></div>
         </div>
         
     </div>
@@ -209,7 +209,7 @@
     <div class="modal" style="max-width: 500px;">
         <div class="modal-title" style="color:#2e7d32; border-color:#2e7d32;">📈 Estoque Físico Ativo</div>
         <div style="margin-bottom: 15px; font-size: 13px; color: #555; background: #e8f5e9; padding: 10px; border-radius: 5px; border-left: 4px solid #4CAF50;">
-            Apenas itens com <b>QR Code</b> impresso que ainda não receberam baixa. Clique para gerenciar.
+            Acompanhe o saldo de todos os itens com controle por <b>QR Code</b>. Clique para gerenciar.
         </div>
         <ul class="list" id="listaEstoqueAtivo" style="max-height: 50vh; overflow-y: auto; border: 1px solid #eee; padding: 0; border-radius:5px; margin-bottom: 15px;"></ul>
         <div class="modal-actions">
@@ -233,7 +233,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.27</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô_Etiqueta - v1.0.28</div>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
@@ -1524,13 +1524,15 @@
             
             let btnExcluir = `<button onclick="excluirRegistroFisico('${r.sku}')" style="margin-top: 5px; margin-left: 5px; background:#d32f2f; color:white; border:none; padding:6px 10px; border-radius:4px; font-weight:bold; cursor:pointer; font-size:12px;" title="Apagar do histórico (Erro)">🗑️ Excluir</button>`;
 
+            let shortSku = r.sku ? r.sku.slice(-5) : '----';
+
             ul.innerHTML += `
                 <li style="padding: 12px; border-bottom: 1px solid #eee; ${risco}">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                         <div>
                             <div style="font-size: 13px; color: #444; margin-bottom: 4px;">Manipulado: ${r.dataManipulado}</div>
                             <div style="font-size: 14px; color: #1565C0;">Validade: <strong>${r.validadeFinal}</strong></div>
-                            <div style="font-size: 11px; color: #999; margin-top: 4px; font-weight: bold;">Cód: ${r.sku}</div>
+                            <div style="font-size: 11px; color: #999; margin-top: 4px; font-weight: bold;">Cód: ${shortSku}</div>
                         </div>
                         <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end;">
                             <div style="display: flex;">
@@ -1575,28 +1577,31 @@
         const lista = document.getElementById('listaEstoqueAtivo');
         lista.innerHTML = '';
 
-        if(!db.historico) db.historico = [];
+        let prodsQR = db.produtos.filter(p => p.usaQR);
 
-        let ativosQR = db.historico.filter(h => {
-            if(h.baixado) return false;
-            let p = db.produtos.find(prod => prod.nome === h.produto);
-            return p && p.usaQR; 
-        });
-
-        if (ativosQR.length === 0) {
-            lista.innerHTML = '<div style="padding:20px; text-align:center; color:#666; font-weight:bold;">Tudo limpo! Nenhum item físico com QR na geladeira.</div>';
+        if (prodsQR.length === 0) {
+            lista.innerHTML = '<div style="padding:20px; text-align:center; color:#666; font-weight:bold;">Tudo limpo! Nenhum produto configurado para usar QR Code.</div>';
         } else {
             let catMap = {};
             
+            prodsQR.forEach(p => {
+                let cat = p.categoria || 'Sem Categoria';
+                let cod = p.codigo || 9999;
+                if(!catMap[cat]) catMap[cat] = {};
+                catMap[cat][p.nome] = { contagem: 0, codigo: cod };
+            });
+
+            if(!db.historico) db.historico = [];
+            let ativosQR = db.historico.filter(h => !h.baixado);
+            
             ativosQR.forEach(item => {
                 let p = db.produtos.find(prod => prod.nome === item.produto);
-                let cat = p ? p.categoria : 'Sem Categoria';
-                let cod = p ? p.codigo : 9999;
-                
-                if(!catMap[cat]) catMap[cat] = {};
-                if(!catMap[cat][item.produto]) catMap[cat][item.produto] = { contagem: 0, codigo: cod };
-                
-                catMap[cat][item.produto].contagem++;
+                if(p && p.usaQR) {
+                    let cat = p.categoria || 'Sem Categoria';
+                    if(catMap[cat] && catMap[cat][item.produto]) {
+                        catMap[cat][item.produto].contagem++;
+                    }
+                }
             });
 
             Object.keys(catMap).sort().forEach(cat => {
@@ -1605,10 +1610,12 @@
                 let prods = Object.keys(catMap[cat]).sort((a,b) => catMap[cat][a].codigo - catMap[cat][b].codigo);
                 
                 prods.forEach(chave => {
+                    let c = catMap[cat][chave].contagem;
+                    let bgCor = c > 0 ? '#4CAF50' : '#9e9e9e'; 
                     lista.innerHTML += `
                         <li style="padding: 12px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="abrirDetalhesEstoque('${chave}', 'ativo')">
                             <strong style="font-size: 15px; color: #333;">${chave}</strong>
-                            <span style="background:#4CAF50; color:white; padding:4px 10px; border-radius:12px; font-weight:bold">${catMap[cat][chave].contagem} un ➡️</span>
+                            <span style="background:${bgCor}; color:white; padding:4px 10px; border-radius:12px; font-weight:bold">${c} un ➡️</span>
                         </li>`;
                 });
             });
@@ -1660,7 +1667,8 @@
                     } 
                     
                     let marcaDisplay = (item.marca && item.marca !== "-") ? `(${item.marca})` : "";
-                    
+                    let shortSku = item.sku ? item.sku.slice(-5) : '----';
+
                     lista.innerHTML += `
                         <li style="padding: 12px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
                             <div style="flex: 1;">
@@ -1669,7 +1677,7 @@
                                 <div style="margin-top: 6px;"><span class="badge-status ${classeBadge}">${textoStatus}</span></div>
                             </div>
                             <div style="text-align: right; margin-left: 10px;">
-                                <div style="font-size: 10px; color: #999; margin-bottom: 8px;">Cód: ${item.sku.slice(-5)}</div>
+                                <div style="font-size: 10px; color: #999; margin-bottom: 8px;">Cód: ${shortSku}</div>
                                 <button onclick="darBaixaManual('${item.sku}')" style="background:#4CAF50; color:white; border:none; padding:6px 10px; border-radius:4px; font-weight:bold; cursor:pointer; font-size:12px;">✅ Baixa</button>
                             </div>
                         </li>`; 
@@ -1881,9 +1889,9 @@
         let tamFonteProd = 16; 
         if (db.configs.destaqueProd) tamFonteProd = 20;
         
-        if(nomeDisplay.length > 12 && db.configs.destaqueProd) tamFonteProd = 16;
-        if(nomeDisplay.length > 16) tamFonteProd = 12;
-        if(nomeDisplay.length > 20) tamFonteProd = 10;
+        if(nomeDisplay.length > 12) tamFonteProd = db.configs.destaqueProd ? 18 : 14;
+        if(nomeDisplay.length > 16) tamFonteProd = db.configs.destaqueProd ? 16 : 13;
+        if(nomeDisplay.length > 20) tamFonteProd = db.configs.destaqueProd ? 14 : 11;
 
         let htmlContent = `
         <html>
@@ -1909,6 +1917,7 @@
             
             let showQR = (db.configs.controleQR && p.usaQR) ? "flex" : "none";
             let idQR = `qr_pdf_${Date.now()}_${i}`;
+            let shortSku = skus[i].slice(-5);
 
             let marcaStr = marca !== "" ? `<span>MARCA: ${marca}</span>` : "";
             let loteStr = lote !== "" ? `<span>LOTE: ${lote}</span>` : "";
@@ -1946,7 +1955,7 @@
 
                     <div style="display: ${showQR}; flex-direction: column; align-items: center; justify-content: center; padding-left: 5px; flex-shrink: 0;">
                         <div id="${idQR}"></div>
-                        <div style="font-size: 7pt; font-weight: bold; margin-top: 2px;">${skus[i]}</div>
+                        <div style="font-size: 8pt; font-weight: bold; margin-top: 2px;">${shortSku}</div>
                     </div>
                 </div>
                 
@@ -1993,9 +2002,9 @@
         let tamFonteProd = 36;
         if(db.configs.destaqueProd) tamFonteProd = 42;
         
-        if(nomeFormatado.length > 12 && db.configs.destaqueProd) tamFonteProd = 36;
-        if(nomeFormatado.length > 16) tamFonteProd = 28;
-        if(nomeFormatado.length > 20) tamFonteProd = 24;
+        if(nomeFormatado.length > 12) tamFonteProd = db.configs.destaqueProd ? 38 : 34;
+        if(nomeFormatado.length > 16) tamFonteProd = db.configs.destaqueProd ? 34 : 30;
+        if(nomeFormatado.length > 20) tamFonteProd = db.configs.destaqueProd ? 30 : 26;
         
         document.getElementById('viz-nome-produto').style.fontSize = tamFonteProd + "px";
         
@@ -2085,7 +2094,8 @@
         for(let i = 0; i < qtd; i++) {
             if(usaQR) {
                 document.getElementById('viz-qrcode').innerHTML = ''; 
-                document.getElementById('viz-sku-text').innerText = skus[i];
+                let shortSku = skus[i].slice(-5);
+                document.getElementById('viz-sku-text').innerText = shortSku;
                 new QRCode(document.getElementById('viz-qrcode'), { text: skus[i], width: 95, height: 95 }); 
                 await new Promise(r => setTimeout(r, 250)); 
             }
