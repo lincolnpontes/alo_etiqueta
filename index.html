@@ -7,14 +7,21 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô Etiquetas v1.0.9</title>
+    <title>Alô Etiqueta v1.0.10</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 
     <style>
-        body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 0; display: flex; justify-content: center; }
+        :root {
+            --primaria: #1565C0;
+            --secundaria: #E3F2FD;
+            --fundo: #f0f2f5;
+        }
+
+        body { font-family: Arial, sans-serif; background: var(--fundo); margin: 0; padding: 0; display: flex; justify-content: center; transition: background 0.3s ease; }
         
         .app-container { width: 100%; max-width: 1200px; background: #fff; min-height: 100vh; display: flex; flex-direction: column; position: relative; margin: 0 auto; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
         #sticky-header { position: sticky; top: 0; z-index: 100; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
@@ -22,37 +29,34 @@
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #ffffff; z-index: 99999; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; color: #1565C0;
+            align-items: center; justify-content: center; color: var(--primaria);
             transition: opacity 0.5s ease;
         }
         #splash-screen.hidden { opacity: 0; pointer-events: none; }
         .splash-icon { width: 130px; height: 130px; object-fit: contain; margin-bottom: 15px; }
         .splash-emoji { font-size: 70px; margin-bottom: 15px; display: none; }
         .splash-title { font-size: 26px; font-weight: 900; margin-bottom: 5px; letter-spacing: 1px; }
-        .splash-version { font-size: 14px; font-weight: bold; opacity: 0.8; background: rgba(21,101,192,0.1); padding: 4px 10px; border-radius: 12px; }
+        .splash-version { font-size: 14px; font-weight: bold; opacity: 0.8; background: var(--secundaria); padding: 4px 10px; border-radius: 12px; }
 
         /* TELA DE LOGIN INICIAL */
         #login-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #1565C0; z-index: 99998; display: flex; flex-direction: column;
+            background: var(--primaria); z-index: 99998; display: flex; flex-direction: column;
             align-items: center; justify-content: center; color: white;
             transition: opacity 0.5s ease;
         }
 
-        .header { background: #1565C0; color: white; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-        .header-op-container { display: flex; align-items: center; gap: 8px; flex: 1; }
+        .header { background: var(--primaria); color: white; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; gap: 10px; transition: background 0.3s ease; }
         
         .modern-select { height: 32px; border-radius: 20px !important; border: 1px solid rgba(255,255,255,0.4) !important; background: rgba(255,255,255,0.1) !important; color: white !important; font-size: 14px; font-weight: bold; width: 100%; max-width: 140px; padding: 0 12px !important; outline: none; cursor: pointer; }
         .modern-select option { color: #333; background: #fff; }
         .modal-select { height: 38px; border-radius: 8px !important; border: 1px solid #ccc !important; background: #fff !important; color: #333 !important; padding: 0 12px !important; width: 100%; max-width: none; font-size: 14px; font-weight: bold; outline: none; margin-bottom: 10px; }
         
         .status-conexao { font-size: 14px; cursor: help; background: rgba(0,0,0,0.2); padding: 4px 8px; border-radius: 12px; }
-        .header-actions { display: flex; gap: 15px; align-items: center; }
-        .header-actions button { background: none; border: none; color: white; font-size: 24px; cursor: pointer; padding: 0; }
         
-        .search-box { background: #E3F2FD; padding: 10px; display: flex; gap: 6px; width: 100%; box-sizing: border-box; align-items: center; overflow: hidden; }
+        .search-box { background: var(--secundaria); padding: 10px; display: flex; gap: 6px; width: 100%; box-sizing: border-box; align-items: center; overflow: hidden; transition: background 0.3s ease; }
         .search-box input { width: 55px; flex-shrink: 0; padding: 12px 4px; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; font-weight: bold; text-align: center; }
-        .search-box .btn-buscar { background: #1976D2; color: white; border: none; padding: 0 10px; height: 44px; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: bold; flex-shrink: 0; }
+        .search-box .btn-buscar { background: var(--primaria); color: white; border: none; padding: 0 10px; height: 44px; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: bold; flex-shrink: 0; }
         .spacer { flex-grow: 1; } 
         
         .icon-group { display: flex; gap: 12px; align-items: center; margin-left: 8px; }
@@ -67,7 +71,7 @@
         .list { padding: 10px; margin: 0; list-style: none; overflow-y: auto; flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 10px; align-content: start; }
         .item { display: flex; align-items: center; padding: 15px; border: 1px solid #eee; border-radius: 8px; cursor: pointer; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         .item:hover { background: #f9f9f9; }
-        .item-avatar { background: #BBDEFB; color: #1565C0; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 15px; flex-shrink: 0; }
+        .item-avatar { background: var(--secundaria); color: var(--primaria); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 15px; flex-shrink: 0; }
         .item-info { flex: 1; min-width: 0; }
         .item-title { font-weight: bold; font-size: 18px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .item-subtitle { color: #666; font-size: 14px; }
@@ -76,7 +80,7 @@
         
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; z-index: 1000; }
         .modal { background: white; padding: 20px; border-radius: 10px; width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto; box-sizing: border-box; }
-        .modal-title { font-size: 20px; font-weight: bold; margin-bottom: 20px; color: #333; border-bottom: 2px solid #1976D2; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .modal-title { font-size: 20px; font-weight: bold; margin-bottom: 20px; color: #333; border-bottom: 2px solid var(--primaria); padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
         
         .form-group { margin-bottom: 15px; position: relative; }
         .form-group label { display: block; margin-bottom: 5px; color: #555; font-weight: bold; font-size: 14px; }
@@ -91,9 +95,9 @@
         
         .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
         .btn-cancel { background: #eee; color: #333; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; border: none; flex: 1; }
-        .btn-action { background: #1976D2; color: white; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; border: none; flex: 1; }
+        .btn-action { background: var(--primaria); color: white; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; border: none; flex: 1; transition: background 0.3s ease; }
         .btn-danger { background: #d32f2f; color: white; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; border: none; width: 100%; margin-bottom: 10px; }
-        .btn-outline { background: #E3F2FD; color: #1976D2; border: 1px solid #1976D2; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 15px; }
+        .btn-outline { background: var(--secundaria); color: var(--primaria); border: 1px solid var(--primaria); padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 15px; transition: all 0.3s ease; }
         
         .gerenciar-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
         .gerenciar-info { flex: 1; font-size: 14px; }
@@ -130,15 +134,17 @@
         
         #reader { width: 100%; background: #000; border-radius: 8px; overflow: hidden; }
         .detalhes-estoque-lista li:last-child { border-bottom: none !important; }
+
+        .sortable-ghost { opacity: 0.4; background: var(--secundaria) !important; border: 1px dashed var(--primaria); }
     </style>
 </head>
 <body>
 
 <div id="splash-screen">
-    <img src="icon.png" class="splash-icon" alt="Alô Etiquetas" onerror="this.style.display='none'; document.getElementById('splash-emoji').style.display='block';">
+    <img src="icon.png" class="splash-icon" alt="Alô Etiqueta" onerror="this.style.display='none'; document.getElementById('splash-emoji').style.display='block';">
     <div id="splash-emoji" class="splash-emoji">🏷️</div>
-    <div class="splash-title">Alô Etiquetas</div>
-    <div class="splash-version">v1.0.9</div>
+    <div class="splash-title">Alô Etiqueta</div>
+    <div class="splash-version">v1.0.10</div>
 </div>
 
 <div id="login-screen">
@@ -198,13 +204,18 @@
 <div class="app-container">
     <div id="sticky-header">
         <div class="header">
-            <div class="header-op-container">
-                <span style="font-size: 18px;">👤</span>
-                <select id="seletorOperador" class="modern-select" onchange="verificarTrocaOperador(this)"></select>
+            <div style="flex: 1; display: flex; justify-content: flex-start;">
+                <div style="position: relative; width: 120px;">
+                    <span style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); font-size: 14px; pointer-events: none; z-index: 1;">👤</span>
+                    <select id="seletorOperador" class="modern-select" style="padding-left: 28px !important; width: 100%;" onchange="verificarTrocaOperador(this)"></select>
+                </div>
             </div>
-            <div id="indicadorConexao" class="status-conexao" title="Sincronização Automática">⚪</div>
-            <div class="header-actions">
-                <button onclick="abrirLoginAdmin()" title="Painel Administrativo">⚙️</button>
+            
+            <div style="flex: 1; text-align: center; font-weight: 900; font-size: 18px; white-space: nowrap; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">Alô Etiqueta</div>
+            
+            <div style="flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 10px;">
+                <div id="indicadorConexao" class="status-conexao" title="Sincronização Automática">⚪</div>
+                <button onclick="abrirLoginAdmin()" title="Painel Administrativo" style="background: none; border: none; color: white; font-size: 22px; cursor: pointer; padding: 0;">⚙️</button>
             </div>
         </div>
         
@@ -224,6 +235,65 @@
     </div>
     
     <ul class="list" id="listaProdutos"></ul>
+</div>
+
+<div class="modal-overlay" id="modalConfigGerais">
+    <div class="modal">
+        <div class="modal-title" style="color: var(--primaria); border-color: var(--primaria);">⚙️ Configurações Gerais</div>
+        
+        <div class="form-group">
+            <label>Nome do Estabelecimento (Impressão):</label>
+            <input type="text" id="cfgEstabelecimento" placeholder="Nome no rodapé da etiqueta">
+        </div>
+        
+        <div class="form-group">
+            <label>Modo de Impressão:</label>
+            <select id="cfgModo">
+                <option value="pdf">Navegador / PDF</option>
+                <option value="rawbt">App RawBT (Android)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Tema de Cores do App:</label>
+            <select id="cfgTema">
+                <option value="azul">🔵 Azul Padrão</option>
+                <option value="verde">🟢 Verde Natureza</option>
+                <option value="vermelho">🔴 Vermelho Brasa</option>
+                <option value="escuro">⚫ Preto Gourmet</option>
+            </select>
+        </div>
+        
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="fecharModal('modalConfigGerais'); abrirPainelUnificado();">Voltar</button>
+            <button class="btn-action" onclick="salvarConfigGerais()">💾 Salvar</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="modalPainelUnificado">
+    <div class="modal">
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô Etiqueta - v1.0.10</div>
+        
+        <button class="btn-outline" onclick="abrirConfigGeraisModal()">⚙️ Configurações Gerais</button>
+        <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
+        <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
+        <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
+        <button class="btn-outline" style="border-color:#f57f17; color:#f57f17;" onclick="abrirGerenciarEtiquetas()">🖨️ Estilo das Etiquetas</button>
+        <button class="btn-outline" style="border-color:#2e7d32; color:#2e7d32;" onclick="abrirEstoque()">📊 Relatório (Acumulado Total)</button>
+        
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+        <div class="form-group" style="text-align: left;">
+            <label>Senha das Configurações (Vazio = Livre):</label>
+            <input type="password" id="cfgSenhaAdmin" placeholder="Deixe em branco para remover senha" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');" onchange="salvarSenhaPainel()">
+        </div>
+
+        <h3 style="font-size: 16px; color: #d32f2f; margin-top: 25px;">Avançado</h3>
+        <button class="btn-danger" onclick="abrirModalAvancado()">⚠️ Configurações Avançadas</button>
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="fecharModal('modalPainelUnificado')">Fechar Painel</button>
+        </div>
+    </div>
 </div>
 
 <div class="modal-overlay" id="modalEstoqueAtivo">
@@ -254,32 +324,9 @@
     </div>
 </div>
 
-<div class="modal-overlay" id="modalPainelUnificado">
-    <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô Etiquetas - v1.0.9</div>
-        <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
-        <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
-        <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
-        <button class="btn-outline" style="border-color:#f57f17; color:#f57f17;" onclick="abrirGerenciarEtiquetas()">🖨️ Gerenciar Etiquetas</button>
-        <button class="btn-outline" style="border-color:#2e7d32; color:#2e7d32;" onclick="abrirEstoque()">📊 Relatório (Acumulado Total)</button>
-        
-        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
-        <div class="form-group" style="text-align: left;">
-            <label>Senha das Configurações (Vazio = Livre):</label>
-            <input type="password" id="cfgSenhaAdmin" placeholder="Deixe em branco para remover senha" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');" onchange="salvarSenhaPainel()">
-        </div>
-
-        <h3 style="font-size: 16px; color: #d32f2f; margin-top: 25px;">Avançado</h3>
-        <button class="btn-danger" onclick="abrirModalAvancado()">⚠️ Configurações Avançadas</button>
-        <div class="modal-actions">
-            <button class="btn-cancel" onclick="fecharModal('modalPainelUnificado')">Fechar Painel</button>
-        </div>
-    </div>
-</div>
-
 <div class="modal-overlay" id="modalHistoricoDiario">
     <div class="modal" style="max-height: 90vh; overflow-y: auto;">
-        <div class="modal-title" style="color:#1976D2; border-color:#1976D2;">
+        <div class="modal-title" style="color:var(--primaria); border-color:var(--primaria);">
             <div>📅 Movimentação Diária</div>
             <button onclick="fecharModal('modalHistoricoDiario')" style="background:none; border:none; font-size:26px; color:#999; cursor:pointer; padding:0; line-height: 1;" title="Fechar">&times;</button>
         </div>
@@ -293,7 +340,7 @@
         <div id="filtroDataCustom" style="display:none; gap:5px; margin-bottom:15px; background: #f5f5f5; padding: 10px; border-radius: 8px;">
             <input type="date" id="dataInicioMov" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px; flex:1;"> 
             <input type="date" id="dataFimMov" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px; flex:1;">
-            <button onclick="mudarFiltroDiario('aplicarCustom')" style="background: #1976D2; color: white; border: none; padding: 0 15px; border-radius: 4px; font-weight: bold;">OK</button>
+            <button onclick="mudarFiltroDiario('aplicarCustom')" style="background: var(--primaria); color: white; border: none; padding: 0 15px; border-radius: 4px; font-weight: bold;">OK</button>
         </div>
         <div id="listaHistoricoDiario"></div>
         <div class="modal-actions">
@@ -304,30 +351,18 @@
 
 <div class="modal-overlay" id="modalGerenciarEtiquetas">
     <div class="modal" style="max-height: 90vh; overflow-y: auto;">
-        <div class="modal-title" style="color:#f57f17; border-color:#f57f17;">Gerenciar Etiquetas</div>
-        <div class="form-group">
-            <label>Nome do Estabelecimento:</label>
-            <input type="text" id="cfgEstabelecimento" onchange="salvarEtiquetaConfigs()">
-        </div>
-        <div style="display: flex; gap: 10px;">
-            <div class="form-group" style="flex:1;">
-                <label>Tamanho:</label>
-                <select id="cfgTamanho" onchange="salvarEtiquetaConfigs()">
-                    <option value="60x40">60x40 mm (Atual)</option>
-                    <option value="50x50">50x50 mm</option>
-                    <option value="40x40">38x40 mm</option>
-                </select>
-            </div>
-            <div class="form-group" style="flex:1;">
-                <label>Modo de Impressão:</label>
-                <select id="cfgModo" onchange="salvarEtiquetaConfigs()">
-                    <option value="pdf">PDF</option>
-                    <option value="rawbt">RawBT</option>
-                </select>
-            </div>
+        <div class="modal-title" style="color:#f57f17; border-color:#f57f17;">Estilo das Etiquetas</div>
+        
+        <div class="form-group" style="margin-top: 5px;">
+            <label>Tamanho da Etiqueta Físico:</label>
+            <select id="cfgTamanho" onchange="salvarEtiquetaConfigs()">
+                <option value="60x40">60x40 mm (Padrão)</option>
+                <option value="50x50">50x50 mm</option>
+                <option value="40x40">38x40 mm</option>
+            </select>
         </div>
         
-        <div class="form-group" style="margin-top: 5px; padding: 12px; background: #e8f5e9; border-radius: 8px; border: 1px solid #c8e6c9;">
+        <div class="form-group" style="padding: 12px; background: #e8f5e9; border-radius: 8px; border: 1px solid #c8e6c9;">
             <label style="color:#2e7d32; display:flex; justify-content:space-between; margin-bottom: 10px;">
                 <span>Ajuste Fino do Gap (Pixels)</span>
                 <span id="lblGapPx" style="font-weight: 900; background: white; padding: 2px 8px; border-radius: 4px;">24</span>
@@ -351,21 +386,21 @@
             </label>
         </div>
         
-        <h3 style="font-size: 14px; margin-bottom:5px;">Ações Padrões</h3>
+        <h3 style="font-size: 14px; margin-bottom:5px; margin-top:20px;">Ações Padrões <span style="font-weight:normal; font-size:11px; color:#666;">(Arraste ☰ para reordenar)</span></h3>
         <div style="display:flex; gap:10px; margin-bottom: 10px;">
             <input type="text" id="novaAcaoInput" placeholder="Ex: Fabricado:" style="flex:1; padding:8px; border:1px solid #ccc; border-radius:4px;">
             <button class="btn-action" style="flex:none; padding: 0 15px;" onclick="adicionarAcaoCfg()">+ Add</button>
         </div>
-        <div id="listaAcoesCfg" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom: 15px;"></div>
+        <div id="listaAcoesCfg" style="display:flex; flex-direction:column; gap:8px; margin-bottom: 15px;"></div>
 
-        <h3 style="font-size: 14px; margin-bottom:5px;">Formas de Conservação</h3>
+        <h3 style="font-size: 14px; margin-bottom:5px;">Formas de Conservação <span style="font-weight:normal; font-size:11px; color:#666;">(Arraste ☰ para reordenar)</span></h3>
         <div style="display:flex; gap:10px; margin-bottom: 10px;">
             <input type="text" id="novaConservacaoInput" placeholder="Ex: Congelado" style="flex:1; padding:8px; border:1px solid #ccc; border-radius:4px;">
             <button class="btn-action" style="flex:none; padding: 0 15px;" onclick="adicionarConservacaoCfg()">+ Add</button>
         </div>
-        <div id="listaConservacoesCfg" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom: 15px;"></div>
+        <div id="listaConservacoesCfg" style="display:flex; flex-direction:column; gap:8px; margin-bottom: 15px;"></div>
 
-        <h3 style="font-size: 14px; margin-bottom:5px;">Rastreabilidade</h3>
+        <h3 style="font-size: 14px; margin-bottom:5px; margin-top:20px;">Rastreabilidade</h3>
         <div class="switch-container">
             <div style="display:flex; flex-direction:column;">
                 <span style="font-weight:bold; font-size:14px;">Controle Global QR Code</span>
@@ -468,7 +503,7 @@
             <div class="modal-title">Relatório Consolidado <button onclick="excluirHistoricoSeguroDireto()" style="background:none; border:none; font-size:16px; cursor:pointer;" title="Limpar">🧹 Limpar</button></div>
             <div class="form-group" style="background:#f5f5f5; padding: 15px; border-radius: 8px; text-align: center;">
                 <div style="font-size: 14px; font-weight: bold; color: #555;">TOTAL GERAL MANIPULADO</div>
-                <div id="estoqueTotal" style="font-size: 28px; font-weight: 900; color: #1976D2;">0</div>
+                <div id="estoqueTotal" style="font-size: 28px; font-weight: 900; color: var(--primaria);">0</div>
             </div>
             <ul class="list" id="listaEstoque" style="max-height: 40vh; overflow-y: auto; border: 1px solid #eee; padding: 5px; border-radius:5px;"></ul>
             <div class="modal-actions">
@@ -476,7 +511,7 @@
             </div>
         </div>
         <div id="estoqueDetalhes" style="display: none;">
-            <div class="modal-title" id="estoqueDetTitulo" style="font-size: 18px; color: #1976D2;">Produto</div>
+            <div class="modal-title" id="estoqueDetTitulo" style="font-size: 18px; color: var(--primaria);">Produto</div>
             <ul class="list detalhes-estoque-lista" id="listaEstoqueDetalhes" style="max-height: 50vh; overflow-y: auto; border: 1px solid #eee; padding: 0; border-radius:5px; margin-bottom: 15px;"></ul>
             <div class="modal-actions">
                 <button class="btn-cancel" onclick="voltarEstoqueMain()">⬅️ Voltar à Lista</button>
@@ -487,7 +522,7 @@
 
 <div class="modal-overlay" id="modalLeitorQR">
     <div class="modal" style="width:100%; height:100%; max-height:100%; max-width:100%; border-radius:0; display:flex; flex-direction:column; padding:0; background: #000;">
-        <div style="background:#1565C0; color:white; padding:15px; font-weight:bold; font-size:18px; text-align:center;">Posicione o QR Code</div>
+        <div style="background:var(--primaria); color:white; padding:15px; font-weight:bold; font-size:18px; text-align:center;">Posicione o QR Code</div>
         <div id="reader" style="flex:1; width:100%; display: flex; align-items: center; justify-content: center;"></div>
         <div style="padding:20px; background: #000; display: flex; flex-direction: column; gap: 10px;">
             <button class="btn-outline" id="btnTrocarCamera" style="margin:0; font-size: 16px; padding: 12px; background: #333; color: white; border: 1px solid #555; display: none; justify-content: center;" onclick="trocarCamera()">🔄 Trocar Câmera (Foco)</button>
@@ -561,7 +596,7 @@
 
 <div class="modal-overlay" id="modalImprimirPers">
     <div class="modal">
-        <div class="modal-title" style="color: #1976D2;">Etiqueta Personalizada</div>
+        <div class="modal-title" style="color: var(--primaria);">Etiqueta Personalizada</div>
         <div class="form-group">
             <label>Nome do Produto:</label>
             <input type="text" id="impPersNome" placeholder="Digite o nome do item avulso...">
@@ -694,7 +729,7 @@
         <div style="display: flex; gap: 10px;">
             <div class="form-group" style="flex: 1;">
                 <label>Fundo:</label>
-                <input type="color" id="catCor" value="#1976D2">
+                <input type="color" id="catCor" value="#1565C0">
             </div>
             <div class="form-group" style="flex: 1;">
                 <label>Texto:</label>
@@ -742,7 +777,29 @@
     let sortConfig = { campo: 'validade', dir: 'asc' }; 
     let filtroDiarioAtual = 'diario';
     
+    let sortableAcoes = null;
+    let sortableConservacoes = null;
+    
     let audioCtx = null;
+
+    const paletasDeCores = {
+        azul: { primaria: '#1565C0', secundaria: '#E3F2FD', fundo: '#f0f2f5' },
+        verde: { primaria: '#2e7d32', secundaria: '#e8f5e9', fundo: '#f0f2f5' },
+        vermelho: { primaria: '#c62828', secundaria: '#ffebee', fundo: '#f0f2f5' },
+        escuro: { primaria: '#212121', secundaria: '#e0e0e0', fundo: '#424242' }
+    };
+
+    function aplicarTemaCores() {
+        let temaSalvo = db.configs.tema || 'azul';
+        let cores = paletasDeCores[temaSalvo] || paletasDeCores['azul'];
+        
+        document.documentElement.style.setProperty('--primaria', cores.primaria);
+        document.documentElement.style.setProperty('--secundaria', cores.secundaria);
+        document.documentElement.style.setProperty('--fundo', cores.fundo);
+        
+        let metaTheme = document.querySelector('meta[name="theme-color"]');
+        if(metaTheme) metaTheme.setAttribute('content', cores.primaria);
+    }
 
     function tocarBeep(tipo) {
         try {
@@ -793,6 +850,7 @@
                 gapEtiquetaPx: 24,
                 acoes: ["Manipulado:", "Aberto:", "Congelado:"],
                 conservacoes: ["Ambiente", "Resfriado", "Congelado"],
+                tema: "azul",
                 ultimaModificacaoLocal: 0
             },
             historico: []
@@ -808,6 +866,7 @@
             if(typeof local.configs.ultimoWipe === 'undefined') local.configs.ultimoWipe = 0;
             if(typeof local.configs.ultimaModificacaoLocal === 'undefined') local.configs.ultimaModificacaoLocal = 0;
             if(typeof local.configs.gapEtiquetaPx === 'undefined') local.configs.gapEtiquetaPx = 24;
+            if(!local.configs.tema) local.configs.tema = "azul";
             if(!local.configs.acoes) local.configs.acoes = ["Manipulado:", "Aberto:", "Congelado:"];
             if(!local.configs.conservacoes) local.configs.conservacoes = ["Ambiente", "Resfriado", "Congelado"];
             
@@ -884,6 +943,7 @@
     }
 
     function iniciar() {
+        aplicarTemaCores();
         renderizarOperadores(); 
         prepararTelaLogin();
         
@@ -945,11 +1005,49 @@
         if(valorAtual && arrayValores.includes(valorAtual)) sel.value = valorAtual;
     }
 
+    function abrirConfigGeraisModal() {
+        fecharModal('modalPainelUnificado');
+        document.getElementById('cfgEstabelecimento').value = db.configs.estabelecimento;
+        document.getElementById('cfgModo').value = db.configs.modo;
+        document.getElementById('cfgTema').value = db.configs.tema || "azul";
+        document.getElementById('modalConfigGerais').style.display = 'flex';
+    }
+
+    function salvarConfigGerais() {
+        db.configs.estabelecimento = document.getElementById('cfgEstabelecimento').value.trim() || "Restaurante";
+        db.configs.modo = document.getElementById('cfgModo').value;
+        db.configs.tema = document.getElementById('cfgTema').value;
+        
+        db.configs.ultimaModificacaoLocal = Date.now();
+        salvarBancoLocal();
+        aplicarTemaCores();
+        sincronizarComNuvemSilencioso();
+        
+        fecharModal('modalConfigGerais');
+        abrirPainelUnificado();
+    }
+
     function renderizarAcoesCfg() {
         let list = document.getElementById('listaAcoesCfg');
         list.innerHTML = '';
         db.configs.acoes.forEach((acao, i) => {
-            list.innerHTML += `<div style="background:#e0e0e0; padding:6px 12px; border-radius:12px; font-size:13px; font-weight:bold; display:flex; align-items:center; gap:8px;">${acao} <span style="cursor:pointer; color:#d32f2f; font-weight:900;" onclick="removerAcaoCfg(${i})">X</span></div>`;
+            list.innerHTML += `
+            <div data-nome="${acao}" style="background:#e0e0e0; padding:8px 12px; border-radius:8px; font-size:14px; font-weight:bold; display:flex; align-items:center; gap:10px;">
+                <span class="drag-handle" style="cursor:grab; font-size:18px; color:#666; padding: 0 5px;">☰</span> 
+                ${acao} 
+                <span style="cursor:pointer; color:#d32f2f; font-weight:900; margin-left:auto; padding: 0 10px;" onclick="removerAcaoCfg('${acao}')">X</span>
+            </div>`;
+        });
+
+        if(sortableAcoes) sortableAcoes.destroy();
+        sortableAcoes = new Sortable(list, {
+            animation: 150,
+            handle: '.drag-handle',
+            ghostClass: 'sortable-ghost',
+            onEnd: function () {
+                db.configs.acoes = Array.from(list.children).map(el => el.dataset.nome);
+                salvarEtiquetaConfigsSilencioso();
+            }
         });
     }
 
@@ -957,17 +1055,18 @@
         let v = document.getElementById('novaAcaoInput').value.trim();
         if(v) {
             if(!v.endsWith(":")) v += ":";
+            if(db.configs.acoes.includes(v)) return alert("Esta ação já existe!");
             db.configs.acoes.push(v);
             document.getElementById('novaAcaoInput').value = '';
-            salvarEtiquetaConfigs();
+            salvarEtiquetaConfigsSilencioso();
             renderizarAcoesCfg();
         }
     }
 
-    function removerAcaoCfg(i) {
+    function removerAcaoCfg(nomeAcao) {
         if(db.configs.acoes.length <= 1) return alert("Você precisa ter pelo menos uma Ação!");
-        db.configs.acoes.splice(i, 1);
-        salvarEtiquetaConfigs();
+        db.configs.acoes = db.configs.acoes.filter(a => a !== nomeAcao);
+        salvarEtiquetaConfigsSilencioso();
         renderizarAcoesCfg();
     }
 
@@ -975,32 +1074,53 @@
         let list = document.getElementById('listaConservacoesCfg');
         list.innerHTML = '';
         db.configs.conservacoes.forEach((cons, i) => {
-            list.innerHTML += `<div style="background:#e0e0e0; padding:6px 12px; border-radius:12px; font-size:13px; font-weight:bold; display:flex; align-items:center; gap:8px;">${cons} <span style="cursor:pointer; color:#d32f2f; font-weight:900;" onclick="removerConservacaoCfg(${i})">X</span></div>`;
+            list.innerHTML += `
+            <div data-nome="${cons}" style="background:#e0e0e0; padding:8px 12px; border-radius:8px; font-size:14px; font-weight:bold; display:flex; align-items:center; gap:10px;">
+                <span class="drag-handle" style="cursor:grab; font-size:18px; color:#666; padding: 0 5px;">☰</span> 
+                ${cons} 
+                <span style="cursor:pointer; color:#d32f2f; font-weight:900; margin-left:auto; padding: 0 10px;" onclick="removerConservacaoCfg('${cons}')">X</span>
+            </div>`;
+        });
+
+        if(sortableConservacoes) sortableConservacoes.destroy();
+        sortableConservacoes = new Sortable(list, {
+            animation: 150,
+            handle: '.drag-handle',
+            ghostClass: 'sortable-ghost',
+            onEnd: function () {
+                db.configs.conservacoes = Array.from(list.children).map(el => el.dataset.nome);
+                salvarEtiquetaConfigsSilencioso();
+            }
         });
     }
 
     function adicionarConservacaoCfg() {
         let v = document.getElementById('novaConservacaoInput').value.trim();
         if(v) {
+            if(db.configs.conservacoes.includes(v)) return alert("Esta forma de conservação já existe!");
             db.configs.conservacoes.push(v);
             document.getElementById('novaConservacaoInput').value = '';
-            salvarEtiquetaConfigs();
+            salvarEtiquetaConfigsSilencioso();
             renderizarConservacoesCfg();
         }
     }
 
-    function removerConservacaoCfg(i) {
+    function removerConservacaoCfg(nomeCons) {
         if(db.configs.conservacoes.length <= 1) return alert("Você precisa ter pelo menos uma Forma de Conservação!");
-        db.configs.conservacoes.splice(i, 1);
-        salvarEtiquetaConfigs();
+        db.configs.conservacoes = db.configs.conservacoes.filter(c => c !== nomeCons);
+        salvarEtiquetaConfigsSilencioso();
         renderizarConservacoesCfg();
+    }
+
+    function salvarEtiquetaConfigsSilencioso() {
+        db.configs.ultimaModificacaoLocal = Date.now();
+        salvarBancoLocal();
+        sincronizarComNuvemSilencioso();
     }
 
     function abrirGerenciarEtiquetas() {
         fecharModal('modalPainelUnificado');
-        document.getElementById('cfgEstabelecimento').value = db.configs.estabelecimento;
         document.getElementById('cfgTamanho').value = db.configs.tamanhoEtiqueta;
-        document.getElementById('cfgModo').value = db.configs.modo;
         document.getElementById('cfgDestaqueProd').checked = db.configs.destaqueProd;
         document.getElementById('cfgDestaqueVal').checked = db.configs.destaqueVal;
         document.getElementById('cfgQRGlobal').checked = db.configs.controleQR;
@@ -1015,9 +1135,7 @@
     }
 
     function salvarEtiquetaConfigs() {
-        db.configs.estabelecimento = document.getElementById('cfgEstabelecimento').value.trim() || "Restaurante";
         db.configs.tamanhoEtiqueta = document.getElementById('cfgTamanho').value;
-        db.configs.modo = document.getElementById('cfgModo').value;
         db.configs.destaqueProd = document.getElementById('cfgDestaqueProd').checked;
         db.configs.destaqueVal = document.getElementById('cfgDestaqueVal').checked;
         db.configs.controleQR = document.getElementById('cfgQRGlobal').checked;
@@ -1110,14 +1228,14 @@
     
     async function exportarBancoTXT() { 
         const dataStr = JSON.stringify(db); 
-        const fileName = `backup_alo_etiquetas_${new Date().getTime()}.txt`; 
+        const fileName = `backup_alo_etiqueta_${new Date().getTime()}.txt`; 
         const blob = new Blob([dataStr], { type: "text/plain" }); 
         
         if (navigator.share && navigator.canShare) { 
             try {
                 const file = new File([blob], fileName, { type: "text/plain" });
                 if (navigator.canShare({ files: [file] })) { 
-                    await navigator.share({ files: [file], title: 'Backup Alô Etiquetas' }); 
+                    await navigator.share({ files: [file], title: 'Backup Alô Etiqueta' }); 
                     return; 
                 }
             } catch (err) { }
@@ -1201,6 +1319,10 @@
                     db.operadores = dadosNuvem.operadores || [];
                     if(dadosNuvem.configs.acoes) db.configs.acoes = dadosNuvem.configs.acoes;
                     if(dadosNuvem.configs.conservacoes) db.configs.conservacoes = dadosNuvem.configs.conservacoes;
+                    if(dadosNuvem.configs.tema) {
+                        db.configs.tema = dadosNuvem.configs.tema;
+                        aplicarTemaCores();
+                    }
                     db.configs.ultimaModificacaoLocal = tsNuvem;
                 } else if (tsLocal > tsNuvem) {
                     mudouLocalmente = true;
@@ -1316,10 +1438,10 @@
 
         if (categoriaAtual === null) {
             lista.innerHTML += `
-                <li class="item" style="border: 2px dashed #1976D2; background: #E3F2FD;" onclick="abrirModalImprimirPersonalizada()">
-                    <div class="item-avatar" style="background: #1976D2; color: white;">*</div>
+                <li class="item" style="border: 2px dashed var(--primaria); background: var(--secundaria);" onclick="abrirModalImprimirPersonalizada()">
+                    <div class="item-avatar" style="background: var(--primaria); color: white;">*</div>
                     <div class="item-info">
-                        <div class="item-title" style="color: #1976D2;">Etiqueta Personalizada</div>
+                        <div class="item-title" style="color: var(--primaria);">Etiqueta Personalizada</div>
                         <div class="item-subtitle">Imprimir item avulso (sem QR)</div>
                     </div>
                     <div class="print-icon" style="font-size:20px;">🖨️</div>
@@ -1464,7 +1586,7 @@
         const existe = db.produtos.find(p => p.codigo === codNum);
 
         if (existe && orig !== "" && parseInt(orig) === codNum) {
-            msg.innerHTML = '<span style="color: #1976D2;">Mantendo código atual</span>';
+            msg.innerHTML = '<span style="color: var(--primaria);">Mantendo código atual</span>';
         } else if (existe) {
             msg.innerHTML = '<span style="color: #d32f2f;">❌ Código já está em uso!</span>';
         } else {
@@ -1577,7 +1699,7 @@
         } else { 
             document.getElementById('catNomeOriginal').value = ''; 
             document.getElementById('catNome').value = ''; 
-            document.getElementById('catCor').value = '#1976D2'; 
+            document.getElementById('catCor').value = '#1565C0'; 
             document.getElementById('catCorTexto').value = '#ffffff'; 
         } 
         
@@ -1784,8 +1906,8 @@
             if(!htmlResumoS) htmlResumoS = '<div style="font-size:13px; color:#999;">Nenhuma saída</div>';
             
             lista.innerHTML += `
-                <div style="background:#e3f2fd; border:2px solid #1976D2; border-radius:8px; margin-bottom:20px; overflow:hidden;">
-                    <div style="background:#1976D2; padding:8px 12px; font-weight:900; color:white; text-align:center;">📊 COMPILAÇÃO DO PERÍODO</div>
+                <div style="background:var(--secundaria); border:2px solid var(--primaria); border-radius:8px; margin-bottom:20px; overflow:hidden;">
+                    <div style="background:var(--primaria); padding:8px 12px; font-weight:900; color:white; text-align:center;">📊 COMPILAÇÃO DO PERÍODO</div>
                     <div style="display:flex; justify-content:space-between; background:white;">
                         <div style="flex:1; padding:12px; border-right:1px solid #eee;">
                             <div style="color:#2e7d32; font-weight:900; font-size:12px; margin-bottom:8px;">🟢 PRODUZIDOS</div>
@@ -1862,7 +1984,7 @@
                     <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                         <div>
                             <div style="font-size: 13px; color: #444; margin-bottom: 4px;">Manipulado: ${r.dataManipulado}</div>
-                            <div style="font-size: 14px; color: #1565C0;">Validade: <strong>${r.validadeFinal}</strong></div>
+                            <div style="font-size: 14px; color: var(--primaria);">Validade: <strong>${r.validadeFinal}</strong></div>
                             <div style="font-size: 11px; color: #999; margin-top: 4px; font-weight: bold;">Cód: ${shortSku}</div>
                         </div>
                         <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end;">
@@ -1957,7 +2079,7 @@
 
             sortedCats.forEach(cat => {
                 let catObj = db.categorias.find(c => c.nome === cat);
-                let bg = catObj ? catObj.cor : '#1565C0';
+                let bg = catObj ? catObj.cor : 'var(--primaria)';
                 let co = catObj ? catObj.corTexto : '#fff';
 
                 lista.innerHTML += `<div style="background:${bg}; color:${co}; padding:6px 12px; font-weight:900; font-size:14px; margin-top:10px; border-radius: 4px;">📁 ${cat.toUpperCase()}</div>`;
@@ -2029,12 +2151,12 @@
                     return valB - valA;
                 });
 
-                document.getElementById('btnSortValidade').style.color = sortConfig.campo === 'validade' ? '#1976D2' : '#555';
-                document.getElementById('btnSortValidade').style.borderColor = sortConfig.campo === 'validade' ? '#1976D2' : '#ccc';
+                document.getElementById('btnSortValidade').style.color = sortConfig.campo === 'validade' ? 'var(--primaria)' : '#555';
+                document.getElementById('btnSortValidade').style.borderColor = sortConfig.campo === 'validade' ? 'var(--primaria)' : '#ccc';
                 document.getElementById('btnSortValidade').innerText = sortConfig.campo === 'validade' ? (sortConfig.dir === 'asc' ? 'Vencimento ⬇️' : 'Vencimento ⬆️') : 'Vencimento ↕️';
 
-                document.getElementById('btnSortProduzido').style.color = sortConfig.campo === 'produzido' ? '#1976D2' : '#555';
-                document.getElementById('btnSortProduzido').style.borderColor = sortConfig.campo === 'produzido' ? '#1976D2' : '#ccc';
+                document.getElementById('btnSortProduzido').style.color = sortConfig.campo === 'produzido' ? 'var(--primaria)' : '#555';
+                document.getElementById('btnSortProduzido').style.borderColor = sortConfig.campo === 'produzido' ? 'var(--primaria)' : '#ccc';
                 document.getElementById('btnSortProduzido').innerText = sortConfig.campo === 'produzido' ? (sortConfig.dir === 'asc' ? 'Produzido ⬇️' : 'Produzido ⬆️') : 'Produzido ↕️';
 
                 itensAtivos.forEach(item => { 
@@ -2062,7 +2184,7 @@
                     lista.innerHTML += `
                         <li style="padding: 12px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
                             <div style="flex: 1;">
-                                <strong style="font-size: 15px; color: #1565C0;">${item.produto} ${marcaDisplay}</strong>
+                                <strong style="font-size: 15px; color: var(--primaria);">${item.produto} ${marcaDisplay}</strong>
                                 <div style="font-size: 12px; color: #666; margin-top: 4px;">Manip.: ${item.dataManipulado}</div>
                                 <div style="margin-top: 6px;"><span class="badge-status ${classeBadge}">${textoStatus}</span></div>
                             </div>
@@ -2338,7 +2460,7 @@
                 id: Date.now() + i,
                 produto: nome + " (Avulso)",
                 sku: skuCode,
-                baixado: true, // Já nasce baixado para não poluir estoque
+                baixado: true, 
                 acaoImpressao: acaoImpressao,
                 acaoSelect: acaoSelect,
                 peso: (pesoInput === "" ? "-" : `${pesoInput}g`),
