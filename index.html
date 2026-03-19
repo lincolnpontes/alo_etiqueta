@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô Etiqueta v1.0.12</title>
+    <title>Alô Etiqueta v1</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -154,7 +154,7 @@
     <img src="icon.png" class="splash-icon" alt="Alô Etiqueta" onerror="this.style.display='none'; document.getElementById('splash-emoji').style.display='block';">
     <div id="splash-emoji" class="splash-emoji">🏷️</div>
     <div class="splash-title">Alô Etiqueta</div>
-    <div class="splash-version">v1.0.12</div>
+    <div class="splash-version">v1</div>
 </div>
 
 <div id="login-screen">
@@ -214,16 +214,18 @@
 <div class="app-container">
     <div id="sticky-header">
         <div class="header">
-            <div style="width: 130px; display: flex; justify-content: flex-start;">
-                <div style="position: relative; width: 100%;">
+            <div style="flex: 1; display: flex; justify-content: flex-start; font-weight: 900; font-size: 18px; white-space: nowrap; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">
+                Alô Etiqueta
+            </div>
+            
+            <div style="flex: 1.5; display: flex; justify-content: center;">
+                <div style="position: relative; width: 100%; max-width: 220px;">
                     <span style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); font-size: 14px; pointer-events: none; z-index: 1;">👤</span>
                     <select id="seletorOperador" class="modern-select" style="padding-left: 28px !important; width: 100%;" onchange="verificarTrocaOperador(this)"></select>
                 </div>
             </div>
             
-            <div style="flex: 1; text-align: center; font-weight: 900; font-size: 18px; white-space: nowrap; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">Alô Etiqueta</div>
-            
-            <div style="width: 130px; display: flex; justify-content: flex-end; align-items: center; gap: 8px;">
+            <div style="flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 8px;">
                 <div id="indicadorConexao" class="status-conexao" title="Sincronização Automática">⚪</div>
                 <button onclick="abrirLoginAdmin()" title="Painel Administrativo" style="background: none; border: none; color: white; font-size: 22px; cursor: pointer; padding: 0;">⚙️</button>
             </div>
@@ -285,7 +287,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô Etiqueta - v1.0.12</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô Etiqueta - v1</div>
         
         <button class="btn-outline" onclick="abrirConfigGeraisModal()">⚙️ Configurações Gerais</button>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
