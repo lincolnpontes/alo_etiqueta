@@ -1,6 +1,6 @@
 {
-  "name": "Etiquetadora",
-  "short_name": "Etiquetas",
+  "name": "Alô Etiqueta",
+  "short_name": "Alô Etiqueta",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f0f2f5",
