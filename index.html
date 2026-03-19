@@ -39,7 +39,7 @@
             transition: opacity 0.5s ease;
         }
         #splash-screen.hidden { opacity: 0; pointer-events: none; }
-        .splash-icon { width: 130px; height: 130px; object-fit: contain; margin-bottom: 15px; }
+        .splash-icon { width: 130px; height: 130px; object-fit: contain; margin-bottom: 15px; background-color: transparent !important; border: none !important; box-shadow: none !important; }
         .splash-emoji { font-size: 70px; margin-bottom: 15px; display: none; }
         .splash-title { font-size: 26px; font-weight: 900; margin-bottom: 5px; letter-spacing: 1px; }
         .splash-version { font-size: 14px; font-weight: bold; opacity: 0.8; background: var(--secundaria); padding: 4px 10px; border-radius: 12px; }
@@ -597,7 +597,7 @@
             </div>
             <div class="form-group" style="flex:1;">
                 <label>Preço (R$):</label>
-                <input type="number" id="imprimirPreco" step="0.01" oninput="calcularTotalPagar()">
+                <input type="text" id="imprimirPreco" inputmode="numeric" oninput="formatarMoedaElemento(this); calcularTotalPagar()">
             </div>
         </div>
         <div id="boxCalculoTotal" style="background:#e8f5e9; padding:10px; border-radius:5px; text-align:center; font-weight:bold; color:#2e7d32; margin-bottom:15px; display:none;">
@@ -654,7 +654,7 @@
             </div>
             <div class="form-group" style="flex:1;">
                 <label>Preço (R$):</label>
-                <input type="number" id="impPersPreco" step="0.01" placeholder="Opcional" oninput="calcularTotalPagarPers()">
+                <input type="text" id="impPersPreco" inputmode="numeric" placeholder="Opcional" oninput="formatarMoedaElemento(this); calcularTotalPagarPers()">
             </div>
         </div>
         <div id="boxCalculoTotalPers" style="background:#e8f5e9; padding:10px; border-radius:5px; text-align:center; font-weight:bold; color:#2e7d32; margin-bottom:15px; display:none;">
@@ -718,7 +718,7 @@
             </div>
             <div class="form-group" style="flex: 1;">
                 <label>Preço Base (R$):</label>
-                <input type="number" id="prodPreco" step="0.01">
+                <input type="text" id="prodPreco" inputmode="numeric" oninput="formatarMoedaElemento(this)">
             </div>
         </div>
         <div class="switch-container">
@@ -863,6 +863,41 @@
             }
         } catch(e){}
     }
+    
+    // ======== FUNÇÕES DE MOEDA ========
+    function formatarMoedaElemento(el) {
+        let valor = el.value.replace(/\D/g, '');
+        if (valor === '') {
+            el.value = '';
+            return;
+        }
+        let numerico = parseInt(valor, 10) / 100;
+        el.value = numerico.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    }
+
+    function getValorMoeda(id) {
+        let val = document.getElementById(id).value;
+        if(!val) return NaN;
+        val = val.replace(/\./g, '').replace(',', '.');
+        return parseFloat(val);
+    }
+
+    function setValorMoeda(id, valor) {
+        const el = document.getElementById(id);
+        if(valor === "" || valor === null || valor === undefined || isNaN(valor)) {
+            el.value = "";
+            return;
+        }
+        let num = parseFloat(valor);
+        el.value = num.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    }
+
+    function formataDinheiro(v) { 
+        let num = parseFloat(v);
+        if(isNaN(num)) return "0,00";
+        return num.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2}); 
+    }
+    // ==================================
 
     function carregarBanco() {
         let def = {
@@ -942,6 +977,7 @@
         const containerSenha = document.getElementById('loginSenhaContainer');
         if(op && op.senha !== "") {
             containerSenha.style.display = "flex";
+            setTimeout(() => document.getElementById('loginSenha').focus(), 10);
         } else {
             containerSenha.style.display = "none";
         }
@@ -1032,7 +1068,7 @@
         if(db.configs.senhaAdmin && db.configs.senhaAdmin.trim() !== "") {
             document.getElementById('senhaAdmin').value = '';
             abrirModal('modalLoginAdmin');
-            setTimeout(() => document.getElementById('senhaAdmin').focus(), 100);
+            document.getElementById('senhaAdmin').focus();
         } else {
             abrirPainelUnificado(); 
         }
@@ -1205,7 +1241,7 @@
         fecharModal('modalPainelUnificado'); 
         document.getElementById('senhaAvancada').value = '';
         abrirModal('modalSenhaAvancada'); 
-        setTimeout(() => document.getElementById('senhaAvancada').focus(), 100);
+        document.getElementById('senhaAvancada').focus();
     }
     
     function abrirZonaRisco() { 
@@ -1425,7 +1461,7 @@
             document.getElementById('operadorAlvo').value = nome; 
             document.getElementById('senhaTrocaOperador').value = ''; 
             abrirModal('modalSenhaOperador'); 
-            setTimeout(() => document.getElementById('senhaTrocaOperador').focus(), 100); 
+            document.getElementById('senhaTrocaOperador').focus();
         } else { 
             operadorAnteriorSelect = nome; 
             localStorage.setItem('etiquetadora_operadorAtual', nome); 
@@ -1697,7 +1733,7 @@
             document.getElementById('prodNome').value = p.nome; 
             document.getElementById('prodCategoria').value = p.categoria; 
             document.getElementById('prodValidade').value = p.validadeDias; 
-            document.getElementById('prodPreco').value = p.precoPadrao; 
+            setValorMoeda('prodPreco', p.precoPadrao); 
             document.getElementById('prodMarcas').value = p.marcas ? p.marcas.join(', ') : ''; 
             
             let acao = p.acaoPadrao ? p.acaoPadrao.replace(/ em:/i, ':').replace(/ em/i, ':') : db.configs.acoes[0];
@@ -1727,7 +1763,10 @@
         const cat = document.getElementById('prodCategoria').value; 
         const val = parseInt(document.getElementById('prodValidade').value); 
         const arm = document.getElementById('prodArmazenamento').value; 
-        const prc = document.getElementById('prodPreco').value; 
+        
+        const prcVal = getValorMoeda('prodPreco');
+        const prc = isNaN(prcVal) ? "" : prcVal.toString();
+        
         const mrc = document.getElementById('prodMarcas').value.split(',').map(m => m.trim()).filter(m => m !== ""); 
         const ac = document.getElementById('prodAcaoPadrao').value; 
         const qr = document.getElementById('prodUsaQR').checked; 
@@ -2367,7 +2406,7 @@
         document.getElementById('imprimirAcao').value = acaoPadraoSelect; 
         
         document.getElementById('imprimirPeso').value = ''; 
-        document.getElementById('imprimirPreco').value = p.precoPadrao; 
+        setValorMoeda('imprimirPreco', p.precoPadrao); 
         document.getElementById('imprimirValidade').value = dVal.toISOString().split('T')[0]; 
         
         const selM = document.getElementById('imprimirMarca'); 
@@ -2435,7 +2474,7 @@
     }
     
     function calcularTotalPagar() { 
-        const preco = parseFloat(document.getElementById('imprimirPreco').value); 
+        const preco = getValorMoeda('imprimirPreco'); 
         const peso = parseFloat(document.getElementById('imprimirPeso').value); 
         const span = document.getElementById('imprimirCalculo'); 
         const box = document.getElementById('boxCalculoTotal'); 
@@ -2453,7 +2492,7 @@
     }
 
     function calcularTotalPagarPers() { 
-        const preco = parseFloat(document.getElementById('impPersPreco').value); 
+        const preco = getValorMoeda('impPersPreco'); 
         const peso = parseFloat(document.getElementById('impPersPeso').value); 
         const span = document.getElementById('impPersCalculo'); 
         const box = document.getElementById('boxCalculoTotalPers'); 
@@ -2470,10 +2509,6 @@
         }
     }
     
-    function formataDinheiro(v) { 
-        return parseFloat(v).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2}); 
-    }
-    
     async function processarImpressao() {
         const btn = document.getElementById('btnProcessarImpressao'); 
         btn.innerText = "Aguarde..."; 
@@ -2482,7 +2517,7 @@
         const p = db.produtos.find(x => x.codigo === parseInt(document.getElementById('imprimirCodigoProduto').value)); 
         const acaoSelect = document.getElementById('imprimirAcao').value; 
         const pesoInput = document.getElementById('imprimirPeso').value.trim(); 
-        const precoInput = document.getElementById('imprimirPreco').value.trim(); 
+        const precoNum = getValorMoeda('imprimirPreco'); 
         const op = document.getElementById('seletorOperador').value; 
         const est = db.configs.estabelecimento; 
         const marca = document.getElementById('imprimirMarca').value; 
@@ -2511,7 +2546,7 @@
                 peso: (pesoInput === "" ? "-" : `${pesoInput}g`), 
                 marca: marca, 
                 lote: lote, 
-                preco: (precoInput === "" ? "" : formataDinheiro(precoInput)), 
+                preco: (isNaN(precoNum) ? "" : formataDinheiro(precoNum)), 
                 dataManipulado: manBR, 
                 validadeFinal: valBR, 
                 quantidade: 1, 
@@ -2529,11 +2564,11 @@
         
         if(db.configs.modo === 'pdf') { 
             fecharModal('modalImprimir'); 
-            gerarPDF(p, acaoImpressao, pesoInput, manBR, valBR, quantidadeAtual, op, est, precoInput, marca, lote, skusGerados); 
+            gerarPDF(p, acaoImpressao, pesoInput, manBR, valBR, quantidadeAtual, op, est, precoNum, marca, lote, skusGerados); 
             btn.innerText = "🖨️ IMPRIMIR"; 
             btn.disabled = false; 
         } else {
-            await gerarRawBT(p, acaoImpressao, pesoInput, manBR, valBR, quantidadeAtual, op, est, precoInput, marca, lote, skusGerados, btn); 
+            await gerarRawBT(p, acaoImpressao, pesoInput, manBR, valBR, quantidadeAtual, op, est, precoNum, marca, lote, skusGerados, btn); 
             fecharModal('modalImprimir');
         }
     }
@@ -2548,7 +2583,7 @@
 
         const acaoSelect = document.getElementById('impPersAcao').value.trim() || db.configs.acoes[0];
         const pesoInput = document.getElementById('impPersPeso').value.trim();
-        const precoInput = document.getElementById('impPersPreco').value.trim();
+        const precoNum = getValorMoeda('impPersPreco');
         const marcaInput = document.getElementById('impPersMarca').value.trim();
         const loteInput = document.getElementById('impPersLote').value.trim();
         const armazInput = document.getElementById('impPersArmazenamento').value;
@@ -2582,7 +2617,7 @@
                 peso: (pesoInput === "" ? "-" : `${pesoInput}g`),
                 marca: marcaInput,
                 lote: loteInput,
-                preco: (precoInput === "" ? "" : formataDinheiro(precoInput)),
+                preco: (isNaN(precoNum) ? "" : formataDinheiro(precoNum)),
                 dataManipulado: manBR,
                 validadeFinal: valBR,
                 quantidade: 1,
@@ -2600,16 +2635,16 @@
 
         if(db.configs.modo === 'pdf') {
             fecharModal('modalImprimirPers');
-            gerarPDF(pFalso, acaoImpressao, pesoInput, manBR, valBR, qtdPers, op, est, precoInput, marcaInput, loteInput, skusGerados);
+            gerarPDF(pFalso, acaoImpressao, pesoInput, manBR, valBR, qtdPers, op, est, precoNum, marcaInput, loteInput, skusGerados);
             btn.innerText = "🖨️ IMPRIMIR"; btn.disabled = false;
         } else {
-            await gerarRawBT(pFalso, acaoImpressao, pesoInput, manBR, valBR, qtdPers, op, est, precoInput, marcaInput, loteInput, skusGerados, btn);
+            await gerarRawBT(pFalso, acaoImpressao, pesoInput, manBR, valBR, qtdPers, op, est, precoNum, marcaInput, loteInput, skusGerados, btn);
             fecharModal('modalImprimirPers');
             btn.innerText = "🖨️ IMPRIMIR"; btn.disabled = false;
         }
     }
 
-    function gerarPDF(p, acaoImpressao, pesoInput, manBR, valBR, qtd, op, est, precoInput, marca, lote, skus) {
+    function gerarPDF(p, acaoImpressao, pesoInput, manBR, valBR, qtd, op, est, precoNum, marca, lote, skus) {
         let printWindow = window.open('', '', 'width=600,height=800');
         
         let armazHTML = "";
@@ -2656,9 +2691,9 @@
         
         for(let i = 0; i < qtd; i++) {
             let valorCalc = ""; 
-            if(precoInput !== "") { 
+            if(!isNaN(precoNum)) { 
                 let psNum = parseFloat(pesoInput); 
-                valorCalc = (!isNaN(psNum) && psNum > 0) ? formataDinheiro((psNum/1000)*parseFloat(precoInput)) : formataDinheiro(parseFloat(precoInput)); 
+                valorCalc = (!isNaN(psNum) && psNum > 0) ? formataDinheiro((psNum/1000)*precoNum) : formataDinheiro(precoNum); 
             }
             
             let showQR = (db.configs.controleQR && p.usaQR) ? "flex" : "none";
@@ -2671,13 +2706,13 @@
             let linhaMarcaLote = (marcaStr || loteStr) ? `<div style="margin-bottom: 2px;">${marcaStr}${divisorML}${loteStr}</div>` : "";
 
             let pesoStr = pesoInput !== "" ? `<span>PESO: ${pesoInput}g</span>` : "";
-            let precoUnitStr = precoInput !== "" ? `<span>PREÇO: R$ ${formataDinheiro(parseFloat(precoInput))}</span>` : "";
-            let divisorPP = (pesoInput !== "" && precoInput !== "") ? `<span style="margin: 0 4px;">|</span>` : "";
+            let precoUnitStr = !isNaN(precoNum) ? `<span>PREÇO: R$ ${formataDinheiro(precoNum)}</span>` : "";
+            let divisorPP = (pesoInput !== "" && !isNaN(precoNum)) ? `<span style="margin: 0 4px;">|</span>` : "";
             let linhaPesoPreco = (pesoStr || precoUnitStr) ? `<div style="margin-bottom: 2px;">${pesoStr}${divisorPP}${precoUnitStr}</div>` : "";
 
             let blocoOpcionais = (linhaMarcaLote || linhaPesoPreco) ? `<div style="font-size: 10pt; font-weight: bold; width: 100%; margin-bottom: 2px;">${linhaMarcaLote}${linhaPesoPreco}</div>` : "";
 
-            let totalStr = precoInput !== "" ? `<div style="font-size: 14pt; font-weight: 900; margin-top: 2px;">TOTAL: R$ <span>${valorCalc}</span></div>` : "";
+            let totalStr = !isNaN(precoNum) ? `<div style="font-size: 14pt; font-weight: 900; margin-top: 2px;">TOTAL: R$ <span>${valorCalc}</span></div>` : "";
 
             htmlContent += `
             <div class="etiqueta-print" ${i < qtd -1 ? 'style="page-break-after: always;"' : ''}>
@@ -2739,7 +2774,7 @@
         printWindow.document.close();
     }
 
-    async function gerarRawBT(p, acaoImpressao, pesoInput, manBR, valBR, qtd, op, est, precoInput, marca, lote, skus, btn) {
+    async function gerarRawBT(p, acaoImpressao, pesoInput, manBR, valBR, qtd, op, est, precoNum, marca, lote, skus, btn) {
         const gab = document.getElementById('area-impressao-visual'); 
         
         let nomeFormatado = p.nome.toUpperCase();
@@ -2770,7 +2805,7 @@
         }
         
         let hasPeso = pesoInput !== "";
-        let hasPreco = precoInput !== "";
+        let hasPreco = !isNaN(precoNum);
         document.getElementById('viz-linha-pesopreco').style.display = (hasPeso || hasPreco) ? "block" : "none";
 
         document.getElementById('viz-peso-container').style.display = hasPeso ? "inline-block" : "none";
@@ -2778,14 +2813,14 @@
 
         document.getElementById('viz-preco-container').style.display = hasPreco ? "inline-block" : "none";
         if(hasPreco) {
-            let precoFormatado = formataDinheiro(parseFloat(precoInput));
+            let precoFormatado = formataDinheiro(precoNum);
             document.getElementById('viz-preco-container').innerHTML = hasPeso ? `| PREÇO: R$ <span id="viz-preco-unit">${precoFormatado}</span>` : `PREÇO: R$ <span id="viz-preco-unit">${precoFormatado}</span>`;
         }
         
         let calcPreco = ""; 
         if(hasPreco) { 
             let psNum = parseFloat(pesoInput); 
-            calcPreco = (!isNaN(psNum) && psNum > 0) ? formataDinheiro((psNum/1000)*parseFloat(precoInput)) : formataDinheiro(parseFloat(precoInput)); 
+            calcPreco = (!isNaN(psNum) && psNum > 0) ? formataDinheiro((psNum/1000)*precoNum) : formataDinheiro(precoNum); 
         }
         
         if(calcPreco !== "") { 
