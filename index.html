@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô Etiqueta v1.0.11</title>
+    <title>Alô Etiqueta v1.0.12</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -21,15 +21,16 @@
             --fundo: #f0f2f5;
             --bg-app: #ffffff;
             --bg-item: #ffffff;
+            --bg-header: #ffffff;
         }
 
         body { font-family: Arial, sans-serif; background: var(--fundo); margin: 0; padding: 0; display: flex; justify-content: center; transition: background 0.3s ease; }
         
-        /* Classe que trava a rolagem do fundo */
         body.modal-open { overflow: hidden; }
         
         .app-container { width: 100%; max-width: 1200px; background: var(--bg-app); min-height: 100vh; display: flex; flex-direction: column; position: relative; margin: 0 auto; box-shadow: 0 0 15px rgba(0,0,0,0.1); transition: background 0.3s ease; }
-        #sticky-header { position: sticky; top: 0; z-index: 100; background: var(--bg-app); box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; flex-direction: column; transition: background 0.3s ease; }
+        
+        #sticky-header { position: sticky; top: 0; z-index: 100; background: var(--bg-header); box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; flex-direction: column; transition: background 0.3s ease; }
         
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -52,15 +53,15 @@
 
         .header { background: var(--primaria); color: white; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; gap: 10px; transition: background 0.3s ease; }
         
-        .modern-select { height: 32px; border-radius: 20px !important; border: 1px solid rgba(255,255,255,0.4) !important; background: rgba(255,255,255,0.1) !important; color: white !important; font-size: 14px; font-weight: bold; width: 100%; max-width: 170px; padding: 0 12px !important; outline: none; cursor: pointer; }
+        .modern-select { height: 32px; border-radius: 20px !important; border: 1px solid rgba(255,255,255,0.4) !important; background: rgba(255,255,255,0.1) !important; color: white !important; font-size: 14px; font-weight: bold; width: 100%; padding: 0 12px !important; outline: none; cursor: pointer; }
         .modern-select option { color: #333; background: #fff; }
         .modal-select { height: 38px; border-radius: 8px !important; border: 1px solid #ccc !important; background: #fff !important; color: #333 !important; padding: 0 12px !important; width: 100%; max-width: none; font-size: 14px; font-weight: bold; outline: none; margin-bottom: 10px; }
         
-        .status-conexao { font-size: 14px; cursor: help; background: rgba(0,0,0,0.2); padding: 4px 8px; border-radius: 12px; }
+        .status-conexao { font-size: 11px; cursor: help; background: rgba(0,0,0,0.2); padding: 3px 6px; border-radius: 12px; }
         
         .search-box { background: var(--secundaria); padding: 10px; display: flex; gap: 6px; width: 100%; box-sizing: border-box; align-items: center; overflow: hidden; transition: background 0.3s ease; }
         .search-box input { width: 55px; flex-shrink: 0; flex-grow: 1; max-width: 150px; padding: 12px 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; font-weight: bold; }
-        .search-box .btn-buscar { background: var(--primaria); color: white; border: none; padding: 0 15px; height: 44px; border-radius: 6px; cursor: pointer; font-size: 18px; font-weight: bold; flex-shrink: 0; }
+        .search-box .btn-buscar { background: var(--primaria); color: white; border: none; padding: 0 10px; height: 44px; border-radius: 6px; cursor: pointer; font-size: 26px; font-weight: bold; flex-shrink: 0; line-height: 1; display: flex; align-items: center; justify-content: center; }
         .spacer { flex-grow: 1; } 
         
         .icon-group { display: flex; gap: 12px; align-items: center; margin-left: 8px; }
@@ -153,7 +154,7 @@
     <img src="icon.png" class="splash-icon" alt="Alô Etiqueta" onerror="this.style.display='none'; document.getElementById('splash-emoji').style.display='block';">
     <div id="splash-emoji" class="splash-emoji">🏷️</div>
     <div class="splash-title">Alô Etiqueta</div>
-    <div class="splash-version">v1.0.11</div>
+    <div class="splash-version">v1.0.12</div>
 </div>
 
 <div id="login-screen">
@@ -213,16 +214,16 @@
 <div class="app-container">
     <div id="sticky-header">
         <div class="header">
-            <div style="flex: 1; display: flex; justify-content: flex-start;">
-                <div style="position: relative; width: 150px;">
+            <div style="width: 130px; display: flex; justify-content: flex-start;">
+                <div style="position: relative; width: 100%;">
                     <span style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); font-size: 14px; pointer-events: none; z-index: 1;">👤</span>
-                    <select id="seletorOperador" class="modern-select" style="padding-left: 28px !important; width: 100%; max-width: 100%;" onchange="verificarTrocaOperador(this)"></select>
+                    <select id="seletorOperador" class="modern-select" style="padding-left: 28px !important; width: 100%;" onchange="verificarTrocaOperador(this)"></select>
                 </div>
             </div>
             
-            <div style="flex: 1.2; text-align: center; font-weight: 900; font-size: 18px; white-space: nowrap; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); padding-left: 15px;">Alô Etiqueta</div>
+            <div style="flex: 1; text-align: center; font-weight: 900; font-size: 18px; white-space: nowrap; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">Alô Etiqueta</div>
             
-            <div style="flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 10px;">
+            <div style="width: 130px; display: flex; justify-content: flex-end; align-items: center; gap: 8px;">
                 <div id="indicadorConexao" class="status-conexao" title="Sincronização Automática">⚪</div>
                 <button onclick="abrirLoginAdmin()" title="Painel Administrativo" style="background: none; border: none; color: white; font-size: 22px; cursor: pointer; padding: 0;">⚙️</button>
             </div>
@@ -284,7 +285,7 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô Etiqueta - v1.0.11</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô Etiqueta - v1.0.12</div>
         
         <button class="btn-outline" onclick="abrirConfigGeraisModal()">⚙️ Configurações Gerais</button>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
@@ -805,12 +806,12 @@
     let toastTimeout;
 
     const paletasDeCores = {
-        azul: { primaria: '#1565C0', secundaria: '#E3F2FD', fundo: '#f0f2f5', bgApp: '#ffffff', bgItem: '#ffffff' },
-        verde: { primaria: '#2e7d32', secundaria: '#e8f5e9', fundo: '#f0f2f5', bgApp: '#ffffff', bgItem: '#ffffff' },
-        vermelho: { primaria: '#c62828', secundaria: '#ffebee', fundo: '#f0f2f5', bgApp: '#ffffff', bgItem: '#ffffff' },
-        rosa: { primaria: '#d81b60', secundaria: '#fce4ec', fundo: '#fdf3f6', bgApp: '#ffffff', bgItem: '#ffffff' },
-        escuro: { primaria: '#212121', secundaria: '#e0e0e0', fundo: '#424242', bgApp: '#f5f5f5', bgItem: '#ffffff' },
-        transparente: { primaria: '#004d40', secundaria: 'rgba(255,255,255,0.4)', fundo: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)', bgApp: 'rgba(255,255,255,0.4)', bgItem: 'rgba(255,255,255,0.5)' }
+        azul: { primaria: '#1565C0', secundaria: '#E3F2FD', fundo: '#f0f2f5', bgApp: '#ffffff', bgItem: '#ffffff', bgHeader: '#ffffff' },
+        verde: { primaria: '#2e7d32', secundaria: '#e8f5e9', fundo: '#f0f2f5', bgApp: '#ffffff', bgItem: '#ffffff', bgHeader: '#ffffff' },
+        vermelho: { primaria: '#c62828', secundaria: '#ffebee', fundo: '#f0f2f5', bgApp: '#ffffff', bgItem: '#ffffff', bgHeader: '#ffffff' },
+        rosa: { primaria: '#d81b60', secundaria: '#fce4ec', fundo: '#fdf3f6', bgApp: '#ffffff', bgItem: '#ffffff', bgHeader: '#ffffff' },
+        escuro: { primaria: '#212121', secundaria: '#e0e0e0', fundo: '#424242', bgApp: '#f5f5f5', bgItem: '#ffffff', bgHeader: '#f5f5f5' },
+        transparente: { primaria: '#004d40', secundaria: '#b2dfdb', fundo: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)', bgApp: 'rgba(255,255,255,0.4)', bgItem: 'rgba(255,255,255,0.6)', bgHeader: '#e0f2f1' }
     };
 
     function aplicarTemaCores() {
@@ -822,6 +823,7 @@
         document.documentElement.style.setProperty('--fundo', cores.fundo);
         document.documentElement.style.setProperty('--bg-app', cores.bgApp);
         document.documentElement.style.setProperty('--bg-item', cores.bgItem);
+        document.documentElement.style.setProperty('--bg-header', cores.bgHeader);
         
         let metaTheme = document.querySelector('meta[name="theme-color"]');
         if(metaTheme) metaTheme.setAttribute('content', cores.primaria);
@@ -1481,7 +1483,6 @@
             document.getElementById('btnBuscaAcao').innerText = modoBusca === 'codigo' ? '🔍' : '🔤';
             filtroTextoBusca = '';
             renderizarLista();
-            input.focus();
         } else if (val !== '') {
             if (modoBusca === 'codigo') {
                 const p = db.produtos.find(x => x.codigo === parseInt(val));
@@ -1494,6 +1495,10 @@
         }
     }
 
+    const removerAcentos = (str) => {
+        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    };
+
     function renderizarLista() { 
         const lista = document.getElementById('listaProdutos'); 
         lista.innerHTML = ''; 
@@ -1501,7 +1506,8 @@
         let filtrados = categoriaAtual === null ? db.produtos : db.produtos.filter(p => p.categoria === categoriaAtual); 
         
         if (modoBusca === 'nome' && filtroTextoBusca !== '') {
-            filtrados = filtrados.filter(p => p.nome.toLowerCase().includes(filtroTextoBusca));
+            let termoBusca = removerAcentos(filtroTextoBusca);
+            filtrados = filtrados.filter(p => removerAcentos(p.nome.toLowerCase()).includes(termoBusca));
         }
 
         if (modoBusca === 'nome') {
