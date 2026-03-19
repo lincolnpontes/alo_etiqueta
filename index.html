@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1565C0">
-    <title>Alô Etiqueta v1.0.10</title>
+    <title>Alô Etiqueta v1.0.11</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -19,12 +19,17 @@
             --primaria: #1565C0;
             --secundaria: #E3F2FD;
             --fundo: #f0f2f5;
+            --bg-app: #ffffff;
+            --bg-item: #ffffff;
         }
 
         body { font-family: Arial, sans-serif; background: var(--fundo); margin: 0; padding: 0; display: flex; justify-content: center; transition: background 0.3s ease; }
         
-        .app-container { width: 100%; max-width: 1200px; background: #fff; min-height: 100vh; display: flex; flex-direction: column; position: relative; margin: 0 auto; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
-        #sticky-header { position: sticky; top: 0; z-index: 100; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
+        /* Classe que trava a rolagem do fundo */
+        body.modal-open { overflow: hidden; }
+        
+        .app-container { width: 100%; max-width: 1200px; background: var(--bg-app); min-height: 100vh; display: flex; flex-direction: column; position: relative; margin: 0 auto; box-shadow: 0 0 15px rgba(0,0,0,0.1); transition: background 0.3s ease; }
+        #sticky-header { position: sticky; top: 0; z-index: 100; background: var(--bg-app); box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; flex-direction: column; transition: background 0.3s ease; }
         
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -38,7 +43,6 @@
         .splash-title { font-size: 26px; font-weight: 900; margin-bottom: 5px; letter-spacing: 1px; }
         .splash-version { font-size: 14px; font-weight: bold; opacity: 0.8; background: var(--secundaria); padding: 4px 10px; border-radius: 12px; }
 
-        /* TELA DE LOGIN INICIAL */
         #login-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--primaria); z-index: 99998; display: flex; flex-direction: column;
@@ -48,15 +52,15 @@
 
         .header { background: var(--primaria); color: white; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; gap: 10px; transition: background 0.3s ease; }
         
-        .modern-select { height: 32px; border-radius: 20px !important; border: 1px solid rgba(255,255,255,0.4) !important; background: rgba(255,255,255,0.1) !important; color: white !important; font-size: 14px; font-weight: bold; width: 100%; max-width: 140px; padding: 0 12px !important; outline: none; cursor: pointer; }
+        .modern-select { height: 32px; border-radius: 20px !important; border: 1px solid rgba(255,255,255,0.4) !important; background: rgba(255,255,255,0.1) !important; color: white !important; font-size: 14px; font-weight: bold; width: 100%; max-width: 170px; padding: 0 12px !important; outline: none; cursor: pointer; }
         .modern-select option { color: #333; background: #fff; }
         .modal-select { height: 38px; border-radius: 8px !important; border: 1px solid #ccc !important; background: #fff !important; color: #333 !important; padding: 0 12px !important; width: 100%; max-width: none; font-size: 14px; font-weight: bold; outline: none; margin-bottom: 10px; }
         
         .status-conexao { font-size: 14px; cursor: help; background: rgba(0,0,0,0.2); padding: 4px 8px; border-radius: 12px; }
         
         .search-box { background: var(--secundaria); padding: 10px; display: flex; gap: 6px; width: 100%; box-sizing: border-box; align-items: center; overflow: hidden; transition: background 0.3s ease; }
-        .search-box input { width: 55px; flex-shrink: 0; padding: 12px 4px; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; font-weight: bold; text-align: center; }
-        .search-box .btn-buscar { background: var(--primaria); color: white; border: none; padding: 0 10px; height: 44px; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: bold; flex-shrink: 0; }
+        .search-box input { width: 55px; flex-shrink: 0; flex-grow: 1; max-width: 150px; padding: 12px 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; font-weight: bold; }
+        .search-box .btn-buscar { background: var(--primaria); color: white; border: none; padding: 0 15px; height: 44px; border-radius: 6px; cursor: pointer; font-size: 18px; font-weight: bold; flex-shrink: 0; }
         .spacer { flex-grow: 1; } 
         
         .icon-group { display: flex; gap: 12px; align-items: center; margin-left: 8px; }
@@ -66,12 +70,12 @@
         .filters { padding: 10px 15px; display: flex; gap: 10px; overflow-x: auto; white-space: nowrap; border-bottom: 1px solid #eee; }
         .chip { background: #e0e0e0; color: #333; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 14px; font-weight: bold; border: 2px solid transparent; }
         .chip.active { border: 2px solid #333; opacity: 0.9; }
-        .chip-diario { padding: 6px 12px; font-size: 13px; }
+        .chip-diario { padding: 6px 12px; font-size: 13px; margin-bottom: 5px; }
         
         .list { padding: 10px; margin: 0; list-style: none; overflow-y: auto; flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 10px; align-content: start; }
-        .item { display: flex; align-items: center; padding: 15px; border: 1px solid #eee; border-radius: 8px; cursor: pointer; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .item:hover { background: #f9f9f9; }
-        .item-avatar { background: var(--secundaria); color: var(--primaria); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 15px; flex-shrink: 0; }
+        .item { display: flex; align-items: center; padding: 15px; border: 1px solid #eee; border-radius: 8px; cursor: pointer; background: var(--bg-item); box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: background 0.3s ease; }
+        .item:hover { filter: brightness(0.95); }
+        .item-avatar { background: var(--secundaria); color: var(--primaria); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 15px; flex-shrink: 0; font-size: 18px; }
         .item-info { flex: 1; min-width: 0; }
         .item-title { font-weight: bold; font-size: 18px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .item-subtitle { color: #666; font-size: 14px; }
@@ -136,15 +140,20 @@
         .detalhes-estoque-lista li:last-child { border-bottom: none !important; }
 
         .sortable-ghost { opacity: 0.4; background: var(--secundaria) !important; border: 1px dashed var(--primaria); }
+
+        /* TOAST DE AVISO */
+        #toast { position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color: white; padding: 12px 24px; border-radius: 25px; font-weight: bold; font-size: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: bottom 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 999999; pointer-events: none; white-space: nowrap; }
     </style>
 </head>
 <body>
+
+<div id="toast">Item Duplicado!</div>
 
 <div id="splash-screen">
     <img src="icon.png" class="splash-icon" alt="Alô Etiqueta" onerror="this.style.display='none'; document.getElementById('splash-emoji').style.display='block';">
     <div id="splash-emoji" class="splash-emoji">🏷️</div>
     <div class="splash-title">Alô Etiqueta</div>
-    <div class="splash-version">v1.0.10</div>
+    <div class="splash-version">v1.0.11</div>
 </div>
 
 <div id="login-screen">
@@ -205,13 +214,13 @@
     <div id="sticky-header">
         <div class="header">
             <div style="flex: 1; display: flex; justify-content: flex-start;">
-                <div style="position: relative; width: 120px;">
+                <div style="position: relative; width: 150px;">
                     <span style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); font-size: 14px; pointer-events: none; z-index: 1;">👤</span>
-                    <select id="seletorOperador" class="modern-select" style="padding-left: 28px !important; width: 100%;" onchange="verificarTrocaOperador(this)"></select>
+                    <select id="seletorOperador" class="modern-select" style="padding-left: 28px !important; width: 100%; max-width: 100%;" onchange="verificarTrocaOperador(this)"></select>
                 </div>
             </div>
             
-            <div style="flex: 1; text-align: center; font-weight: 900; font-size: 18px; white-space: nowrap; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">Alô Etiqueta</div>
+            <div style="flex: 1.2; text-align: center; font-weight: 900; font-size: 18px; white-space: nowrap; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); padding-left: 15px;">Alô Etiqueta</div>
             
             <div style="flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 10px;">
                 <div id="indicadorConexao" class="status-conexao" title="Sincronização Automática">⚪</div>
@@ -221,7 +230,7 @@
         
         <div class="search-box">
             <input type="number" id="buscaCodigo" placeholder="Cód." inputmode="numeric">
-            <button class="btn-buscar" onclick="buscarPorCodigo()">Buscar</button>
+            <button id="btnBuscaAcao" class="btn-buscar" onclick="acionarBusca()">🔍</button>
             <div class="icon-group">
                 <button class="btn-icon" onclick="abrirEstoqueAtivo()" title="Estoque Ativo (Com QR)">📈</button>
                 <button class="btn-icon" onclick="abrirPainelValidade()" title="Filtro de Validade">⏳</button>
@@ -260,7 +269,9 @@
                 <option value="azul">🔵 Azul Padrão</option>
                 <option value="verde">🟢 Verde Natureza</option>
                 <option value="vermelho">🔴 Vermelho Brasa</option>
+                <option value="rosa">🌸 Rosa Algodão</option>
                 <option value="escuro">⚫ Preto Gourmet</option>
+                <option value="transparente">🧊 Vidro Transparente</option>
             </select>
         </div>
         
@@ -273,19 +284,19 @@
 
 <div class="modal-overlay" id="modalPainelUnificado">
     <div class="modal">
-        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô Etiqueta - v1.0.10</div>
+        <div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô Etiqueta - v1.0.11</div>
         
         <button class="btn-outline" onclick="abrirConfigGeraisModal()">⚙️ Configurações Gerais</button>
         <button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Gerenciar Produtos</button>
         <button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Gerenciar Categorias</button>
         <button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Gerenciar Operadores</button>
         <button class="btn-outline" style="border-color:#f57f17; color:#f57f17;" onclick="abrirGerenciarEtiquetas()">🖨️ Estilo das Etiquetas</button>
-        <button class="btn-outline" style="border-color:#2e7d32; color:#2e7d32;" onclick="abrirEstoque()">📊 Relatório (Acumulado Total)</button>
+        <button class="btn-outline" style="border-color:#2e7d32; color:#2e7d32;" onclick="abrirEstoque(false)">📊 Relatório (Acumulado Total)</button>
         
         <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
         <div class="form-group" style="text-align: left;">
             <label>Senha das Configurações (Vazio = Livre):</label>
-            <input type="password" id="cfgSenhaAdmin" placeholder="Deixe em branco para remover senha" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');" onchange="salvarSenhaPainel()">
+            <input type="password" id="cfgSenhaAdmin" placeholder="Deixe em branco para remover senha" inputmode="numeric" onfocus="this.select()" oninput="this.value = this.value.replace(/[^0-9]/g, '');" onchange="salvarSenhaPainel()">
         </div>
 
         <h3 style="font-size: 16px; color: #d32f2f; margin-top: 25px;">Avançado</h3>
@@ -500,7 +511,13 @@
 <div class="modal-overlay" id="modalEstoque">
     <div class="modal" id="modalEstoqueInner">
         <div id="estoqueMain">
-            <div class="modal-title">Relatório Consolidado <button onclick="excluirHistoricoSeguroDireto()" style="background:none; border:none; font-size:16px; cursor:pointer;" title="Limpar">🧹 Limpar</button></div>
+            <div class="modal-title" style="margin-bottom: 10px;">Relatório Consolidado <button onclick="excluirHistoricoSeguroDireto()" style="background:none; border:none; font-size:16px; cursor:pointer;" title="Limpar">🧹 Limpar</button></div>
+            
+            <div style="display:flex; gap:5px; margin-bottom:15px;">
+                <button class="chip chip-diario active" id="btnAbaProd" onclick="mudarAbaEstoque('prod')" style="flex:1; text-align:center;">Por Produto</button>
+                <button class="chip chip-diario" id="btnAbaColab" onclick="mudarAbaEstoque('colab')" style="flex:1; text-align:center;">Por Colaborador</button>
+            </div>
+
             <div class="form-group" style="background:#f5f5f5; padding: 15px; border-radius: 8px; text-align: center;">
                 <div style="font-size: 14px; font-weight: bold; color: #555;">TOTAL GERAL MANIPULADO</div>
                 <div id="estoqueTotal" style="font-size: 28px; font-weight: 900; color: var(--primaria);">0</div>
@@ -753,7 +770,7 @@
         </div>
         <div class="form-group">
             <label>Senha (Vazio = sem):</label>
-            <input type="text" id="opSenha" placeholder="Opcional" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+            <input type="password" id="opSenha" placeholder="Opcional" inputmode="numeric" onfocus="this.select()" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
         </div>
         <div class="modal-actions">
             <button class="btn-cancel" onclick="fecharModal('modalFormOperador'); abrirGerenciar('operadores')">Cancelar</button>
@@ -776,17 +793,24 @@
     let isSyncing = false;
     let sortConfig = { campo: 'validade', dir: 'asc' }; 
     let filtroDiarioAtual = 'diario';
+    let abaEstoqueAtual = 'prod';
     
+    let modoBusca = 'codigo'; 
+    let filtroTextoBusca = '';
+
     let sortableAcoes = null;
     let sortableConservacoes = null;
     
     let audioCtx = null;
+    let toastTimeout;
 
     const paletasDeCores = {
-        azul: { primaria: '#1565C0', secundaria: '#E3F2FD', fundo: '#f0f2f5' },
-        verde: { primaria: '#2e7d32', secundaria: '#e8f5e9', fundo: '#f0f2f5' },
-        vermelho: { primaria: '#c62828', secundaria: '#ffebee', fundo: '#f0f2f5' },
-        escuro: { primaria: '#212121', secundaria: '#e0e0e0', fundo: '#424242' }
+        azul: { primaria: '#1565C0', secundaria: '#E3F2FD', fundo: '#f0f2f5', bgApp: '#ffffff', bgItem: '#ffffff' },
+        verde: { primaria: '#2e7d32', secundaria: '#e8f5e9', fundo: '#f0f2f5', bgApp: '#ffffff', bgItem: '#ffffff' },
+        vermelho: { primaria: '#c62828', secundaria: '#ffebee', fundo: '#f0f2f5', bgApp: '#ffffff', bgItem: '#ffffff' },
+        rosa: { primaria: '#d81b60', secundaria: '#fce4ec', fundo: '#fdf3f6', bgApp: '#ffffff', bgItem: '#ffffff' },
+        escuro: { primaria: '#212121', secundaria: '#e0e0e0', fundo: '#424242', bgApp: '#f5f5f5', bgItem: '#ffffff' },
+        transparente: { primaria: '#004d40', secundaria: 'rgba(255,255,255,0.4)', fundo: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)', bgApp: 'rgba(255,255,255,0.4)', bgItem: 'rgba(255,255,255,0.5)' }
     };
 
     function aplicarTemaCores() {
@@ -796,9 +820,19 @@
         document.documentElement.style.setProperty('--primaria', cores.primaria);
         document.documentElement.style.setProperty('--secundaria', cores.secundaria);
         document.documentElement.style.setProperty('--fundo', cores.fundo);
+        document.documentElement.style.setProperty('--bg-app', cores.bgApp);
+        document.documentElement.style.setProperty('--bg-item', cores.bgItem);
         
         let metaTheme = document.querySelector('meta[name="theme-color"]');
         if(metaTheme) metaTheme.setAttribute('content', cores.primaria);
+    }
+
+    function mostrarToast(msg) {
+        const t = document.getElementById('toast');
+        t.innerText = msg;
+        t.style.bottom = '20px';
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => { t.style.bottom = '-60px'; }, 3000);
     }
 
     function tocarBeep(tipo) {
@@ -962,22 +996,38 @@
         renderizarFiltros(); 
         renderizarLista();
         
-        document.getElementById('buscaCodigo').addEventListener('keypress', function(e) { 
-            if(e.key === 'Enter') buscarPorCodigo(); 
+        const buscaInput = document.getElementById('buscaCodigo');
+        buscaInput.addEventListener('keypress', function(e) { 
+            if(e.key === 'Enter') acionarBusca(true); 
+        });
+        buscaInput.addEventListener('input', function(e) {
+            if(modoBusca === 'nome') {
+                filtroTextoBusca = this.value.toLowerCase();
+                renderizarLista();
+            }
         });
         
         setInterval(sincronizarComNuvemSilencioso, 20000); 
         sincronizarComNuvemSilencioso();
     }
     
+    function abrirModal(id) {
+        document.getElementById(id).style.display = 'flex';
+        document.body.classList.add('modal-open');
+    }
+
     function fecharModal(id) { 
         document.getElementById(id).style.display = 'none'; 
+        const openModals = Array.from(document.querySelectorAll('.modal-overlay')).some(m => m.style.display === 'flex');
+        if (!openModals) {
+            document.body.classList.remove('modal-open');
+        }
     }
     
     function abrirLoginAdmin() { 
         if(db.configs.senhaAdmin && db.configs.senhaAdmin.trim() !== "") {
             document.getElementById('senhaAdmin').value = '';
-            document.getElementById('modalLoginAdmin').style.display = 'flex';
+            abrirModal('modalLoginAdmin');
             setTimeout(() => document.getElementById('senhaAdmin').focus(), 100);
         } else {
             abrirPainelUnificado(); 
@@ -986,7 +1036,7 @@
     
     function abrirPainelUnificado() { 
         document.getElementById('cfgSenhaAdmin').value = db.configs.senhaAdmin || ""; 
-        document.getElementById('modalPainelUnificado').style.display = 'flex'; 
+        abrirModal('modalPainelUnificado'); 
     }
 
     function salvarSenhaPainel() { 
@@ -1010,7 +1060,7 @@
         document.getElementById('cfgEstabelecimento').value = db.configs.estabelecimento;
         document.getElementById('cfgModo').value = db.configs.modo;
         document.getElementById('cfgTema').value = db.configs.tema || "azul";
-        document.getElementById('modalConfigGerais').style.display = 'flex';
+        abrirModal('modalConfigGerais');
     }
 
     function salvarConfigGerais() {
@@ -1131,7 +1181,7 @@
         renderizarAcoesCfg();
         renderizarConservacoesCfg();
 
-        document.getElementById('modalGerenciarEtiquetas').style.display = 'flex';
+        abrirModal('modalGerenciarEtiquetas');
     }
 
     function salvarEtiquetaConfigs() {
@@ -1150,14 +1200,14 @@
     function abrirModalAvancado() { 
         fecharModal('modalPainelUnificado'); 
         document.getElementById('senhaAvancada').value = '';
-        document.getElementById('modalSenhaAvancada').style.display = 'flex'; 
+        abrirModal('modalSenhaAvancada'); 
         setTimeout(() => document.getElementById('senhaAvancada').focus(), 100);
     }
     
     function abrirZonaRisco() { 
         document.getElementById('configUrlAppScript').value = db.configs.urlAppScript; 
         document.getElementById('inputConfirmarExclusao').value = ''; 
-        document.getElementById('modalZonaRisco').style.display = 'flex'; 
+        abrirModal('modalZonaRisco'); 
     }
     
     async function salvarUrlESincronizar(event) { 
@@ -1176,7 +1226,7 @@
         
         btn.innerText = "💾 Salvar e Forçar Sincronia"; 
         btn.disabled = false;
-        alert("Sincronia finalizada!");
+        mostrarToast("Sincronia finalizada!");
     }
     
     function excluirHistoricoSeguro() { 
@@ -1186,7 +1236,7 @@
             db.configs.ultimaModificacaoLocal = Date.now();
             salvarBancoLocal(); 
             sincronizarComNuvemSilencioso(); 
-            alert("Apagado!"); 
+            mostrarToast("Apagado!"); 
             document.getElementById('inputConfirmarExclusao').value = '';
         } else { 
             alert("Frase incorreta."); 
@@ -1202,7 +1252,7 @@
                 salvarBancoLocal(); 
                 sincronizarComNuvemSilencioso(); 
                 voltarEstoqueMain(); 
-                abrirEstoque(); 
+                abrirEstoque(true); 
             } 
         } 
     }
@@ -1257,7 +1307,7 @@
             try { 
                 db = JSON.parse(evt.target.result); 
                 salvarBancoLocal(); 
-                alert("Restaurado!"); 
+                mostrarToast("Restaurado!"); 
                 location.reload(); 
             } catch(err) { 
                 alert("Inválido."); 
@@ -1348,7 +1398,7 @@
 
     function renderizarOperadores() { 
         const sel = document.getElementById('seletorOperador'); 
-        sel.innerHTML = '<option value="">Selecionar...</option>'; 
+        sel.innerHTML = ''; 
         db.operadores.forEach(op => { 
             sel.innerHTML += `<option value="${op.nome}">${op.nome}</option>`; 
         }); 
@@ -1356,7 +1406,10 @@
         if(ult && db.operadores.find(o => o.nome === ult)) { 
             sel.value = ult; 
             operadorAnteriorSelect = ult; 
-        } 
+        } else if (db.operadores.length > 0) {
+            sel.value = db.operadores[0].nome;
+            operadorAnteriorSelect = db.operadores[0].nome;
+        }
     }
     
     function verificarTrocaOperador(el) { 
@@ -1367,7 +1420,7 @@
         if(op && op.senha !== "") { 
             document.getElementById('operadorAlvo').value = nome; 
             document.getElementById('senhaTrocaOperador').value = ''; 
-            document.getElementById('modalSenhaOperador').style.display = 'flex'; 
+            abrirModal('modalSenhaOperador'); 
             setTimeout(() => document.getElementById('senhaTrocaOperador').focus(), 100); 
         } else { 
             operadorAnteriorSelect = nome; 
@@ -1416,18 +1469,54 @@
         renderizarLista(); 
     }
     
+    function acionarBusca(ehEnter = false) {
+        const input = document.getElementById('buscaCodigo');
+        const val = input.value.trim();
+        
+        if (val === '' && !ehEnter) {
+            modoBusca = modoBusca === 'codigo' ? 'nome' : 'codigo';
+            input.type = modoBusca === 'codigo' ? 'number' : 'text';
+            input.inputMode = modoBusca === 'codigo' ? 'numeric' : 'text';
+            input.placeholder = modoBusca === 'codigo' ? 'Cód.' : 'Buscar...';
+            document.getElementById('btnBuscaAcao').innerText = modoBusca === 'codigo' ? '🔍' : '🔤';
+            filtroTextoBusca = '';
+            renderizarLista();
+            input.focus();
+        } else if (val !== '') {
+            if (modoBusca === 'codigo') {
+                const p = db.produtos.find(x => x.codigo === parseInt(val));
+                if(p) { abrirModalImprimir(p.codigo); input.value = ''; input.blur(); }
+                else { mostrarToast("Não encontrado!"); }
+            } else {
+                filtroTextoBusca = val.toLowerCase();
+                renderizarLista();
+            }
+        }
+    }
+
     function renderizarLista() { 
         const lista = document.getElementById('listaProdutos'); 
         lista.innerHTML = ''; 
         
         let filtrados = categoriaAtual === null ? db.produtos : db.produtos.filter(p => p.categoria === categoriaAtual); 
-        filtrados.sort((a,b) => a.codigo - b.codigo); 
+        
+        if (modoBusca === 'nome' && filtroTextoBusca !== '') {
+            filtrados = filtrados.filter(p => p.nome.toLowerCase().includes(filtroTextoBusca));
+        }
+
+        if (modoBusca === 'nome') {
+            filtrados.sort((a,b) => a.nome.localeCompare(b.nome)); 
+        } else {
+            filtrados.sort((a,b) => a.codigo - b.codigo); 
+        }
         
         filtrados.forEach(p => { 
             const cat = db.categorias.find(x => x.nome === p.categoria) || {cor:'#eee', corTexto:'#333'}; 
+            let avatarConteudo = modoBusca === 'codigo' ? p.codigo : p.nome.charAt(0).toUpperCase();
+
             lista.innerHTML += `
                 <li class="item" onclick="abrirModalImprimir(${p.codigo})">
-                    <div class="item-avatar" style="background:${cat.cor};color:${cat.corTexto}">${p.codigo}</div>
+                    <div class="item-avatar" style="background:${cat.cor};color:${cat.corTexto}">${avatarConteudo}</div>
                     <div class="item-info">
                         <div class="item-title">${p.nome}</div>
                         <div class="item-subtitle">${p.categoria} • Val: ${p.validadeDias}d</div>
@@ -1436,31 +1525,15 @@
                 </li>`; 
         }); 
 
-        if (categoriaAtual === null) {
-            lista.innerHTML += `
-                <li class="item" style="border: 2px dashed var(--primaria); background: var(--secundaria);" onclick="abrirModalImprimirPersonalizada()">
-                    <div class="item-avatar" style="background: var(--primaria); color: white;">*</div>
-                    <div class="item-info">
-                        <div class="item-title" style="color: var(--primaria);">Etiqueta Personalizada</div>
-                        <div class="item-subtitle">Imprimir item avulso (sem QR)</div>
-                    </div>
-                    <div class="print-icon" style="font-size:20px;">🖨️</div>
-                </li>`;
-        }
-    }
-    
-    function buscarPorCodigo() { 
-        const cod = parseInt(document.getElementById('buscaCodigo').value); 
-        if(isNaN(cod)) return; 
-        
-        const p = db.produtos.find(x => x.codigo === cod); 
-        if(p) { 
-            abrirModalImprimir(cod); 
-            document.getElementById('buscaCodigo').value = ''; 
-            document.getElementById('buscaCodigo').blur(); 
-        } else { 
-            alert("Não encontrado!"); 
-        } 
+        lista.innerHTML += `
+            <li class="item" style="border: 2px dashed var(--primaria); background: var(--secundaria);" onclick="abrirModalImprimirPersonalizada()">
+                <div class="item-avatar" style="background: var(--primaria); color: white;">*</div>
+                <div class="item-info">
+                    <div class="item-title" style="color: var(--primaria);">Etiqueta Personalizada</div>
+                    <div class="item-subtitle">Imprimir item avulso (sem QR)</div>
+                </div>
+                <div class="print-icon" style="font-size:20px;">🖨️</div>
+            </li>`;
     }
     
     function moverItem(tipo, idx, dir) { 
@@ -1491,6 +1564,7 @@
         db.configs.ultimaModificacaoLocal = Date.now();
         salvarBancoLocal(); 
         abrirGerenciar('produtos'); 
+        mostrarToast("Item Duplicado!");
         sincronizarComNuvemSilencioso();
     }
     
@@ -1555,7 +1629,7 @@
             }); 
         } 
         
-        document.getElementById('modalListagem').style.display = 'flex'; 
+        abrirModal('modalListagem'); 
     }
     
     function excluirItem(tipo, id) { 
@@ -1635,7 +1709,7 @@
             document.getElementById('prodUsaQR').checked = false; 
         } 
         
-        document.getElementById('modalFormProduto').style.display = 'flex'; 
+        abrirModal('modalFormProduto'); 
     }
     
     function salvarProduto() { 
@@ -1703,7 +1777,7 @@
             document.getElementById('catCorTexto').value = '#ffffff'; 
         } 
         
-        document.getElementById('modalFormCategoria').style.display = 'flex'; 
+        abrirModal('modalFormCategoria'); 
     }
     
     function salvarCategoria() { 
@@ -1748,7 +1822,7 @@
             document.getElementById('opSenha').value = ''; 
         } 
         
-        document.getElementById('modalFormOperador').style.display = 'flex'; 
+        abrirModal('modalFormOperador'); 
     }
     
     function salvarOperador() { 
@@ -1778,33 +1852,67 @@
         sincronizarComNuvemSilencioso();
     }
     
-    function abrirEstoque() { 
-        fecharModal('modalPainelUnificado'); 
-        voltarEstoqueMain(); 
+    function mudarAbaEstoque(aba) {
+        abaEstoqueAtual = aba;
+        document.getElementById('btnAbaProd').classList.toggle('active', aba === 'prod');
+        document.getElementById('btnAbaColab').classList.toggle('active', aba === 'colab');
+        abrirEstoque(true); 
+    }
+
+    function abrirEstoque(manterModalAberto = false) { 
+        if(!manterModalAberto) {
+            fecharModal('modalPainelUnificado'); 
+            voltarEstoqueMain(); 
+        }
         
         const lista = document.getElementById('listaEstoque'); 
         lista.innerHTML = ''; 
         
         let total = 0; 
-        let stats = {}; 
         
-        db.historico.forEach(r => { 
-            if(!stats[r.produto]) stats[r.produto] = 0; 
-            stats[r.produto] += 1; 
-            total += 1; 
-        }); 
+        if(abaEstoqueAtual === 'prod') {
+            let stats = {}; 
+            db.historico.forEach(r => { 
+                if(!stats[r.produto]) stats[r.produto] = 0; 
+                stats[r.produto] += 1; 
+                total += 1; 
+            }); 
+            
+            document.getElementById('estoqueTotal').innerText = total; 
+            
+            Object.keys(stats).sort((a,b) => stats[b] - stats[a]).forEach(k => { 
+                lista.innerHTML += `
+                    <li style="display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:1px solid #eee;cursor:pointer;" onclick="abrirDetalhesEstoque('${k}', 'estoque')">
+                        <strong style="color: #333;">${k}</strong>
+                        <span style="background:#e0e0e0;padding:4px 10px;border-radius:12px;font-weight:bold">${stats[k]}x ➡️</span>
+                    </li>`; 
+            }); 
+        } else {
+            let statsColab = {};
+            db.historico.forEach(r => {
+                let op = r.operador || 'Desconhecido';
+                if(!statsColab[op]) statsColab[op] = { total: 0, prods: {} };
+                statsColab[op].total++;
+                if(!statsColab[op].prods[r.produto]) statsColab[op].prods[r.produto] = 0;
+                statsColab[op].prods[r.produto]++;
+                total += 1;
+            });
+            document.getElementById('estoqueTotal').innerText = total;
+
+            Object.keys(statsColab).sort((a,b) => statsColab[b].total - statsColab[a].total).forEach(op => {
+                let desc = Object.keys(statsColab[op].prods).map(p => `${statsColab[op].prods[p]}x ${p}`).join(', ');
+                lista.innerHTML += `
+                    <li style="padding:12px;border-bottom:1px solid #eee;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <strong style="color: #333; font-size:16px;">👤 ${op}</strong>
+                            <span style="background:#e0e0e0;padding:4px 10px;border-radius:12px;font-weight:bold">${statsColab[op].total}x</span>
+                        </div>
+                        <div style="font-size:12px; color:#666; margin-top:5px; line-height: 1.4;">${desc}</div>
+                    </li>`;
+            });
+        }
         
-        document.getElementById('estoqueTotal').innerText = total; 
-        
-        Object.keys(stats).sort((a,b) => stats[b] - stats[a]).forEach(k => { 
-            lista.innerHTML += `
-                <li style="display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:1px solid #eee;cursor:pointer;" onclick="abrirDetalhesEstoque('${k}', 'estoque')">
-                    <strong style="color: #333;">${k}</strong>
-                    <span style="background:#e0e0e0;padding:4px 10px;border-radius:12px;font-weight:bold">${stats[k]}x ➡️</span>
-                </li>`; 
-        }); 
-        
-        document.getElementById('modalEstoque').style.display = 'flex'; 
+        if(!manterModalAberto) abrirModal('modalEstoque'); 
     }
 
     function mudarFiltroDiario(tipo) {
@@ -1956,7 +2064,7 @@
                 </div>`;
         });
 
-        document.getElementById('modalHistoricoDiario').style.display = 'flex';
+        abrirModal('modalHistoricoDiario');
     }
     
     function abrirDetalhesEstoque(nome, origem = 'estoque') { 
@@ -1999,7 +2107,7 @@
         
         if(origem === 'ativo') {
             fecharModal('modalEstoqueAtivo');
-            document.getElementById('modalEstoque').style.display = 'flex';
+            abrirModal('modalEstoque');
         }
     }
     
@@ -2098,7 +2206,7 @@
             });
         }
 
-        document.getElementById('modalEstoqueAtivo').style.display = 'flex';
+        abrirModal('modalEstoqueAtivo');
     }
     
     const parseDataHoraBR = (str) => { 
@@ -2196,7 +2304,7 @@
                 }); 
             } 
             
-            document.getElementById('modalValidade').style.display = 'flex'; 
+            abrirModal('modalValidade'); 
         } catch(err) { }
     }
 
@@ -2271,7 +2379,7 @@
         toggleLote(); 
         calcularTotalPagar(); 
         
-        document.getElementById('modalImprimir').style.display = 'flex'; 
+        abrirModal('modalImprimir'); 
     }
 
     function abrirModalImprimirPersonalizada() {
@@ -2291,7 +2399,7 @@
         document.getElementById('impPersLote').value = '';
         document.getElementById('boxCalculoTotalPers').style.display = 'none';
         document.getElementById('impPersValidade').value = new Date().toISOString().split('T')[0];
-        document.getElementById('modalImprimirPers').style.display = 'flex';
+        abrirModal('modalImprimirPers');
     }
     
     function toggleLote() { 
@@ -2769,7 +2877,7 @@
     }
 
     function abrirScannerQR() { 
-        document.getElementById('modalLeitorQR').style.display = 'flex'; 
+        abrirModal('modalLeitorQR'); 
         html5QrCode = new Html5Qrcode("reader"); 
         
         Html5Qrcode.getCameras().then(devices => {
@@ -2831,7 +2939,7 @@
                 html5QrCode = null; 
             }).catch(()=>{});
         }
-        document.getElementById('modalLeitorQR').style.display = 'none'; 
+        fecharModal('modalLeitorQR'); 
     }
     
     function onScanSuccess(decodedText) { 
@@ -2863,7 +2971,7 @@
                 item.dataBaixa = new Date().toLocaleString('pt-BR'); 
                 db.configs.ultimaModificacaoLocal = Date.now();
                 salvarBancoLocal(); 
-                alert("Baixa confirmada!"); 
+                mostrarToast("Baixa confirmada!"); 
                 
                 sincronizarComNuvemSilencioso(); 
                 fecharLeitorQR(); 
