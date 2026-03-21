@@ -7,17 +7,17 @@
 
 <div class="form-group" style="padding:15px; background:#fff3e0; border-radius:8px; border:1px solid #ffcc80;">
     <label style="color:#e65100; font-weight:900; margin-bottom:10px; display:block; font-size: 15px;">
-        ⚙️ Alternador de Gap (Força Bruta)
+        ⚙️ Híbrido: Alternador + Decimais
     </label>
     <div style="display:flex; gap:15px; width:100%;">
         <div style="flex:1;">
-            <span style="font-size:12px; color:#555; font-weight: bold; display:block; text-align:center; margin-bottom: 4px;">Gap ÍMPAR (px)</span>
-            <input type="number" id="cfgGapImpar" style="width:100%; text-align:center; font-weight:900; font-size:22px; height:44px; border:2px solid #ff9800; border-radius:6px; background:white; color:#e65100;" oninput="salvarEtiquetaConfigs()">
+            <span style="font-size:12px; color:#555; font-weight: bold; display:block; text-align:center; margin-bottom: 4px;">Gap ÍMPAR (px ou deci)</span>
+            <input type="number" step="0.1" id="cfgGapImpar" style="width:100%; text-align:center; font-weight:900; font-size:22px; height:44px; border:2px solid #ff9800; border-radius:6px; background:white; color:#e65100;" oninput="salvarEtiquetaConfigs()">
             <div style="font-size:10px; color:#777; text-align:center; margin-top:2px;">(1ª, 3ª, 5ª...)</div>
         </div>
         <div style="flex:1;">
-            <span style="font-size:12px; color:#555; font-weight: bold; display:block; text-align:center; margin-bottom: 4px;">Gap PAR (px)</span>
-            <input type="number" id="cfgGapPar" style="width:100%; text-align:center; font-weight:900; font-size:22px; height:44px; border:2px solid #ff9800; border-radius:6px; background:white; color:#e65100;" oninput="salvarEtiquetaConfigs()">
+            <span style="font-size:12px; color:#555; font-weight: bold; display:block; text-align:center; margin-bottom: 4px;">Gap PAR (px ou deci)</span>
+            <input type="number" step="0.1" id="cfgGapPar" style="width:100%; text-align:center; font-weight:900; font-size:22px; height:44px; border:2px solid #ff9800; border-radius:6px; background:white; color:#e65100;" oninput="salvarEtiquetaConfigs()">
             <div style="font-size:10px; color:#777; text-align:center; margin-top:2px;">(2ª, 4ª, 6ª...)</div>
         </div>
     </div>
@@ -34,7 +34,7 @@ function formatarMoedaElemento(e){let v=e.value.replace(/\D/g,'');if(v===''){e.v
 function getValorMoeda(id){let v=document.getElementById(id).value;if(!v)return NaN;v=v.replace(/\./g,'').replace(',','.');return parseFloat(v)}
 function setValorMoeda(id,v){const e=document.getElementById(id);if(v===""||v===null||v===undefined||isNaN(v)){e.value="";return}let n=parseFloat(v);e.value=n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}
 function formataDinheiro(v){let n=parseFloat(v);if(isNaN(n))return"0,00";return n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}
-function carregarBanco(){let d={produtos:[{codigo:1,nome:"Hambúrguer",categoria:"Carnes",validadeDias:5,armazenamento:"Não informar",precoPadrao:"",marcas:[],acaoPadrao:"Manipulado:",usaQR:!1}],categorias:[{nome:"Carnes",cor:"#ffcccc",corTexto:"#000000"}],operadores:[{nome:"Admin",senha:"",ocultarEngrenagem:!1}],configs:{modo:"pdf",estabelecimento:"Restaurante",urlAppScript:"",tamanhoEtiqueta:"60x40",destaqueProd:!1,destaqueVal:!1,controleQR:!1,senhaAdmin:"",ultimoWipe:0,gapImpar:24,gapPar:24,acoes:["Manipulado:","Aberto:","Congelado:"],conservacoes:["Não informar","Ambiente","Resfriado","Congelado"],tema:"azul",ultimaModificacaoLocal:0,mestreAtivo:!1},historico:[]},l=JSON.parse(localStorage.getItem('etiquetadora_db'));if(l){if(!l.configs.tamanhoEtiqueta)l.configs.tamanhoEtiqueta="60x40";if(typeof l.configs.destaqueProd==='undefined')l.configs.destaqueProd=!1;if(typeof l.configs.destaqueVal==='undefined')l.configs.destaqueVal=!1;if(typeof l.configs.controleQR==='undefined')l.configs.controleQR=!1;if(typeof l.configs.senhaAdmin==='undefined')l.configs.senhaAdmin="";if(typeof l.configs.ultimoWipe==='undefined')l.configs.ultimoWipe=0;if(typeof l.configs.ultimaModificacaoLocal==='undefined')l.configs.ultimaModificacaoLocal=0;if(typeof l.configs.gapImpar==='undefined')l.configs.gapImpar=l.configs.gapEtiquetaPx||24;if(typeof l.configs.gapPar==='undefined')l.configs.gapPar=l.configs.gapEtiquetaPx||24;if(!l.configs.tema)l.configs.tema="azul";if(!l.configs.acoes)l.configs.acoes=["Manipulado:","Aberto:","Congelado:"];if(!l.configs.conservacoes)l.configs.conservacoes=["Não informar","Ambiente","Resfriado","Congelado"];if(!l.configs.conservacoes.includes("Não informar"))l.configs.conservacoes.unshift("Não informar");l.configs.mestreAtivo=!1;l.produtos.forEach(p=>{if(!p.acaoPadrao)p.acaoPadrao="Manipulado:";p.acaoPadrao=p.acaoPadrao.replace(/ em:/i,':').replace(/ em/i,':');if(!p.armazenamento)p.armazenamento="Não informar";if(typeof p.usaQR==='undefined')p.usaQR=!1});return l}return d}
+function carregarBanco(){let d={produtos:[{codigo:1,nome:"Hambúrguer",categoria:"Carnes",validadeDias:5,armazenamento:"Não informar",precoPadrao:"",marcas:[],acaoPadrao:"Manipulado:",usaQR:!1}],categorias:[{nome:"Carnes",cor:"#ffcccc",corTexto:"#000000"}],operadores:[{nome:"Admin",senha:"",ocultarEngrenagem:!1}],configs:{modo:"pdf",estabelecimento:"Restaurante",urlAppScript:"",tamanhoEtiqueta:"60x40",destaqueProd:!1,destaqueVal:!1,controleQR:!1,senhaAdmin:"",ultimoWipe:0,gapImpar:24,gapPar:24,acoes:["Manipulado:","Aberto:","Congelado:"],conservacoes:["Não informar","Ambiente","Resfriado","Congelado"],tema:"azul",ultimaModificacaoLocal:0,mestreAtivo:!1},historico:[]},l=JSON.parse(localStorage.getItem('etiquetadora_db'));if(l){if(!l.configs.tamanhoEtiqueta)l.configs.tamanhoEtiqueta="60x40";if(typeof l.configs.destaqueProd==='undefined')l.configs.destaqueProd=!1;if(typeof l.configs.destaqueVal==='undefined')l.configs.destaqueVal=!1;if(typeof l.configs.controleQR==='undefined')l.configs.controleQR=!1;if(typeof l.configs.senhaAdmin==='undefined')l.configs.senhaAdmin="";if(typeof l.configs.ultimoWipe==='undefined')l.configs.ultimoWipe=0;if(typeof l.configs.ultimaModificacaoLocal==='undefined')l.configs.ultimaModificacaoLocal=0;if(typeof l.configs.gapImpar==='undefined')l.configs.gapImpar=l.configs.gapEtiquetaPx!==undefined?l.configs.gapEtiquetaPx:24;if(typeof l.configs.gapPar==='undefined')l.configs.gapPar=l.configs.gapEtiquetaPx!==undefined?l.configs.gapEtiquetaPx:24;if(!l.configs.tema)l.configs.tema="azul";if(!l.configs.acoes)l.configs.acoes=["Manipulado:","Aberto:","Congelado:"];if(!l.configs.conservacoes)l.configs.conservacoes=["Não informar","Ambiente","Resfriado","Congelado"];if(!l.configs.conservacoes.includes("Não informar"))l.configs.conservacoes.unshift("Não informar");l.configs.mestreAtivo=!1;l.produtos.forEach(p=>{if(!p.acaoPadrao)p.acaoPadrao="Manipulado:";p.acaoPadrao=p.acaoPadrao.replace(/ em:/i,':').replace(/ em/i,':');if(!p.armazenamento)p.armazenamento="Não informar";if(typeof p.usaQR==='undefined')p.usaQR=!1});return l}return d}
 function salvarBancoLocal(){localStorage.setItem('etiquetadora_db',JSON.stringify(db))}
 function prepararTelaLogin(){const s=document.getElementById('loginOperador');s.innerHTML='<option value="">Selecione...</option>';db.operadores.forEach(o=>{s.innerHTML+=`<option value="${o.nome}">${o.nome}</option>`});const u=localStorage.getItem('etiquetadora_operadorAtual');if(u&&db.operadores.find(o=>o.nome===u))s.value=u;checarSenhaLoginInicial()}
 function checarSenhaLoginInicial(){const n=document.getElementById('loginOperador').value,o=db.operadores.find(x=>x.nome===n),c=document.getElementById('loginSenhaContainer');if(o&&o.senha!==""){c.style.display="flex";setTimeout(()=>document.getElementById('loginSenha').focus(),10)}else c.style.display="none"}
@@ -79,8 +79,11 @@ function salvarEtiquetaConfigs(){
     db.configs.destaqueVal=document.getElementById('cfgDestaqueVal').checked;
     db.configs.controleQR=document.getElementById('cfgQRGlobal').checked;
     
-    db.configs.gapImpar = parseInt(document.getElementById('cfgGapImpar').value) || 24;
-    db.configs.gapPar = parseInt(document.getElementById('cfgGapPar').value) || 24;
+    let gapIStr = String(document.getElementById('cfgGapImpar').value).replace(',', '.');
+    db.configs.gapImpar = isNaN(parseFloat(gapIStr)) ? 24 : parseFloat(gapIStr);
+    
+    let gapPStr = String(document.getElementById('cfgGapPar').value).replace(',', '.');
+    db.configs.gapPar = isNaN(parseFloat(gapPStr)) ? 24 : parseFloat(gapPStr);
     
     db.configs.ultimaModificacaoLocal=Date.now();
     salvarBancoLocal();
@@ -294,14 +297,16 @@ async function gerarRawBT(p,ac,ps,mB,vB,q,op,es,prN,ma,lo,sk,btn){
     
     const fc=document.createElement('canvas'),ctx=fc.getContext('2d'),tm=db.configs.tamanhoEtiqueta||"60x40";
     
-    // MÁGICA 3: Força Bruta de Alternância (Gap Par/Ímpar)
+    // MÁGICA DEFINITIVA: Alternador Par/Ímpar COM Acumulador Flutuante
     const scaleMulti = 3; 
     let hw=480,dw=480,dh=320;
     
-    let gapI = db.configs.gapImpar !== undefined ? parseInt(db.configs.gapImpar) : 24;
-    let gapP = db.configs.gapPar !== undefined ? parseInt(db.configs.gapPar) : 24;
-    
+    let gpIRaw = db.configs.gapImpar !== undefined ? String(db.configs.gapImpar).replace(',', '.') : "24";
+    let gapI = parseFloat(gpIRaw);
     if(isNaN(gapI)) gapI = 24;
+
+    let gpPRaw = db.configs.gapPar !== undefined ? String(db.configs.gapPar).replace(',', '.') : "24";
+    let gapP = parseFloat(gpPRaw);
     if(isNaN(gapP)) gapP = 24;
 
     if(tm==="40x40"){hw=304;dw=304;dh=320}
@@ -320,16 +325,16 @@ async function gerarRawBT(p,ac,ps,mB,vB,q,op,es,prN,ma,lo,sk,btn){
     document.body.classList.remove('modal-open');
     window.scrollTo(0,0);
     
-    // Calcula a altura exata da fita toda baseada na soma dos Gaps que você escolheu
+    // Calcula a altura exata da fita toda baseada na soma dos Gaps Flutuantes
     let totalHeightPx = 0;
     for(let i=0; i<q; i++){
         totalHeightPx += dh;
-        if(i < q - 1){ // Se não for a última etiqueta, adiciona o gap para a próxima
+        if(i < q - 1){ 
             totalHeightPx += (i % 2 === 0) ? gapI : gapP; 
         }
     }
 
-    let posY = 0;
+    let posYFloat = 0;
 
     for(let i=0; i<q; i++){
         if(uQ){
@@ -350,16 +355,19 @@ async function gerarRawBT(p,ac,ps,mB,vB,q,op,es,prN,ma,lo,sk,btn){
         
         if(i===0){
             fc.width = c.width; 
-            fc.height = totalHeightPx * scaleMulti;
+            fc.height = Math.ceil(totalHeightPx * scaleMulti);
             ctx.fillStyle="#ffffff";
             ctx.fillRect(0,0,fc.width,fc.height);
             ctx.imageSmoothingEnabled=!1;
         }
         
-        ctx.drawImage(c, 0, posY * scaleMulti);
+        // Arredonda só no momento de jogar a imagem no canvas final
+        // Isso preserva os decimais na soma e garante que o gap fique exato!
+        let pixelY = Math.round(posYFloat * scaleMulti);
+        ctx.drawImage(c, 0, pixelY);
         
         let gapAtual = (i % 2 === 0) ? gapI : gapP;
-        posY += (dh + gapAtual); // Prepara o Y exato para a próxima etiqueta
+        posYFloat += (dh + gapAtual);
     }
     
     const int="intent:"+fc.toDataURL("image/png")+"#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;";
