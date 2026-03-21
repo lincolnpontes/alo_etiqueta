@@ -5,16 +5,21 @@
         .btn-acao-micro.via{background:#2196F3;color:white;border-color:#1976d2;}
     </style></head><body><div id="toast">Aviso!</div><div id="splash-screen"><img src="icon.png" class="splash-icon" alt="Alô Etiqueta" onerror="this.style.display='none'; document.getElementById('splash-emoji').style.display='block';"><div id="splash-emoji" class="splash-emoji">🏷️</div><div class="splash-title">Alô Etiqueta</div><div class="splash-version">v1</div></div><div id="login-screen"><div style="font-size: 70px; margin-bottom: 10px;">👤</div><h2 style="margin-top: 0; margin-bottom: 20px; font-size: 24px;">Identificação</h2><select id="loginOperador" style="padding: 15px; font-size: 18px; width: 85%; max-width: 350px; border-radius: 8px; margin-bottom: 15px; border: none; outline: none; font-weight: bold; color: #333;" onchange="checarSenhaLoginInicial()"></select><div id="loginSenhaContainer" style="display: none; flex-direction: column; align-items: center; width: 100%;"><input type="password" id="loginSenha" inputmode="numeric" placeholder="Senha Numérica" style="padding: 15px; font-size: 20px; width: 85%; max-width: 350px; margin-bottom: 25px; border-radius: 8px; border: none; text-align: center; outline: none; font-weight: bold; color: #333;" onkeypress="if(event.key === 'Enter') fazerLoginInicial()"></div><button onclick="fazerLoginInicial()" style="padding: 15px 40px; font-size: 20px; font-weight: bold; border-radius: 8px; border: none; background: #4CAF50; color: white; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">ENTRAR</button></div><div id="area-impressao-visual"><div style="border-bottom: 3px solid black; padding-bottom: 6px; width: 100%; text-align: center;"><div id="viz-nome-produto" class="item-nome">PRODUTO</div></div><div style="flex: 1; padding-top: 8px; display: flex; width: 100%;"><div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; text-align: left; justify-content: center; overflow: hidden;"><div style="font-size: 20px; font-weight: 900; margin-bottom: 6px;"><span id="viz-label-acao">AÇÃO:</span> <span id="viz-data-man">00/00/0000 00:00</span></div><div id="viz-linha-marcalote" style="display: none; font-size: 16px; font-weight: bold; width: 100%; margin-bottom: 4px; white-space: nowrap; overflow: hidden;"><span id="viz-marca-container" style="display:none;">MARCA: <span id="viz-marca">---</span></span><span id="viz-lote-container" style="display:none; margin-left: 6px;"></span></div><div id="viz-linha-pesopreco" style="display: none; font-size: 16px; font-weight: bold; width: 100%; margin-bottom: 4px; white-space: nowrap; overflow: hidden;"><span id="viz-peso-container" style="display:none;">PESO: <span id="viz-peso">0g</span></span><span id="viz-preco-container" style="display:none; margin-left: 6px;"></span></div><div id="viz-box-total-container" style="display: none; font-size: 20px; font-weight: 900; margin-top: 4px;">TOTAL: R$ <span id="viz-preco">0,00</span></div></div><div id="viz-qrcode-container" style="display: none; flex-direction: column; align-items: center; justify-content: center; padding-left: 10px; flex-shrink: 0;"><div id="viz-qrcode"></div><div id="viz-sku-text" style="font-size: 16px; font-weight: 900; margin-top: 2px; line-height: 1;"></div></div></div><div style="width: 100%; padding-top: 6px; text-align: center;"><div id="viz-container-validade" style="margin-bottom: 6px; line-height: 1.1; text-align: center; width: 100%;"><span class="val-label" style="font-size: 28px; font-weight: 900;">VAL:</span> <span class="val-data" id="viz-data-val" style="font-size: 28px; font-weight: 900;">00/00/0000</span></div><div id="viz-linha-armazenamento" style="margin-bottom: 8px; display: none; line-height: 1.0; text-align: center; width: 100%;"><span id="viz-armazenamento" style="font-size: 18px; font-weight: 900; text-transform: uppercase; border: 2px solid black; border-radius: 4px; padding: 2px 8px; display: inline-block;">MANTER CONGELADO</span></div><div style="border-top: 2px solid black; width: 100%; margin-bottom: 4px;"></div><div style="display: flex; justify-content: space-between; align-items: center; width: 100%;"><div id="viz-estabelecimento" style="font-weight: bold; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 50%; text-align: left;">Estabelecimento</div><div style="font-size: 16px; text-align: right;">Op: <span id="viz-operador" style="font-weight: 900;">Nome</span></div></div></div></div><div class="app-container"><div id="sticky-header"><div class="header"><div style="flex: 1; display: flex; justify-content: flex-start; font-weight: 900; font-size: 18px; white-space: nowrap; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">Alô Etiqueta</div><div style="flex: 1.5; display: flex; justify-content: center;"><div style="position: relative; width: 100%; max-width: 220px;"><span style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); font-size: 14px; pointer-events: none; z-index: 1;">👤</span><select id="seletorOperador" class="modern-select" style="padding-left: 28px !important; width: 100%;" onchange="verificarTrocaOperador(this)"></select></div></div><div style="flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 8px;"><div id="indicadorConexao" class="status-conexao" title="Sincronização">⚪</div><button id="btnTemaRapido" onclick="abrirModalTemaRapido()" title="Tema" style="background: none; border: none; color: white; font-size: 22px; cursor: pointer; padding: 0; display: none;">🎨</button><button id="btnConfigGear" onclick="abrirLoginAdmin()" title="Painel Adm" style="background: none; border: none; color: white; font-size: 22px; cursor: pointer; padding: 0;">⚙️</button></div></div><div class="search-box"><input type="number" id="buscaCodigo" placeholder="Cód." inputmode="numeric"><button id="btnBuscaAcao" class="btn-buscar" onclick="acionarBusca()">🔍</button><div class="spacer"></div><div class="icon-group"><button class="btn-icon" onclick="abrirEstoqueAtivo()" title="Estoque Ativo">📈</button><button class="btn-icon" onclick="abrirHistoricoDiario()" title="Diário">📅</button><button class="btn-icon" id="btnScannerQRHome" onclick="abrirScannerQR()" style="display:none;font-size:35px;line-height:1;padding:0;">📷</button></div></div><div class="filters" id="containerFiltros"></div></div><ul class="list" id="listaProdutos"></ul></div><div class="modal-overlay" id="modalConfigGerais"><div class="modal"><div class="modal-title" style="color:var(--primaria); border-color:var(--primaria);">⚙️ Configurações</div><div class="form-group"><label>Estabelecimento:</label><input type="text" id="cfgEstabelecimento"></div><div class="form-group"><label>Impressão:</label><select id="cfgModo"><option value="pdf">Navegador/PDF</option><option value="rawbt">App RawBT</option></select></div><div class="form-group"><label>Tema:</label><select id="cfgTema"><option value="azul">🔵 Azul</option><option value="verde">🟢 Verde</option><option value="vermelho">🔴 Vermelho</option><option value="rosa">🌸 Rosa</option><option value="escuro">⚫ Escuro</option><option value="transparente">🧊 Transparente</option><option value="vinho">🍷 Vinho</option><option value="roxo">💜 Roxo</option></select></div><div class="form-group"><label>Senha Painel (Somente Gerente):</label><input type="password" id="cfgSenhaAdmin" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');" onchange="salvarSenhaPainel()"></div><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalConfigGerais');abrirPainelUnificadoComNivel(db.configs.mestreAtivo);">Voltar</button><button class="btn-action" onclick="salvarConfigGerais()">💾 Salvar</button></div></div></div><div class="modal-overlay" id="modalTemaRapido"><div class="modal"><div class="modal-title" style="color:var(--primaria)">🎨 Escolher Tema</div><div class="form-group"><label>Meu Tema Pessoal:</label><select id="cfgTemaRapido"><option value="azul">🔵 Azul</option><option value="verde">🟢 Verde</option><option value="vermelho">🔴 Vermelho</option><option value="rosa">🌸 Rosa</option><option value="escuro">⚫ Escuro</option><option value="transparente">🧊 Transparente</option><option value="vinho">🍷 Vinho</option><option value="roxo">💜 Roxo</option></select></div><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalTemaRapido')">Cancelar</button><button class="btn-action" onclick="salvarTemaRapido()">💾 Salvar</button></div></div></div><div class="modal-overlay" id="modalPainelUnificado"><div class="modal"><div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô Etiqueta - v1</div><button class="btn-outline" onclick="abrirConfigGeraisModal()">⚙️ Configurações</button><button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Produtos</button><button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Categorias</button><button class="btn-outline" style="border-color:#2e7d32; color:#2e7d32;" onclick="abrirEstoque(false)">📊 Relatório Geral</button><div id="painelSecreto" style="display:none;"><button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Operadores</button><button class="btn-outline" style="border-color:#f57f17; color:#f57f17;" onclick="abrirGerenciarEtiquetas()">🖨️ Estilo da Etiqueta</button><hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;"><button class="btn-danger" onclick="abrirModalAvancado()">⚠️ Avançado</button></div><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalPainelUnificado')">Fechar</button></div></div></div><div class="modal-overlay" id="modalEstoqueAtivo"><div class="modal" style="max-width: 500px;"><div class="modal-title" style="color:#2e7d32; border-color:#2e7d32;">📈 Estoque Físico Ativo</div><div style="display:flex; gap:10px; margin-bottom:10px;"><select id="filtroCatEstoqueAtivo" class="modal-select" style="flex:1; margin:0;" onchange="abrirEstoqueAtivo()"></select><button onclick="abrirPainelValidade();fecharModal('modalEstoqueAtivo')" class="btn-outline" style="flex:0; margin:0; padding:0 15px; font-size:22px; border-color:#ccc;" title="Validade">⏳</button></div><ul class="list" id="listaEstoqueAtivo" style="max-height: 50vh; overflow-y: auto; border: 1px solid #eee; padding: 0; border-radius:5px; margin-bottom: 15px;"></ul><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalEstoqueAtivo')">Fechar</button></div></div></div><div class="modal-overlay" id="modalLoginAdmin"><div class="modal"><div class="modal-title">Acesso ao Painel</div><div class="form-group"><label>Senha:</label><input type="password" id="senhaAdmin" inputmode="numeric" oninput="if(this.value === '1999' || (db.configs.senhaAdmin && db.configs.senhaAdmin !== '' && this.value === db.configs.senhaAdmin)){let mestre=this.value==='1999';this.blur();fecharModal('modalLoginAdmin');abrirPainelUnificadoComNivel(mestre);this.value='';}"></div><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalLoginAdmin')">Cancelar</button></div></div></div><div class="modal-overlay" id="modalHistoricoDiario"><div class="modal" style="max-height: 90vh; overflow-y: auto;"><div class="modal-title" style="color:var(--primaria); border-color:var(--primaria);"><div>📅 Movimentação Diária</div><button onclick="fecharModal('modalHistoricoDiario')" style="background:none; border:none; font-size:26px; color:#999; cursor:pointer; padding:0; line-height: 1;" title="Fechar">&times;</button></div><div style="display:flex; gap:5px; margin-bottom:10px; overflow-x:auto; padding-bottom:5px;"><button class="chip chip-diario" id="btnFiltroDiario" onclick="mudarFiltroDiario('diario')">Hoje</button><button class="chip chip-diario" id="btnFiltro7" onclick="mudarFiltroDiario('7')">7 Dias</button><button class="chip chip-diario" id="btnFiltro15" onclick="mudarFiltroDiario('15')">15 Dias</button><button class="chip chip-diario" id="btnFiltro30" onclick="mudarFiltroDiario('30')">30 Dias</button><button class="chip chip-diario" id="btnFiltroCustom" onclick="mudarFiltroDiario('custom')">Custom</button></div><div id="filtroDataCustom" style="display:none; gap:5px; margin-bottom:15px; background: #f5f5f5; padding: 10px; border-radius: 8px;"><input type="date" id="dataInicioMov" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px; flex:1;"> <input type="date" id="dataFimMov" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px; flex:1;"><button onclick="mudarFiltroDiario('aplicarCustom')" style="background: var(--primaria); color: white; border: none; padding: 0 15px; border-radius: 4px; font-weight: bold;">OK</button></div><div id="listaHistoricoDiario"></div></div></div><div class="modal-overlay" id="modalGerenciarEtiquetas"><div class="modal" style="max-height: 90vh; overflow-y: auto;"><div class="modal-title" style="color:#f57f17; border-color:#f57f17;">Estilo das Etiquetas</div><div class="form-group"><label>Tamanho:</label><select id="cfgTamanho" onchange="salvarEtiquetaConfigs()"><option value="60x40">60x40 mm</option><option value="50x50">50x50 mm</option><option value="40x40">38x40 mm</option></select></div>
 
-<div class="form-group" style="padding:12px; background:#e8f5e9; border-radius:8px; border:1px solid #c8e6c9;">
-    <label style="color:#2e7d32; display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <span>Ajuste Gap (px) 
-            <span onclick="alert('AJUSTE GAP:\nAjuste fino com precisão decimal. Use os botões + e - para achar o sincronismo perfeito da sua impressora. (Ex: 23.6)')" style="background:#2e7d32; color:white; border-radius:50%; width:18px; height:18px; display:inline-flex; align-items:center; justify-content:center; font-size:12px; cursor:pointer; font-weight:bold; margin-left:5px;">?</span>
-        </span>
+<div class="form-group" style="padding:15px; background:#fff3e0; border-radius:8px; border:1px solid #ffcc80;">
+    <label style="color:#e65100; font-weight:900; margin-bottom:10px; display:block; font-size: 15px;">
+        ⚙️ Alternador de Gap (Força Bruta)
     </label>
-    <div style="display:flex; align-items:center; gap: 10px; width:100%;">
-        <button class="btn-outline" style="margin:0; width:44px; height:44px; font-size:24px; padding:0; font-weight:bold;" onclick="ajustarGapFino(-0.1)">-</button>
-        <input type="number" step="0.1" id="lblGapPxInput" style="flex:1; text-align:center; font-weight:bold; font-size:20px; border:1px solid #ccc; border-radius:4px; height:44px; margin:0;" oninput="salvarEtiquetaConfigs()">
-        <button class="btn-outline" style="margin:0; width:44px; height:44px; font-size:24px; padding:0; font-weight:bold;" onclick="ajustarGapFino(0.1)">+</button>
+    <div style="display:flex; gap:15px; width:100%;">
+        <div style="flex:1;">
+            <span style="font-size:12px; color:#555; font-weight: bold; display:block; text-align:center; margin-bottom: 4px;">Gap ÍMPAR (px)</span>
+            <input type="number" id="cfgGapImpar" style="width:100%; text-align:center; font-weight:900; font-size:22px; height:44px; border:2px solid #ff9800; border-radius:6px; background:white; color:#e65100;" oninput="salvarEtiquetaConfigs()">
+            <div style="font-size:10px; color:#777; text-align:center; margin-top:2px;">(1ª, 3ª, 5ª...)</div>
+        </div>
+        <div style="flex:1;">
+            <span style="font-size:12px; color:#555; font-weight: bold; display:block; text-align:center; margin-bottom: 4px;">Gap PAR (px)</span>
+            <input type="number" id="cfgGapPar" style="width:100%; text-align:center; font-weight:900; font-size:22px; height:44px; border:2px solid #ff9800; border-radius:6px; background:white; color:#e65100;" oninput="salvarEtiquetaConfigs()">
+            <div style="font-size:10px; color:#777; text-align:center; margin-top:2px;">(2ª, 4ª, 6ª...)</div>
+        </div>
     </div>
 </div>
 
@@ -29,7 +34,7 @@ function formatarMoedaElemento(e){let v=e.value.replace(/\D/g,'');if(v===''){e.v
 function getValorMoeda(id){let v=document.getElementById(id).value;if(!v)return NaN;v=v.replace(/\./g,'').replace(',','.');return parseFloat(v)}
 function setValorMoeda(id,v){const e=document.getElementById(id);if(v===""||v===null||v===undefined||isNaN(v)){e.value="";return}let n=parseFloat(v);e.value=n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}
 function formataDinheiro(v){let n=parseFloat(v);if(isNaN(n))return"0,00";return n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}
-function carregarBanco(){let d={produtos:[{codigo:1,nome:"Hambúrguer",categoria:"Carnes",validadeDias:5,armazenamento:"Não informar",precoPadrao:"",marcas:[],acaoPadrao:"Manipulado:",usaQR:!1}],categorias:[{nome:"Carnes",cor:"#ffcccc",corTexto:"#000000"}],operadores:[{nome:"Admin",senha:"",ocultarEngrenagem:!1}],configs:{modo:"pdf",estabelecimento:"Restaurante",urlAppScript:"",tamanhoEtiqueta:"60x40",destaqueProd:!1,destaqueVal:!1,controleQR:!1,senhaAdmin:"",ultimoWipe:0,gapEtiquetaPx:24,acoes:["Manipulado:","Aberto:","Congelado:"],conservacoes:["Não informar","Ambiente","Resfriado","Congelado"],tema:"azul",ultimaModificacaoLocal:0,mestreAtivo:!1},historico:[]},l=JSON.parse(localStorage.getItem('etiquetadora_db'));if(l){if(!l.configs.tamanhoEtiqueta)l.configs.tamanhoEtiqueta="60x40";if(typeof l.configs.destaqueProd==='undefined')l.configs.destaqueProd=!1;if(typeof l.configs.destaqueVal==='undefined')l.configs.destaqueVal=!1;if(typeof l.configs.controleQR==='undefined')l.configs.controleQR=!1;if(typeof l.configs.senhaAdmin==='undefined')l.configs.senhaAdmin="";if(typeof l.configs.ultimoWipe==='undefined')l.configs.ultimoWipe=0;if(typeof l.configs.ultimaModificacaoLocal==='undefined')l.configs.ultimaModificacaoLocal=0;if(typeof l.configs.gapEtiquetaPx==='undefined')l.configs.gapEtiquetaPx=24;if(!l.configs.tema)l.configs.tema="azul";if(!l.configs.acoes)l.configs.acoes=["Manipulado:","Aberto:","Congelado:"];if(!l.configs.conservacoes)l.configs.conservacoes=["Não informar","Ambiente","Resfriado","Congelado"];if(!l.configs.conservacoes.includes("Não informar"))l.configs.conservacoes.unshift("Não informar");l.configs.mestreAtivo=!1;l.produtos.forEach(p=>{if(!p.acaoPadrao)p.acaoPadrao="Manipulado:";p.acaoPadrao=p.acaoPadrao.replace(/ em:/i,':').replace(/ em/i,':');if(!p.armazenamento)p.armazenamento="Não informar";if(typeof p.usaQR==='undefined')p.usaQR=!1});return l}return d}
+function carregarBanco(){let d={produtos:[{codigo:1,nome:"Hambúrguer",categoria:"Carnes",validadeDias:5,armazenamento:"Não informar",precoPadrao:"",marcas:[],acaoPadrao:"Manipulado:",usaQR:!1}],categorias:[{nome:"Carnes",cor:"#ffcccc",corTexto:"#000000"}],operadores:[{nome:"Admin",senha:"",ocultarEngrenagem:!1}],configs:{modo:"pdf",estabelecimento:"Restaurante",urlAppScript:"",tamanhoEtiqueta:"60x40",destaqueProd:!1,destaqueVal:!1,controleQR:!1,senhaAdmin:"",ultimoWipe:0,gapImpar:24,gapPar:24,acoes:["Manipulado:","Aberto:","Congelado:"],conservacoes:["Não informar","Ambiente","Resfriado","Congelado"],tema:"azul",ultimaModificacaoLocal:0,mestreAtivo:!1},historico:[]},l=JSON.parse(localStorage.getItem('etiquetadora_db'));if(l){if(!l.configs.tamanhoEtiqueta)l.configs.tamanhoEtiqueta="60x40";if(typeof l.configs.destaqueProd==='undefined')l.configs.destaqueProd=!1;if(typeof l.configs.destaqueVal==='undefined')l.configs.destaqueVal=!1;if(typeof l.configs.controleQR==='undefined')l.configs.controleQR=!1;if(typeof l.configs.senhaAdmin==='undefined')l.configs.senhaAdmin="";if(typeof l.configs.ultimoWipe==='undefined')l.configs.ultimoWipe=0;if(typeof l.configs.ultimaModificacaoLocal==='undefined')l.configs.ultimaModificacaoLocal=0;if(typeof l.configs.gapImpar==='undefined')l.configs.gapImpar=l.configs.gapEtiquetaPx||24;if(typeof l.configs.gapPar==='undefined')l.configs.gapPar=l.configs.gapEtiquetaPx||24;if(!l.configs.tema)l.configs.tema="azul";if(!l.configs.acoes)l.configs.acoes=["Manipulado:","Aberto:","Congelado:"];if(!l.configs.conservacoes)l.configs.conservacoes=["Não informar","Ambiente","Resfriado","Congelado"];if(!l.configs.conservacoes.includes("Não informar"))l.configs.conservacoes.unshift("Não informar");l.configs.mestreAtivo=!1;l.produtos.forEach(p=>{if(!p.acaoPadrao)p.acaoPadrao="Manipulado:";p.acaoPadrao=p.acaoPadrao.replace(/ em:/i,':').replace(/ em/i,':');if(!p.armazenamento)p.armazenamento="Não informar";if(typeof p.usaQR==='undefined')p.usaQR=!1});return l}return d}
 function salvarBancoLocal(){localStorage.setItem('etiquetadora_db',JSON.stringify(db))}
 function prepararTelaLogin(){const s=document.getElementById('loginOperador');s.innerHTML='<option value="">Selecione...</option>';db.operadores.forEach(o=>{s.innerHTML+=`<option value="${o.nome}">${o.nome}</option>`});const u=localStorage.getItem('etiquetadora_operadorAtual');if(u&&db.operadores.find(o=>o.nome===u))s.value=u;checarSenhaLoginInicial()}
 function checarSenhaLoginInicial(){const n=document.getElementById('loginOperador').value,o=db.operadores.find(x=>x.nome===n),c=document.getElementById('loginSenhaContainer');if(o&&o.senha!==""){c.style.display="flex";setTimeout(()=>document.getElementById('loginSenha').focus(),10)}else c.style.display="none"}
@@ -55,23 +60,14 @@ function adicionarConservacaoCfg(){let v=document.getElementById('novaConservaca
 function removerConservacaoCfg(n){db.configs.conservacoes=db.configs.conservacoes.filter(c=>c!==n);salvarEtiquetaConfigsSilencioso();renderizarConservacoesCfg()}
 function salvarEtiquetaConfigsSilencioso(){db.configs.ultimaModificacaoLocal=Date.now();salvarBancoLocal();sincronizarComNuvemSilencioso()}
 
-function ajustarGapFino(val){
-    let i = document.getElementById('lblGapPxInput');
-    let atual = parseFloat(i.value.replace(',','.'));
-    if(isNaN(atual)) atual = 24.0;
-    let novo = (atual + val).toFixed(1);
-    i.value = novo;
-    salvarEtiquetaConfigs();
-}
-
 function abrirGerenciarEtiquetas(){
     fecharModal('modalPainelUnificado');
     document.getElementById('cfgTamanho').value=db.configs.tamanhoEtiqueta;
     document.getElementById('cfgDestaqueProd').checked=db.configs.destaqueProd;
     document.getElementById('cfgDestaqueVal').checked=db.configs.destaqueVal;
     document.getElementById('cfgQRGlobal').checked=db.configs.controleQR;
-    let gapV = db.configs.gapEtiquetaPx !== undefined ? db.configs.gapEtiquetaPx : 24;
-    document.getElementById('lblGapPxInput').value=gapV;
+    document.getElementById('cfgGapImpar').value = db.configs.gapImpar !== undefined ? db.configs.gapImpar : 24;
+    document.getElementById('cfgGapPar').value = db.configs.gapPar !== undefined ? db.configs.gapPar : 24;
     renderizarAcoesCfg();
     renderizarConservacoesCfg();
     abrirModal('modalGerenciarEtiquetas');
@@ -82,9 +78,10 @@ function salvarEtiquetaConfigs(){
     db.configs.destaqueProd=document.getElementById('cfgDestaqueProd').checked;
     db.configs.destaqueVal=document.getElementById('cfgDestaqueVal').checked;
     db.configs.controleQR=document.getElementById('cfgQRGlobal').checked;
-    let gapStr=String(document.getElementById('lblGapPxInput').value).replace(',','.');
-    let gapFloat=parseFloat(gapStr);
-    db.configs.gapEtiquetaPx=isNaN(gapFloat)?24:gapFloat;
+    
+    db.configs.gapImpar = parseInt(document.getElementById('cfgGapImpar').value) || 24;
+    db.configs.gapPar = parseInt(document.getElementById('cfgGapPar').value) || 24;
+    
     db.configs.ultimaModificacaoLocal=Date.now();
     salvarBancoLocal();
     document.getElementById('btnScannerQRHome').style.display=db.configs.controleQR?'flex':'none';
@@ -297,13 +294,15 @@ async function gerarRawBT(p,ac,ps,mB,vB,q,op,es,prN,ma,lo,sk,btn){
     
     const fc=document.createElement('canvas'),ctx=fc.getContext('2d'),tm=db.configs.tamanhoEtiqueta||"60x40";
     
-    // MÁGICA REFEITA: Acumulador Flutuante Real
+    // MÁGICA 3: Força Bruta de Alternância (Gap Par/Ímpar)
     const scaleMulti = 3; 
     let hw=480,dw=480,dh=320;
     
-    let gpRaw = db.configs.gapEtiquetaPx !== undefined ? String(db.configs.gapEtiquetaPx).replace(',', '.') : "24";
-    let gp = parseFloat(gpRaw);
-    if(isNaN(gp)) gp = 24;
+    let gapI = db.configs.gapImpar !== undefined ? parseInt(db.configs.gapImpar) : 24;
+    let gapP = db.configs.gapPar !== undefined ? parseInt(db.configs.gapPar) : 24;
+    
+    if(isNaN(gapI)) gapI = 24;
+    if(isNaN(gapP)) gapP = 24;
 
     if(tm==="40x40"){hw=304;dw=304;dh=320}
     else if(tm==="50x50"){hw=384;dw=384;dh=400}
@@ -321,8 +320,16 @@ async function gerarRawBT(p,ac,ps,mB,vB,q,op,es,prN,ma,lo,sk,btn){
     document.body.classList.remove('modal-open');
     window.scrollTo(0,0);
     
-    // O tamanho exato do salto (float)
-    let pitch = dh + gp; // Ex: 320 + 23.84 = 343.84
+    // Calcula a altura exata da fita toda baseada na soma dos Gaps que você escolheu
+    let totalHeightPx = 0;
+    for(let i=0; i<q; i++){
+        totalHeightPx += dh;
+        if(i < q - 1){ // Se não for a última etiqueta, adiciona o gap para a próxima
+            totalHeightPx += (i % 2 === 0) ? gapI : gapP; 
+        }
+    }
+
+    let posY = 0;
 
     for(let i=0; i<q; i++){
         if(uQ){
@@ -343,17 +350,16 @@ async function gerarRawBT(p,ac,ps,mB,vB,q,op,es,prN,ma,lo,sk,btn){
         
         if(i===0){
             fc.width = c.width; 
-            // Altura total exata, arredondando no final
-            fc.height = Math.ceil(pitch * q * scaleMulti); 
+            fc.height = totalHeightPx * scaleMulti;
             ctx.fillStyle="#ffffff";
             ctx.fillRect(0,0,fc.width,fc.height);
             ctx.imageSmoothingEnabled=!1;
         }
         
-        // A posição Y de cada etiqueta acumula o float, arredondando SÓ a coordenada final.
-        // Isso resolve a falha na média do gap a longo prazo!
-        let pY = Math.round(i * pitch * scaleMulti); 
-        ctx.drawImage(c, 0, pY);
+        ctx.drawImage(c, 0, posY * scaleMulti);
+        
+        let gapAtual = (i % 2 === 0) ? gapI : gapP;
+        posY += (dh + gapAtual); // Prepara o Y exato para a próxima etiqueta
     }
     
     const int="intent:"+fc.toDataURL("image/png")+"#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;";
