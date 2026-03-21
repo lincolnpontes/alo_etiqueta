@@ -297,7 +297,7 @@ async function gerarRawBT(p,ac,ps,mB,vB,q,op,es,prN,ma,lo,sk,btn){
     
     const fc=document.createElement('canvas'),ctx=fc.getContext('2d'),tm=db.configs.tamanhoEtiqueta||"60x40";
     
-    // MÁGICA 2: Trava Matemática do Passo!
+    // MÁGICA REFEITA: Acumulador Flutuante Real
     const scaleMulti = 3; 
     let hw=480,dw=480,dh=320;
     
@@ -321,8 +321,8 @@ async function gerarRawBT(p,ac,ps,mB,vB,q,op,es,prN,ma,lo,sk,btn){
     document.body.classList.remove('modal-open');
     window.scrollTo(0,0);
     
-    // Aqui o passo é cravado. Nunca muda 1 pixel sequer entre as etiquetas.
-    let step = Math.round((dh + gp) * scaleMulti);
+    // O tamanho exato do salto (float)
+    let pitch = dh + gp; // Ex: 320 + 23.84 = 343.84
 
     for(let i=0; i<q; i++){
         if(uQ){
@@ -343,13 +343,16 @@ async function gerarRawBT(p,ac,ps,mB,vB,q,op,es,prN,ma,lo,sk,btn){
         
         if(i===0){
             fc.width = c.width; 
-            fc.height = step * q; // A altura total respeita o passo cravado
+            // Altura total exata, arredondando no final
+            fc.height = Math.ceil(pitch * q * scaleMulti); 
             ctx.fillStyle="#ffffff";
             ctx.fillRect(0,0,fc.width,fc.height);
             ctx.imageSmoothingEnabled=!1;
         }
         
-        let pY = i * step; // Matemática limpa.
+        // A posição Y de cada etiqueta acumula o float, arredondando SÓ a coordenada final.
+        // Isso resolve a falha na média do gap a longo prazo!
+        let pY = Math.round(i * pitch * scaleMulti); 
         ctx.drawImage(c, 0, pY);
     }
     
