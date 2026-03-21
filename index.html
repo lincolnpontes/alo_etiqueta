@@ -297,9 +297,10 @@ async function gerarRawBT(p,ac,ps,mB,vB,q,op,es,prN,ma,lo,sk,btn){
     
     const fc=document.createElement('canvas'),ctx=fc.getContext('2d'),tm=db.configs.tamanhoEtiqueta||"60x40";
     
+    // A ESCALA BLINDADA VOLTOU!
+    const scaleMulti = 3; 
     let hw=480,dw=480,dh=320;
     
-    // Pega os decimais corretamente e joga no parseFloat
     let gpIRaw = db.configs.gapImpar !== undefined ? String(db.configs.gapImpar).replace(',', '.') : "24";
     let gapI = parseFloat(gpIRaw);
     if(isNaN(gapI)) gapI = 24;
@@ -332,9 +333,9 @@ async function gerarRawBT(p,ac,ps,mB,vB,q,op,es,prN,ma,lo,sk,btn){
         }
     }
 
-    // Canvas no tamanho REAL 1:1, sem zoom bizarro para o RawBT não encolher
-    fc.width = hw; 
-    fc.height = Math.ceil(totalHeightPx);
+    // Canvas esticado e blindado para o RawBT espremer perfeitamente depois
+    fc.width = hw * scaleMulti; 
+    fc.height = Math.ceil(totalHeightPx * scaleMulti);
     ctx.fillStyle="#ffffff";
     ctx.fillRect(0,0,fc.width,fc.height);
     ctx.imageSmoothingEnabled=!1;
@@ -351,17 +352,16 @@ async function gerarRawBT(p,ac,ps,mB,vB,q,op,es,prN,ma,lo,sk,btn){
         }
         
         let c = await html2canvas(gab,{
-            scale: 1, // AQUI ESTÁ A CORREÇÃO PRINCIPAL: TRAVADO EM 1x
+            scale: scaleMulti,
             backgroundColor:"#ffffff",
             logging:!1,useCORS:!0,
             width:hw,height:dh,
             windowWidth:hw,windowHeight:dh,x:0,y:0
         });
         
-        let pixelY = Math.round(posYFloat);
+        let pixelY = Math.round(posYFloat * scaleMulti);
         ctx.drawImage(c, 0, pixelY);
         
-        // Aplica o gap alternado
         let gapAtual = (i % 2 === 0) ? gapI : gapP;
         posYFloat += (dh + gapAtual);
     }
