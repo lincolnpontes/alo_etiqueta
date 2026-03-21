@@ -11,12 +11,12 @@
     </label>
     <div style="display:flex; gap:15px; width:100%;">
         <div style="flex:1;">
-            <span style="font-size:12px; color:#555; font-weight: bold; display:block; text-align:center; margin-bottom: 4px;">Gap ÍMPAR (px ou deci)</span>
+            <span style="font-size:12px; color:#555; font-weight: bold; display:block; text-align:center; margin-bottom: 4px;">Gap ÍMPAR (px/deci)</span>
             <input type="number" step="0.1" id="cfgGapImpar" style="width:100%; text-align:center; font-weight:900; font-size:22px; height:44px; border:2px solid #ff9800; border-radius:6px; background:white; color:#e65100;" oninput="salvarEtiquetaConfigs()">
             <div style="font-size:10px; color:#777; text-align:center; margin-top:2px;">(1ª, 3ª, 5ª...)</div>
         </div>
         <div style="flex:1;">
-            <span style="font-size:12px; color:#555; font-weight: bold; display:block; text-align:center; margin-bottom: 4px;">Gap PAR (px ou deci)</span>
+            <span style="font-size:12px; color:#555; font-weight: bold; display:block; text-align:center; margin-bottom: 4px;">Gap PAR (px/deci)</span>
             <input type="number" step="0.1" id="cfgGapPar" style="width:100%; text-align:center; font-weight:900; font-size:22px; height:44px; border:2px solid #ff9800; border-radius:6px; background:white; color:#e65100;" oninput="salvarEtiquetaConfigs()">
             <div style="font-size:10px; color:#777; text-align:center; margin-top:2px;">(2ª, 4ª, 6ª...)</div>
         </div>
@@ -297,10 +297,9 @@ async function gerarRawBT(p,ac,ps,mB,vB,q,op,es,prN,ma,lo,sk,btn){
     
     const fc=document.createElement('canvas'),ctx=fc.getContext('2d'),tm=db.configs.tamanhoEtiqueta||"60x40";
     
-    // MÁGICA DEFINITIVA: Alternador Par/Ímpar COM Acumulador Flutuante
-    const scaleMulti = 3; 
     let hw=480,dw=480,dh=320;
     
+    // Pega os decimais corretamente e joga no parseFloat
     let gpIRaw = db.configs.gapImpar !== undefined ? String(db.configs.gapImpar).replace(',', '.') : "24";
     let gapI = parseFloat(gpIRaw);
     if(isNaN(gapI)) gapI = 24;
@@ -325,7 +324,6 @@ async function gerarRawBT(p,ac,ps,mB,vB,q,op,es,prN,ma,lo,sk,btn){
     document.body.classList.remove('modal-open');
     window.scrollTo(0,0);
     
-    // Calcula a altura exata da fita toda baseada na soma dos Gaps Flutuantes
     let totalHeightPx = 0;
     for(let i=0; i<q; i++){
         totalHeightPx += dh;
@@ -333,6 +331,13 @@ async function gerarRawBT(p,ac,ps,mB,vB,q,op,es,prN,ma,lo,sk,btn){
             totalHeightPx += (i % 2 === 0) ? gapI : gapP; 
         }
     }
+
+    // Canvas no tamanho REAL 1:1, sem zoom bizarro para o RawBT não encolher
+    fc.width = hw; 
+    fc.height = Math.ceil(totalHeightPx);
+    ctx.fillStyle="#ffffff";
+    ctx.fillRect(0,0,fc.width,fc.height);
+    ctx.imageSmoothingEnabled=!1;
 
     let posYFloat = 0;
 
@@ -346,26 +351,17 @@ async function gerarRawBT(p,ac,ps,mB,vB,q,op,es,prN,ma,lo,sk,btn){
         }
         
         let c = await html2canvas(gab,{
-            scale: scaleMulti,
+            scale: 1, // AQUI ESTÁ A CORREÇÃO PRINCIPAL: TRAVADO EM 1x
             backgroundColor:"#ffffff",
             logging:!1,useCORS:!0,
             width:hw,height:dh,
             windowWidth:hw,windowHeight:dh,x:0,y:0
         });
         
-        if(i===0){
-            fc.width = c.width; 
-            fc.height = Math.ceil(totalHeightPx * scaleMulti);
-            ctx.fillStyle="#ffffff";
-            ctx.fillRect(0,0,fc.width,fc.height);
-            ctx.imageSmoothingEnabled=!1;
-        }
-        
-        // Arredonda só no momento de jogar a imagem no canvas final
-        // Isso preserva os decimais na soma e garante que o gap fique exato!
-        let pixelY = Math.round(posYFloat * scaleMulti);
+        let pixelY = Math.round(posYFloat);
         ctx.drawImage(c, 0, pixelY);
         
+        // Aplica o gap alternado
         let gapAtual = (i % 2 === 0) ? gapI : gapP;
         posYFloat += (dh + gapAtual);
     }
