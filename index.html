@@ -18,7 +18,7 @@
         input[type=range].vermelho::-webkit-slider-runnable-track {
             background: #ffcdd2; border-color: #ef9a9a;
         }
-    </style></head><body><div id="toast">Aviso!</div><div id="splash-screen"><img src="icon.png" class="splash-icon" alt="Alô Etiqueta" onerror="this.style.display='none'; document.getElementById('splash-emoji').style.display='block';"><div id="splash-emoji" class="splash-emoji">🏷️</div><div class="splash-title">Alô Etiqueta</div><div class="splash-version">v1</div><button onclick="forcarAtualizacao()" style="position:absolute; bottom:30px; background:none; border:none; color:inherit; opacity:0.6; font-size:13px; font-weight:bold; cursor:pointer; padding:10px;">🔄 Forçar Atualização</button></div><div id="login-screen"><div style="font-size: 70px; margin-bottom: 10px;">👤</div><h2 style="margin-top: 0; margin-bottom: 20px; font-size: 24px;">Identificação</h2><select id="loginOperador" style="padding: 15px; font-size: 18px; width: 85%; max-width: 350px; border-radius: 8px; margin-bottom: 15px; border: none; outline: none; font-weight: bold; color: #333;" onchange="checarSenhaLoginInicial()"></select><div id="loginSenhaContainer" style="display: none; flex-direction: column; align-items: center; width: 100%;"><input type="password" id="loginSenha" inputmode="numeric" placeholder="Senha Numérica" style="padding: 15px; font-size: 20px; width: 85%; max-width: 350px; margin-bottom: 25px; border-radius: 8px; border: none; text-align: center; outline: none; font-weight: bold; color: #333;" onkeypress="if(event.key === 'Enter') fazerLoginInicial()"></div><button onclick="fazerLoginInicial()" style="padding: 15px 40px; font-size: 20px; font-weight: bold; border-radius: 8px; border: none; background: #4CAF50; color: white; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">ENTRAR</button><button onclick="forcarAtualizacao()" style="position:absolute; bottom:30px; background:none; border:none; color:white; opacity:0.6; font-size:13px; font-weight:bold; cursor:pointer; padding:10px;">🔄 Forçar Atualização</button></div><div id="area-impressao-visual"><div style="border-bottom: 3px solid black; padding-bottom: 6px; width: 100%; text-align: center;"><div id="viz-nome-produto" class="item-nome">PRODUTO</div></div><div style="flex: 1; padding-top: 8px; display: flex; width: 100%;"><div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; text-align: left; justify-content: center; overflow: hidden;"><div style="font-size: 20px; font-weight: 900; margin-bottom: 6px;"><span id="viz-label-acao">AÇÃO:</span> <span id="viz-data-man">00/00/0000 00:00</span></div><div id="viz-linha-marcalote" style="display: none; font-size: 16px; font-weight: bold; width: 100%; margin-bottom: 4px; white-space: nowrap; overflow: hidden;"><span id="viz-marca-container" style="display:none;">MARCA: <span id="viz-marca">---</span></span><span id="viz-lote-container" style="display:none; margin-left: 6px;"></span></div><div id="viz-linha-pesopreco" style="display: none; font-size: 16px; font-weight: bold; width: 100%; margin-bottom: 4px; white-space: nowrap; overflow: hidden;"><span id="viz-peso-container" style="display:none;">PESO: <span id="viz-peso">0g</span></span><span id="viz-preco-container" style="display:none; margin-left: 6px;"></span></div><div id="viz-box-total-container" style="display: none; font-size: 20px; font-weight: 900; margin-top: 4px;">TOTAL: R$ <span id="viz-preco">0,00</span></div></div><div id="viz-qrcode-container" style="display: none; flex-direction: column; align-items: center; justify-content: center; padding-left: 10px; flex-shrink: 0;"><div id="viz-qrcode"></div><div id="viz-sku-text" style="font-size: 16px; font-weight: 900; margin-top: 2px; line-height: 1;"></div></div></div><div style="width: 100%; padding-top: 6px; text-align: center;"><div id="viz-container-validade" style="margin-bottom: 6px; line-height: 1.1; text-align: center; width: 100%;"><span class="val-label" style="font-size: 28px; font-weight: 900;">VAL:</span> <span class="val-data" id="viz-data-val" style="font-size: 28px; font-weight: 900;">00/00/0000</span></div><div id="viz-linha-armazenamento" style="margin-bottom: 8px; display: none; line-height: 1.0; text-align: center; width: 100%;"><span id="viz-armazenamento" style="font-size: 18px; font-weight: 900; text-transform: uppercase; border: 2px solid black; border-radius: 4px; padding: 2px 8px; display: inline-block;">MANTER CONGELADO</span></div><div style="border-top: 2px solid black; width: 100%; margin-bottom: 4px;"></div><div style="display: flex; justify-content: space-between; align-items: center; width: 100%;"><div id="viz-estabelecimento" style="font-weight: bold; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 50%; text-align: left;">Estabelecimento</div><div style="font-size: 16px; text-align: right;">Op: <span id="viz-operador" style="font-weight: 900;">Nome</span></div></div></div></div><div class="app-container"><div id="sticky-header"><div class="header"><div style="flex: 1; display: flex; justify-content: flex-start; font-weight: 900; font-size: 18px; white-space: nowrap; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">Alô Etiqueta</div><div style="flex: 1.5; display: flex; justify-content: center;"><div style="position: relative; width: 100%; max-width: 220px;"><span style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); font-size: 14px; pointer-events: none; z-index: 1;">👤</span><select id="seletorOperador" class="modern-select" style="padding-left: 28px !important; width: 100%;" onchange="verificarTrocaOperador(this)"></select></div></div><div style="flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 8px;"><div id="indicadorConexao" class="status-conexao" title="Sincronização">🌐</div><button id="btnTemaRapido" onclick="abrirModalTemaRapido()" title="Tema" style="background: none; border: none; color: white; font-size: 22px; cursor: pointer; padding: 0; display: none;">🎨</button><button id="btnConfigGear" onclick="abrirLoginAdmin()" title="Painel Adm" style="background: none; border: none; color: white; font-size: 22px; cursor: pointer; padding: 0;">⚙️</button></div></div><div class="search-box"><input type="number" id="buscaCodigo" placeholder="Cód." inputmode="numeric"><button id="btnBuscaAcao" class="btn-buscar" onclick="acionarBusca()">🔍</button><div class="spacer"></div><div class="icon-group"><button class="btn-icon" onclick="abrirEstoqueAtivo()" title="Estoque Ativo">📈</button><button class="btn-icon" onclick="abrirHistoricoDiario()" title="Diário">📅</button><button class="btn-icon" id="btnScannerQRHome" onclick="abrirScannerQR()" style="display:none;font-size:35px;line-height:1;padding:0;">📷</button></div></div><div class="filters" id="containerFiltros"></div></div><ul class="list" id="listaProdutos"></ul></div><div class="modal-overlay" id="modalConfigGerais"><div class="modal"><div class="modal-title" style="color:var(--primaria); border-color:var(--primaria);">⚙️ Configurações</div><div class="form-group"><label>Estabelecimento:</label><input type="text" id="cfgEstabelecimento"></div><div class="form-group"><label>Impressão:</label><select id="cfgModo"><option value="pdf">Navegador/PDF</option><option value="rawbt">App RawBT</option></select></div><div class="form-group"><label>Tema:</label><select id="cfgTema"><option value="azul">🔵 Azul</option><option value="verde">🟢 Verde</option><option value="vermelho">🔴 Vermelho</option><option value="rosa">🌸 Rosa</option><option value="escuro">⚫ Escuro</option><option value="transparente">🧊 Transparente</option><option value="vinho">🍷 Vinho</option><option value="roxo">💜 Roxo</option></select></div><div class="form-group"><label>Senha Painel (Somente Gerente):</label><input type="password" id="cfgSenhaAdmin" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');" onchange="salvarSenhaPainel()"></div><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalConfigGerais');abrirPainelUnificadoComNivel(db.configs.mestreAtivo);">Voltar</button><button class="btn-action" onclick="salvarConfigGerais()">💾 Salvar</button></div></div></div><div class="modal-overlay" id="modalTemaRapido"><div class="modal"><div class="modal-title" style="color:var(--primaria)">🎨 Escolher Tema</div><div class="form-group"><label>Meu Tema Pessoal:</label><select id="cfgTemaRapido"><option value="azul">🔵 Azul</option><option value="verde">🟢 Verde</option><option value="vermelho">🔴 Vermelho</option><option value="rosa">🌸 Rosa</option><option value="escuro">⚫ Escuro</option><option value="transparente">🧊 Transparente</option><option value="vinho">🍷 Vinho</option><option value="roxo">💜 Roxo</option></select></div><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalTemaRapido')">Cancelar</button><button class="btn-action" onclick="salvarTemaRapido()">💾 Salvar</button></div></div></div><div class="modal-overlay" id="modalPainelUnificado"><div class="modal"><div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô Etiqueta - v1</div><button class="btn-outline" onclick="abrirConfigGeraisModal()">⚙️ Configurações</button><button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Produtos</button><button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Categorias</button><button class="btn-outline" style="border-color:#2e7d32; color:#2e7d32;" onclick="abrirEstoque(false)">📊 Relatório Geral</button><div id="painelSecreto" style="display:none;"><button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Operadores</button><button class="btn-outline" style="border-color:#f57f17; color:#f57f17;" onclick="abrirGerenciarEtiquetas()">🖨️ Estilo da Etiqueta</button><hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;"><button class="btn-danger" onclick="abrirZonaRisco()">⚠️ Avançado</button></div><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalPainelUnificado')">Fechar</button></div></div></div><div class="modal-overlay" id="modalEstoqueAtivo"><div class="modal" style="max-width: 500px;"><div class="modal-title" style="color:#2e7d32; border-color:#2e7d32;">📈 Estoque Físico Ativo</div><div style="display:flex; gap:10px; margin-bottom:10px;"><select id="filtroCatEstoqueAtivo" class="modal-select" style="flex:1; margin:0;" onchange="abrirEstoqueAtivo()"></select><button onclick="abrirPainelValidade();fecharModal('modalEstoqueAtivo')" class="btn-outline" style="flex:0; margin:0; padding:0 15px; font-size:22px; border-color:#ccc;" title="Validade">⏳</button></div><ul class="list" id="listaEstoqueAtivo" style="max-height: 50vh; overflow-y: auto; border: 1px solid #eee; padding: 0; border-radius:5px; margin-bottom: 15px;"></ul><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalEstoqueAtivo')">Fechar</button></div></div></div><div class="modal-overlay" id="modalLoginAdmin"><div class="modal"><div class="modal-title">Acesso ao Painel</div><div class="form-group"><label>Senha:</label><input type="password" id="senhaAdmin" inputmode="numeric" oninput="if(this.value === '1999' || (db.configs.senhaAdmin && db.configs.senhaAdmin !== '' && this.value === db.configs.senhaAdmin)){let mestre=this.value==='1999';this.blur();fecharModal('modalLoginAdmin');abrirPainelUnificadoComNivel(mestre);this.value='';}"></div><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalLoginAdmin')">Cancelar</button></div></div></div><div class="modal-overlay" id="modalHistoricoDiario"><div class="modal" style="max-height: 90vh; overflow-y: auto;"><div class="modal-title" style="color:var(--primaria); border-color:var(--primaria);"><div>📅 Movimentação Diária</div><button onclick="fecharModal('modalHistoricoDiario')" style="background:none; border:none; font-size:26px; color:#999; cursor:pointer; padding:0; line-height: 1;" title="Fechar">&times;</button></div><div style="display:flex; gap:5px; margin-bottom:10px; overflow-x:auto; padding-bottom:5px;"><button class="chip chip-diario" id="btnFiltroDiario" onclick="mudarFiltroDiario('diario')">Hoje</button><button class="chip chip-diario" id="btnFiltro7" onclick="mudarFiltroDiario('7')">7 Dias</button><button class="chip chip-diario" id="btnFiltro15" onclick="mudarFiltroDiario('15')">15 Dias</button><button class="chip chip-diario" id="btnFiltro30" onclick="mudarFiltroDiario('30')">30 Dias</button><button class="chip chip-diario" id="btnFiltroCustom" onclick="mudarFiltroDiario('custom')">Custom</button></div><div id="filtroDataCustom" style="display:none; gap:5px; margin-bottom:15px; background: #f5f5f5; padding: 10px; border-radius: 8px;"><input type="date" id="dataInicioMov" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px; flex:1;"> <input type="date" id="dataFimMov" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px; flex:1;"><button onclick="mudarFiltroDiario('aplicarCustom')" style="background: var(--primaria); color: white; border: none; padding: 0 15px; border-radius: 4px; font-weight: bold;">OK</button></div><div id="listaHistoricoDiario"></div></div></div><div class="modal-overlay" id="modalGerenciarEtiquetas"><div class="modal" style="max-height: 90vh; overflow-y: auto;"><div class="modal-title" style="color:#f57f17; border-color:#f57f17;">Estilo das Etiquetas</div><div class="form-group"><label>Tamanho:</label><select id="cfgTamanho" onchange="salvarEtiquetaConfigs()"><option value="60x40">60x40 mm</option><option value="50x50">50x50 mm</option><option value="40x40">38x40 mm</option></select></div><div class="form-group" style="padding:15px; background:#e3f2fd; border-radius:8px; border:1px solid #90caf9; margin-top: 10px;"><label style="color:#1565c0; font-weight:900; margin-bottom:10px; display:block; font-size: 15px; text-align:center;">📏 Ajuste de Fim de Lote (Gap)</label><div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px dashed #90caf9; padding-bottom: 10px;"><span style="font-weight:bold; font-size:14px; color:#1565c0;">Alternar Gaps Automático</span><label class="switch"><input type="checkbox" id="cfgAlternarGap" onchange="toggleGapSecundario(); salvarEtiquetaConfigs()"><span class="slider"></span></label></div><div style="display:flex; justify-content: space-around; width:100%; align-items: flex-start; gap: 10px;"><div style="display:flex; flex-direction:column; align-items: center; flex: 1;"><span id="lblGap1" style="font-size:12px; font-weight:bold; color:#1565c0; margin-bottom:5px;">Padrão</span><input type="number" id="cfgAjusteGapNum" style="width:100%; max-width: 80px; text-align:center; font-weight:900; font-size:20px; height:45px; border:2px solid #2196f3; border-radius:8px; background:white; color:#1565c0;" oninput="document.getElementById('cfgAjusteGapSlider').value=this.value; salvarEtiquetaConfigs()"></div><div id="boxGap2" style="display:none; flex-direction:column; align-items: center; flex: 1;"><span style="font-size:12px; font-weight:bold; color:#d32f2f; margin-bottom:5px;">Gap 2</span><input type="number" id="cfgAjusteGapNum2" style="width:100%; max-width: 80px; text-align:center; font-weight:900; font-size:20px; height:45px; border:2px solid #d32f2f; border-radius:8px; background:white; color:#d32f2f;" oninput="document.getElementById('cfgAjusteGapSlider2').value=this.value; salvarEtiquetaConfigs()"></div></div><input type="range" id="cfgAjusteGapSlider" min="-100" max="100" step="1" style="width:100%; margin-top: 15px;" oninput="document.getElementById('cfgAjusteGapNum').value=this.value; salvarEtiquetaConfigs()"><input type="range" id="cfgAjusteGapSlider2" class="vermelho" min="-100" max="100" step="1" style="width:100%; margin-top: 5px; display:none;" oninput="document.getElementById('cfgAjusteGapNum2').value=this.value; salvarEtiquetaConfigs()"><div style="font-size:11px; color:#555; text-align:center; margin-top:10px; font-weight:bold;">0 é o padrão (Corte automático).<br>O alternador ajusta o gap automaticamente a cada etiqueta para driblar falhas do sensor da impressora.</div></div><div class="switch-container"><span style="font-weight:bold; font-size:14px;">Destaque Produto</span><label class="switch"><input type="checkbox" id="cfgDestaqueProd" onchange="salvarEtiquetaConfigs()"><span class="slider"></span></label></div><div class="switch-container"><span style="font-weight:bold; font-size:14px;">Destaque Validade</span><label class="switch"><input type="checkbox" id="cfgDestaqueVal" onchange="salvarEtiquetaConfigs()"><span class="slider"></span></label></div><div class="switch-container"><div style="display:flex; flex-direction:column;"><span style="font-weight:bold; font-size:14px;">QR Global</span><span style="font-size:10px; color:#666;">Botão na tela inicial</span></div><label class="switch"><input type="checkbox" id="cfgQRGlobal" onchange="salvarEtiquetaConfigs()"><span class="slider"></span></label></div><h3 style="font-size: 14px; margin-bottom:5px; margin-top:20px;">Ações Padrões</h3><div style="display:flex; gap:10px; margin-bottom: 10px;"><input type="text" id="novaAcaoInput" placeholder="Ex: Fabricado:" style="flex:1; padding:8px; border:1px solid #ccc; border-radius:4px;"><button class="btn-action" style="flex:none; padding: 0 15px;" onclick="adicionarAcaoCfg()">+ Add</button></div><div id="listaAcoesCfg" style="display:flex; flex-direction:column; gap:8px; margin-bottom: 15px;"></div><h3 style="font-size: 14px; margin-bottom:5px;">Conservação</h3><div style="display:flex; gap:10px; margin-bottom: 10px;"><input type="text" id="novaConservacaoInput" placeholder="Ex: Congelado" style="flex:1; padding:8px; border:1px solid #ccc; border-radius:4px;"><button class="btn-action" style="flex:none; padding: 0 15px;" onclick="adicionarConservacaoCfg()">+ Add</button></div><div id="listaConservacoesCfg" style="display:flex; flex-direction:column; gap:8px; margin-bottom: 15px;"></div><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalGerenciarEtiquetas'); abrirPainelUnificadoComNivel(true);">Voltar</button></div></div></div><div class="modal-overlay" id="modalZonaRisco"><div class="modal" style="max-height: 90vh; overflow-y: auto;"><div class="modal-title" style="color:#d32f2f;">Zona de Risco</div><div class="form-group"><label>URL Apps Script:</label><input type="text" id="configUrlAppScript"><button class="btn-action" style="margin-top:10px; width:100%; background:#4CAF50;" onclick="salvarUrlESincronizar(event)">💾 Salvar URL</button></div><hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;"><h3 style="font-size: 14px; margin-bottom:10px; color:#1565C0;">Sincronização Manual</h3><div style="display: flex; gap: 10px; flex-direction: column;"><button class="btn-action" style="margin:0; width:100%; background:#1565C0; padding:15px;" onclick="forcarEnvioNuvem(event)">☁️ Enviar Tudo (PC ➡️ Nuvem)</button><button class="btn-action" style="margin:0; width:100%; background:#d32f2f; padding:15px;" onclick="forcarDownloadNuvem(event)">☁️ Puxar Tudo (Nuvem ➡️ PC)</button></div><hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;"><h3 style="font-size: 14px; margin-bottom:10px; color:#555;">Backup Físico (Arquivo)</h3><div style="display: flex; gap: 10px;"><button class="btn-outline" style="margin:0; flex:1;" onclick="exportarBancoTXT()">📤 Baixar TXT</button><button class="btn-outline" style="margin:0; flex:1;" onclick="document.getElementById('fileImport').click()">📥 Importar TXT</button><input type="file" id="fileImport" style="display:none;" accept=".txt" onchange="importarBancoTXT(event)"></div><hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;"><div class="form-group"><label>Excluir Histórico (<b>quero excluir todo o histórico</b>)</label><input type="text" id="inputConfirmarExclusao"><button class="btn-danger" style="margin-top:5px;" onclick="excluirHistoricoSeguro()">🗑️ Apagar</button></div><div class="form-group"><button class="btn-outline" style="border-color:#fbc02d; color:#fbc02d;" onclick="forcarAtualizacao()">🔄 Forçar Atualização do App</button></div><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalZonaRisco'); abrirPainelUnificadoComNivel(true);">Voltar</button></div></div></div><div class="modal-overlay" id="modalSenhaOperador"><div class="modal" style="margin-bottom: 30vh;"><div class="modal-title">Identidade</div><input type="hidden" id="operadorAlvo"><div class="form-group"><label>Senha:</label><input type="password" id="senhaTrocaOperador" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');" onkeypress="if(event.key === 'Enter') confirmarTrocaOperador()"></div><div class="modal-actions"><button class="btn-cancel" onclick="cancelarTrocaOperador()">Cancelar</button><button class="btn-action" onclick="confirmarTrocaOperador()">Confirmar</button></div></div></div><div class="modal-overlay" id="modalValidade"><div class="modal" style="max-width: 600px;"><div class="modal-title" style="color:#d32f2f; border-color:#d32f2f;">⏳ Rastreados (QR Code)</div><div style="display: flex; gap: 10px; margin-bottom: 10px;"><button id="btnSortValidade" class="btn-outline" style="margin:0; padding: 8px; font-size: 13px; flex:1;" onclick="mudarSortValidade('validade')">Vencimento ⬇️</button><button id="btnSortProduzido" class="btn-outline" style="margin:0; padding: 8px; font-size: 13px; color:#555; border-color:#ccc; flex:1;" onclick="mudarSortValidade('produzido')">Produzido ↕️</button></div><ul class="list" id="listaValidade" style="max-height: 50vh; overflow-y: auto; border: 1px solid #eee; padding: 0; border-radius:5px; margin-bottom: 15px;"></ul><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalValidade'); abrirEstoqueAtivo();">Voltar ao Estoque</button></div></div></div><div class="modal-overlay" id="modalEstoque"><div class="modal" id="modalEstoqueInner"><div id="estoqueMain"><div class="modal-title" style="margin-bottom: 10px;">Relatório Consolidado <button onclick="excluirHistoricoSeguroDireto()" style="background:none; border:none; font-size:16px; cursor:pointer;" title="Limpar">🧹 Limpar</button></div><div style="display:flex; gap:5px; margin-bottom:10px; overflow-x:auto; padding-bottom:5px;"><button class="chip chip-diario" id="btnRelDiario" onclick="mudarFiltroRel('diario')">Hoje</button><button class="chip chip-diario" id="btnRel7" onclick="mudarFiltroRel('7')">7 Dias</button><button class="chip chip-diario" id="btnRel15" onclick="mudarFiltroRel('15')">15 Dias</button><button class="chip chip-diario" id="btnRel30" onclick="mudarFiltroRel('30')">30 Dias</button><button class="chip chip-diario" id="btnRelCustom" onclick="mudarFiltroRel('custom')">Custom</button></div><div id="filtroRelCustom" style="display:none; gap:5px; margin-bottom:15px; background: #f5f5f5; padding: 10px; border-radius: 8px;"><input type="date" id="dataRelIni" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px; flex:1;"> <input type="date" id="dataRelFim" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px; flex:1;"><button onclick="mudarFiltroRel('aplicarCustom')" style="background: var(--primaria); color: white; border: none; padding: 0 15px; border-radius: 4px; font-weight: bold;">OK</button></div><div style="display:flex; gap:5px; margin-bottom:15px;"><button class="chip chip-diario active" id="btnAbaProd" onclick="mudarAbaEstoque('prod')" style="flex:1; text-align:center;">Por Produto</button><button class="chip chip-diario" id="btnAbaColab" onclick="mudarAbaEstoque('colab')" style="flex:1; text-align:center;">Por Colaborador</button></div><div class="form-group" style="background:#f5f5f5; padding: 10px; border-radius: 8px; text-align: center;"><div style="font-size: 14px; font-weight: bold; color: #555;">TOTAL NO PERÍODO</div><div id="estoqueTotal" style="font-size: 28px; font-weight: 900; color: var(--primaria);">0</div></div><ul class="list" id="listaEstoque" style="max-height: 35vh; overflow-y: auto; border: 1px solid #eee; padding: 5px; border-radius:5px;"></ul><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalEstoque'); abrirPainelUnificadoComNivel(db.configs.mestreAtivo);">Voltar</button><button class="btn-action" onclick="exportarRelatorioTXT()">📤 Gerar TXT</button></div></div><div id="estoqueDetalhes" style="display: none;"><div class="modal-title" id="estoqueDetTitulo" style="font-size: 18px; color: var(--primaria);">Produto</div><ul class="list detalhes-estoque-lista" id="listaEstoqueDetalhes" style="max-height: 50vh; overflow-y: auto; border: 1px solid #eee; padding: 0; border-radius:5px; margin-bottom: 15px;"></ul><div class="modal-actions"><button class="btn-cancel" onclick="voltarEstoqueMain()">⬅️ Voltar à Lista</button></div></div></div></div><div class="modal-overlay" id="modalLeitorQR"><div class="modal" style="width:100%;height:100%;max-height:100%;max-width:100%;border-radius:0;display:flex;flex-direction:column;padding:0;background:#000"><div style="background:var(--primaria);color:#fff;padding:15px;font-weight:700;font-size:18px;text-align:center">QR Code</div><div id="reader" style="flex:1;width:100%;display:flex;align-items:center;justify-content:center"></div><div style="padding:20px;background:#000;display:flex;flex-direction:column;gap:10px"><button class="btn-outline" id="btnTrocarCamera" style="margin:0;font-size:16px;padding:12px;background:#333;color:#fff;border:1px solid #555;display:none;justify-content:center" onclick="trocarCamera()">🔄 Trocar Câmera</button><button class="btn-danger" style="margin:0;font-size:18px;padding:15px" onclick="fecharLeitorQR()">Fechar Câmera</button></div></div></div><div class="modal-overlay" id="modalListagem"><div class="modal"><div class="modal-title" id="tituloListagem">Gerenciar</div><button class="btn-action" id="btnNovoListagem" style="width:100%;margin-bottom:15px">+ Novo</button><div id="conteudoListagem" style="max-height:50vh;overflow-y:auto;padding-right:5px"></div><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalListagem');abrirPainelUnificadoComNivel(db.configs.mestreAtivo);">Voltar</button></div></div></div><div class="modal-overlay" id="modalImprimir"><div class="modal"><div class="modal-title" id="imprimirNomeProduto" style="font-size:18px">Produto</div><input type="hidden" id="imprimirCodigoProduto"><div style="display:flex;gap:10px"><div class="form-group" style="flex:.6"><label>Ação:</label><select id="imprimirAcao"></select></div><div class="form-group" style="flex:.4"><label>Qtd:</label><div class="qtd-control"><button class="qtd-btn" onclick="mudarQtd(-1)">-</button><span id="imprimirQtd" style="font-size:18px;font-weight:700">1</span><button class="qtd-btn" onclick="mudarQtd(1)">+</button></div></div></div><div style="display:flex;gap:10px"><div class="form-group" style="flex:1" id="boxMarcaSelect"><label>Marca:</label><select id="imprimirMarca" onchange="toggleLote()"></select></div><div class="form-group" style="flex:1;display:none" id="boxLote"><label>Lote:</label><input type="text" id="imprimirLote"></div></div><div style="display:flex;gap:10px"><div class="form-group" style="flex:1"><label>Peso (g):</label><input type="number" id="imprimirPeso" oninput="calcularTotalPagar()"></div><div class="form-group" style="flex:1"><label>Preço (R$):</label><input type="text" id="imprimirPreco" inputmode="numeric" oninput="formatarMoedaElemento(this);calcularTotalPagar()"></div></div><div id="boxCalculoTotal" style="background:#e8f5e9;padding:10px;border-radius:5px;text-align:center;font-weight:700;color:#2e7d32;margin-bottom:15px;display:none">Total Calc: R$ <span id="imprimirCalculo">0,00</span></div><div class="form-group"><label>Validade Final:</label><input type="date" id="imprimirValidade"></div><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalImprimir')">Cancelar</button><button class="btn-action" id="btnProcessarImpressao" onclick="processarImpressao()">🖨️ IMPRIMIR</button></div></div></div><div class="modal-overlay" id="modalImprimirPers"><div class="modal"><div class="modal-title" style="color:var(--primaria)">Avulso</div><div class="form-group"><label>Nome Produto:</label><input type="text" id="impPersNome"></div><div style="display:flex;gap:10px"><div class="form-group" style="flex:.6"><label>Ação:</label><select id="impPersAcao"></select></div><div class="form-group" style="flex:.4"><label>Qtd:</label><div class="qtd-control"><button class="qtd-btn" onclick="mudarQtdPers(-1)">-</button><span id="impPersQtd" style="font-size:18px;font-weight:700">1</span><button class="qtd-btn" onclick="mudarQtdPers(1)">+</button></div></div></div><div style="display:flex;gap:10px"><div class="form-group" style="flex:1"><label>Marca:</label><input type="text" id="impPersMarca"></div><div class="form-group" style="flex:1"><label>Lote:</label><input type="text" id="impPersLote"></div></div><div style="display:flex;gap:10px"><div class="form-group" style="flex:1"><label>Peso (g):</label><input type="number" id="impPersPeso" oninput="calcularTotalPagarPers()"></div><div class="form-group" style="flex:1"><label>Preço (R$):</label><input type="text" id="impPersPreco" inputmode="numeric" oninput="formatarMoedaElemento(this);calcularTotalPagarPers()"></div></div><div id="boxCalculoTotalPers" style="background:#e8f5e9;padding:10px;border-radius:5px;text-align:center;font-weight:700;color:#2e7d32;margin-bottom:15px;display:none">Total Calc: R$ <span id="impPersCalculo">0,00</span></div><div style="display:flex;gap:10px"><div class="form-group" style="flex:1"><label>Conservação:</label><select id="impPersArmazenamento"></select></div><div class="form-group" style="flex:1"><label>Validade:</label><input type="date" id="impPersValidade"></div></div><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalImprimirPers')">Cancelar</button><button class="btn-action" id="btnPersImprimir" onclick="processarImpressaoPers()">🖨️ IMPRIMIR</button></div></div></div><div class="modal-overlay" id="modalFormProduto"><div class="modal"><div class="modal-title">Produto</div><input type="hidden" id="prodCodigoOriginal"><div style="display:flex;gap:10px"><div class="form-group" style="flex:.3"><label>Cód:</label><input type="number" id="prodCodigo" oninput="checarCodigoDisponivel()"></div><div class="form-group" style="flex:.7"><label>Nome:</label><input type="text" id="prodNome"></div></div><div id="msgCodigoDisponivel" style="font-size:13px;font-weight:700;margin-top:-10px;margin-bottom:15px"></div><div style="display:flex;gap:10px"><div class="form-group" style="flex:1"><label>Categoria:</label><select id="prodCategoria"></select></div><div class="form-group" style="flex:1"><label>Val(Dias):</label><input type="number" id="prodValidade"></div></div><div class="form-group"><label>Ação Padrão:</label><select id="prodAcaoPadrao"></select></div><div class="form-group"><label>Marcas (por vírgula):</label><input type="text" id="prodMarcas"></div><div style="display:flex;gap:10px"><div class="form-group" style="flex:1"><label>Conservação:</label><select id="prodArmazenamento"></select></div><div class="form-group" style="flex:1"><label>Preço Base(R$):</label><input type="text" id="prodPreco" inputmode="numeric" oninput="formatarMoedaElemento(this)"></div></div><div class="switch-container"><div style="display:flex;flex-direction:column"><span style="font-weight:700;font-size:14px">Controle QR</span><span style="font-size:10px;color:#666">Gerar baixa</span></div><label class="switch"><input type="checkbox" id="prodUsaQR"><span class="slider"></span></label></div><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalFormProduto');abrirGerenciar('produtos')">Cancelar</button><button class="btn-action" onclick="salvarProduto()">Salvar</button></div></div></div><div class="modal-overlay" id="modalFormCategoria"><div class="modal"><div class="modal-title">Categoria</div><input type="hidden" id="catNomeOriginal"><div class="form-group"><label>Nome:</label><input type="text" id="catNome"></div><div style="display:flex;gap:10px"><div class="form-group" style="flex:1"><label>Fundo:</label><input type="color" id="catCor" value="#1565C0"></div><div class="form-group" style="flex:1"><label>Texto:</label><input type="color" id="catCorTexto" value="#ffffff"></div></div><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalFormCategoria');abrirGerenciar('categorias')">Cancelar</button><button class="btn-action" onclick="salvarCategoria()">Salvar</button></div></div></div><div class="modal-overlay" id="modalFormOperador"><div class="modal"><div class="modal-title">Operador(a)</div><input type="hidden" id="opNomeOriginal"><div class="form-group"><label>Nome:</label><input type="text" id="opNome"></div><div class="form-group"><label>Senha (Vazio=sem):</label><input type="password" id="opSenha" inputmode="numeric" onfocus="this.select()" oninput="this.value=this.value.replace(/[^0-9]/g,'')"></div><div class="switch-container"><span style="font-weight:bold;font-size:14px;">Ocultar Engrenagem ⚙️</span><label class="switch"><input type="checkbox" id="opOcultarEngrenagem"><span class="slider"></span></label></div><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalFormOperador');abrirGerenciar('operadores')">Cancelar</button><button class="btn-action" onclick="salvarOperador()">Salvar</button></div></div></div>
+    </style></head><body><div id="toast">Aviso!</div><div id="splash-screen"><img src="icon.png" class="splash-icon" alt="Alô Etiqueta" onerror="this.style.display='none'; document.getElementById('splash-emoji').style.display='block';"><div id="splash-emoji" class="splash-emoji">🏷️</div><div class="splash-title">Alô Etiqueta</div><div class="splash-version">v1</div><button onclick="forcarAtualizacao()" style="position:absolute; bottom:30px; background:none; border:none; color:inherit; opacity:0.6; font-size:13px; font-weight:bold; cursor:pointer; padding:10px;">🔄 Forçar Atualização</button></div><div id="login-screen"><div style="font-size: 70px; margin-bottom: 10px;">👤</div><h2 style="margin-top: 0; margin-bottom: 20px; font-size: 24px;">Identificação</h2><select id="loginOperador" style="padding: 15px; font-size: 18px; width: 85%; max-width: 350px; border-radius: 8px; margin-bottom: 15px; border: none; outline: none; font-weight: bold; color: #333;" onchange="checarSenhaLoginInicial()"></select><div id="loginSenhaContainer" style="display: none; flex-direction: column; align-items: center; width: 100%;"><input type="password" id="loginSenha" inputmode="numeric" placeholder="Senha Numérica" style="padding: 15px; font-size: 20px; width: 85%; max-width: 350px; margin-bottom: 25px; border-radius: 8px; border: none; text-align: center; outline: none; font-weight: bold; color: #333;" onkeypress="if(event.key === 'Enter') fazerLoginInicial()"></div><button onclick="fazerLoginInicial()" style="padding: 15px 40px; font-size: 20px; font-weight: bold; border-radius: 8px; border: none; background: #4CAF50; color: white; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">ENTRAR</button><button onclick="forcarAtualizacao()" style="position:absolute; bottom:30px; background:none; border:none; color:white; opacity:0.6; font-size:13px; font-weight:bold; cursor:pointer; padding:10px;">🔄 Forçar Atualização</button></div><div id="area-impressao-visual"><div style="border-bottom: 3px solid black; padding-bottom: 6px; width: 100%; text-align: center;"><div id="viz-nome-produto" class="item-nome">PRODUTO</div></div><div style="flex: 1; padding-top: 8px; display: flex; width: 100%;"><div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; text-align: left; justify-content: center; overflow: hidden;"><div style="font-size: 20px; font-weight: 900; margin-bottom: 6px;"><span id="viz-label-acao">AÇÃO:</span> <span id="viz-data-man">00/00/0000 00:00</span></div><div id="viz-linha-marcalote" style="display: none; font-size: 16px; font-weight: bold; width: 100%; margin-bottom: 4px; white-space: nowrap; overflow: hidden;"><span id="viz-marca-container" style="display:none;">MARCA: <span id="viz-marca">---</span></span><span id="viz-lote-container" style="display:none; margin-left: 6px;"></span></div><div id="viz-linha-pesopreco" style="display: none; font-size: 16px; font-weight: bold; width: 100%; margin-bottom: 4px; white-space: nowrap; overflow: hidden;"><span id="viz-peso-container" style="display:none;">PESO: <span id="viz-peso">0g</span></span><span id="viz-preco-container" style="display:none; margin-left: 6px;"></span></div><div id="viz-box-total-container" style="display: none; font-size: 20px; font-weight: 900; margin-top: 4px;">TOTAL: R$ <span id="viz-preco">0,00</span></div></div><div id="viz-qrcode-container" style="display: none; flex-direction: column; align-items: center; justify-content: center; padding-left: 10px; flex-shrink: 0;"><div id="viz-qrcode"></div><div id="viz-sku-text" style="font-size: 16px; font-weight: 900; margin-top: 2px; line-height: 1;"></div></div></div><div style="width: 100%; padding-top: 6px; text-align: center;"><div id="viz-container-validade" style="margin-bottom: 6px; line-height: 1.1; text-align: center; width: 100%;"><span class="val-label" style="font-size: 28px; font-weight: 900;">VAL:</span> <span class="val-data" id="viz-data-val" style="font-size: 28px; font-weight: 900;">00/00/0000</span></div><div id="viz-linha-armazenamento" style="margin-bottom: 8px; display: none; line-height: 1.0; text-align: center; width: 100%;"><span id="viz-armazenamento" style="font-size: 18px; font-weight: 900; text-transform: uppercase; border: 2px solid black; border-radius: 4px; padding: 2px 8px; display: inline-block;">MANTER CONGELADO</span></div><div style="border-top: 2px solid black; width: 100%; margin-bottom: 4px;"></div><div style="display: flex; justify-content: space-between; align-items: center; width: 100%;"><div id="viz-estabelecimento" style="font-weight: bold; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 50%; text-align: left;">Estabelecimento</div><div style="font-size: 16px; text-align: right;">Op: <span id="viz-operador" style="font-weight: 900;">Nome</span></div></div></div></div><div class="app-container"><div id="sticky-header"><div class="header"><div style="flex: 1; display: flex; justify-content: flex-start; font-weight: 900; font-size: 18px; white-space: nowrap; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">Alô Etiqueta</div><div style="flex: 1.5; display: flex; justify-content: center;"><div style="position: relative; width: 100%; max-width: 220px;"><span style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); font-size: 14px; pointer-events: none; z-index: 1;">👤</span><select id="seletorOperador" class="modern-select" style="padding-left: 28px !important; width: 100%;" onchange="verificarTrocaOperador(this)"></select></div></div><div style="flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 8px;"><div id="indicadorConexao" class="status-conexao" title="Sincronização">🌐</div><button id="btnTemaRapido" onclick="abrirModalTemaRapido()" title="Tema" style="background: none; border: none; color: white; font-size: 22px; cursor: pointer; padding: 0; display: none;">🎨</button><button id="btnConfigGear" onclick="abrirLoginAdmin()" title="Painel Adm" style="background: none; border: none; color: white; font-size: 22px; cursor: pointer; padding: 0;">⚙️</button></div></div><div class="search-box"><input type="number" id="buscaCodigo" placeholder="Cód." inputmode="numeric"><button id="btnBuscaAcao" class="btn-buscar" onclick="acionarBusca()">🔍</button><div class="spacer"></div><div class="icon-group"><button class="btn-icon" onclick="abrirEstoqueAtivo()" title="Estoque Ativo">📈</button><button class="btn-icon" onclick="abrirHistoricoDiario()" title="Diário">📅</button><button class="btn-icon" id="btnScannerQRHome" onclick="abrirScannerQR()" style="display:none;font-size:35px;line-height:1;padding:0;">📷</button></div></div><div class="filters" id="containerFiltros"></div></div><ul class="list" id="listaProdutos"></ul></div><div class="modal-overlay" id="modalConfigGerais"><div class="modal"><div class="modal-title" style="color:var(--primaria); border-color:var(--primaria);">⚙️ Configurações</div><div class="form-group"><label>Estabelecimento:</label><input type="text" id="cfgEstabelecimento"></div><div class="form-group"><label>Impressão:</label><select id="cfgModo"><option value="pdf">Navegador/PDF</option><option value="rawbt">App RawBT</option></select></div><div class="form-group"><label>Tema:</label><select id="cfgTema"><option value="azul">🔵 Azul</option><option value="verde">🟢 Verde</option><option value="vermelho">🔴 Vermelho</option><option value="rosa">🌸 Rosa</option><option value="escuro">⚫ Escuro</option><option value="transparente">🧊 Transparente</option><option value="vinho">🍷 Vinho</option><option value="roxo">💜 Roxo</option></select></div><div class="form-group"><label>Senha Painel (Somente Gerente):</label><input type="password" id="cfgSenhaAdmin" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');" onchange="salvarSenhaPainel()"></div><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalConfigGerais');abrirPainelUnificadoComNivel(db.configs.mestreAtivo);">Voltar</button><button class="btn-action" onclick="salvarConfigGerais()">💾 Salvar</button></div></div></div><div class="modal-overlay" id="modalTemaRapido"><div class="modal"><div class="modal-title" style="color:var(--primaria)">🎨 Escolher Tema</div><div class="form-group"><label>Meu Tema Pessoal:</label><select id="cfgTemaRapido"><option value="azul">🔵 Azul</option><option value="verde">🟢 Verde</option><option value="vermelho">🔴 Vermelho</option><option value="rosa">🌸 Rosa</option><option value="escuro">⚫ Escuro</option><option value="transparente">🧊 Transparente</option><option value="vinho">🍷 Vinho</option><option value="roxo">💜 Roxo</option></select></div><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalTemaRapido')">Cancelar</button><button class="btn-action" onclick="salvarTemaRapido()">💾 Salvar</button></div></div></div><div class="modal-overlay" id="modalPainelUnificado"><div class="modal"><div style="text-align: center; color: #666; font-size: 13px; font-weight: bold; margin-bottom: 15px;">Alô Etiqueta - v1</div><button class="btn-outline" onclick="abrirConfigGeraisModal()">⚙️ Configurações</button><button class="btn-outline" onclick="abrirGerenciar('produtos')">📦 Produtos</button><button class="btn-outline" onclick="abrirGerenciar('categorias')">🏷️ Categorias</button><button class="btn-outline" style="border-color:#2e7d32; color:#2e7d32;" onclick="abrirEstoque(false)">📊 Relatório Geral</button><div id="painelSecreto" style="display:none;"><button class="btn-outline" onclick="abrirGerenciar('operadores')">👥 Operadores</button><button class="btn-outline" style="border-color:#f57f17; color:#f57f17;" onclick="abrirGerenciarEtiquetas()">🖨️ Estilo da Etiqueta</button><button class="btn-outline" style="border-color:#6a1b9a; color:#6a1b9a;" onclick="testeTSPLRawBT()">Teste TSPL + QR</button><hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;"><button class="btn-danger" onclick="abrirZonaRisco()">⚠️ Avançado</button></div><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalPainelUnificado')">Fechar</button></div></div></div><div class="modal-overlay" id="modalEstoqueAtivo"><div class="modal" style="max-width: 500px;"><div class="modal-title" style="color:#2e7d32; border-color:#2e7d32;">📈 Estoque Físico Ativo</div><div style="display:flex; gap:10px; margin-bottom:10px;"><select id="filtroCatEstoqueAtivo" class="modal-select" style="flex:1; margin:0;" onchange="abrirEstoqueAtivo()"></select><button onclick="abrirPainelValidade();fecharModal('modalEstoqueAtivo')" class="btn-outline" style="flex:0; margin:0; padding:0 15px; font-size:22px; border-color:#ccc;" title="Validade">⏳</button></div><ul class="list" id="listaEstoqueAtivo" style="max-height: 50vh; overflow-y: auto; border: 1px solid #eee; padding: 0; border-radius:5px; margin-bottom: 15px;"></ul><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalEstoqueAtivo')">Fechar</button></div></div></div><div class="modal-overlay" id="modalLoginAdmin"><div class="modal"><div class="modal-title">Acesso ao Painel</div><div class="form-group"><label>Senha:</label><input type="password" id="senhaAdmin" inputmode="numeric" oninput="if(this.value === '1999' || (db.configs.senhaAdmin && db.configs.senhaAdmin !== '' && this.value === db.configs.senhaAdmin)){let mestre=this.value==='1999';this.blur();fecharModal('modalLoginAdmin');abrirPainelUnificadoComNivel(mestre);this.value='';}"></div><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalLoginAdmin')">Cancelar</button></div></div></div><div class="modal-overlay" id="modalHistoricoDiario"><div class="modal" style="max-height: 90vh; overflow-y: auto;"><div class="modal-title" style="color:var(--primaria); border-color:var(--primaria);"><div>📅 Movimentação Diária</div><button onclick="fecharModal('modalHistoricoDiario')" style="background:none; border:none; font-size:26px; color:#999; cursor:pointer; padding:0; line-height: 1;" title="Fechar">&times;</button></div><div style="display:flex; gap:5px; margin-bottom:10px; overflow-x:auto; padding-bottom:5px;"><button class="chip chip-diario" id="btnFiltroDiario" onclick="mudarFiltroDiario('diario')">Hoje</button><button class="chip chip-diario" id="btnFiltro7" onclick="mudarFiltroDiario('7')">7 Dias</button><button class="chip chip-diario" id="btnFiltro15" onclick="mudarFiltroDiario('15')">15 Dias</button><button class="chip chip-diario" id="btnFiltro30" onclick="mudarFiltroDiario('30')">30 Dias</button><button class="chip chip-diario" id="btnFiltroCustom" onclick="mudarFiltroDiario('custom')">Custom</button></div><div id="filtroDataCustom" style="display:none; gap:5px; margin-bottom:15px; background: #f5f5f5; padding: 10px; border-radius: 8px;"><input type="date" id="dataInicioMov" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px; flex:1;"> <input type="date" id="dataFimMov" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px; flex:1;"><button onclick="mudarFiltroDiario('aplicarCustom')" style="background: var(--primaria); color: white; border: none; padding: 0 15px; border-radius: 4px; font-weight: bold;">OK</button></div><div id="listaHistoricoDiario"></div></div></div><div class="modal-overlay" id="modalGerenciarEtiquetas"><div class="modal" style="max-height: 90vh; overflow-y: auto;"><div class="modal-title" style="color:#f57f17; border-color:#f57f17;">Estilo das Etiquetas</div><div class="form-group"><label>Tamanho:</label><select id="cfgTamanho" onchange="salvarEtiquetaConfigs()"><option value="60x40">60x40 mm</option><option value="50x50">50x50 mm</option><option value="40x40">38x40 mm</option></select></div><div class="form-group" style="padding:15px; background:#e3f2fd; border-radius:8px; border:1px solid #90caf9; margin-top: 10px;"><label style="color:#1565c0; font-weight:900; margin-bottom:10px; display:block; font-size: 15px; text-align:center;">📏 Ajuste de Fim de Lote (Gap)</label><div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px dashed #90caf9; padding-bottom: 10px;"><span style="font-weight:bold; font-size:14px; color:#1565c0;">Alternar Gaps Automático</span><label class="switch"><input type="checkbox" id="cfgAlternarGap" onchange="toggleGapSecundario(); salvarEtiquetaConfigs()"><span class="slider"></span></label></div><div style="display:flex; justify-content: space-around; width:100%; align-items: flex-start; gap: 10px;"><div style="display:flex; flex-direction:column; align-items: center; flex: 1;"><span id="lblGap1" style="font-size:12px; font-weight:bold; color:#1565c0; margin-bottom:5px;">Padrão</span><input type="number" id="cfgAjusteGapNum" style="width:100%; max-width: 80px; text-align:center; font-weight:900; font-size:20px; height:45px; border:2px solid #2196f3; border-radius:8px; background:white; color:#1565c0;" oninput="document.getElementById('cfgAjusteGapSlider').value=this.value; salvarEtiquetaConfigs()"></div><div id="boxGap2" style="display:none; flex-direction:column; align-items: center; flex: 1;"><span style="font-size:12px; font-weight:bold; color:#d32f2f; margin-bottom:5px;">Gap 2</span><input type="number" id="cfgAjusteGapNum2" style="width:100%; max-width: 80px; text-align:center; font-weight:900; font-size:20px; height:45px; border:2px solid #d32f2f; border-radius:8px; background:white; color:#d32f2f;" oninput="document.getElementById('cfgAjusteGapSlider2').value=this.value; salvarEtiquetaConfigs()"></div></div><input type="range" id="cfgAjusteGapSlider" min="-100" max="100" step="1" style="width:100%; margin-top: 15px;" oninput="document.getElementById('cfgAjusteGapNum').value=this.value; salvarEtiquetaConfigs()"><input type="range" id="cfgAjusteGapSlider2" class="vermelho" min="-100" max="100" step="1" style="width:100%; margin-top: 5px; display:none;" oninput="document.getElementById('cfgAjusteGapNum2').value=this.value; salvarEtiquetaConfigs()"><div style="font-size:11px; color:#555; text-align:center; margin-top:10px; font-weight:bold;">0 é o padrão (Corte automático).<br>O alternador ajusta o gap automaticamente a cada etiqueta para driblar falhas do sensor da impressora.</div></div><div class="switch-container"><span style="font-weight:bold; font-size:14px;">Destaque Produto</span><label class="switch"><input type="checkbox" id="cfgDestaqueProd" onchange="salvarEtiquetaConfigs()"><span class="slider"></span></label></div><div class="switch-container"><span style="font-weight:bold; font-size:14px;">Destaque Validade</span><label class="switch"><input type="checkbox" id="cfgDestaqueVal" onchange="salvarEtiquetaConfigs()"><span class="slider"></span></label></div><div class="switch-container"><div style="display:flex; flex-direction:column;"><span style="font-weight:bold; font-size:14px;">QR Global</span><span style="font-size:10px; color:#666;">Botão na tela inicial</span></div><label class="switch"><input type="checkbox" id="cfgQRGlobal" onchange="salvarEtiquetaConfigs()"><span class="slider"></span></label></div><h3 style="font-size: 14px; margin-bottom:5px; margin-top:20px;">Ações Padrões</h3><div style="display:flex; gap:10px; margin-bottom: 10px;"><input type="text" id="novaAcaoInput" placeholder="Ex: Fabricado:" style="flex:1; padding:8px; border:1px solid #ccc; border-radius:4px;"><button class="btn-action" style="flex:none; padding: 0 15px;" onclick="adicionarAcaoCfg()">+ Add</button></div><div id="listaAcoesCfg" style="display:flex; flex-direction:column; gap:8px; margin-bottom: 15px;"></div><h3 style="font-size: 14px; margin-bottom:5px;">Conservação</h3><div style="display:flex; gap:10px; margin-bottom: 10px;"><input type="text" id="novaConservacaoInput" placeholder="Ex: Congelado" style="flex:1; padding:8px; border:1px solid #ccc; border-radius:4px;"><button class="btn-action" style="flex:none; padding: 0 15px;" onclick="adicionarConservacaoCfg()">+ Add</button></div><div id="listaConservacoesCfg" style="display:flex; flex-direction:column; gap:8px; margin-bottom: 15px;"></div><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalGerenciarEtiquetas'); abrirPainelUnificadoComNivel(true);">Voltar</button></div></div></div><div class="modal-overlay" id="modalZonaRisco"><div class="modal" style="max-height: 90vh; overflow-y: auto;"><div class="modal-title" style="color:#d32f2f;">Zona de Risco</div><div class="form-group"><label>URL Apps Script:</label><input type="text" id="configUrlAppScript"><button class="btn-action" style="margin-top:10px; width:100%; background:#4CAF50;" onclick="salvarUrlESincronizar(event)">💾 Salvar URL</button></div><hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;"><h3 style="font-size: 14px; margin-bottom:10px; color:#1565C0;">Sincronização Manual</h3><div style="display: flex; gap: 10px; flex-direction: column;"><button class="btn-action" style="margin:0; width:100%; background:#1565C0; padding:15px;" onclick="forcarEnvioNuvem(event)">☁️ Enviar Tudo (PC ➡️ Nuvem)</button><button class="btn-action" style="margin:0; width:100%; background:#d32f2f; padding:15px;" onclick="forcarDownloadNuvem(event)">☁️ Puxar Tudo (Nuvem ➡️ PC)</button></div><hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;"><h3 style="font-size: 14px; margin-bottom:10px; color:#555;">Backup Físico (Arquivo)</h3><div style="display: flex; gap: 10px;"><button class="btn-outline" style="margin:0; flex:1;" onclick="exportarBancoTXT()">📤 Baixar TXT</button><button class="btn-outline" style="margin:0; flex:1;" onclick="document.getElementById('fileImport').click()">📥 Importar TXT</button><input type="file" id="fileImport" style="display:none;" accept=".txt" onchange="importarBancoTXT(event)"></div><hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;"><div class="form-group"><label>Excluir Histórico (<b>quero excluir todo o histórico</b>)</label><input type="text" id="inputConfirmarExclusao"><button class="btn-danger" style="margin-top:5px;" onclick="excluirHistoricoSeguro()">🗑️ Apagar</button></div><div class="form-group"><button class="btn-outline" style="border-color:#fbc02d; color:#fbc02d;" onclick="forcarAtualizacao()">🔄 Forçar Atualização do App</button></div><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalZonaRisco'); abrirPainelUnificadoComNivel(true);">Voltar</button></div></div></div><div class="modal-overlay" id="modalSenhaOperador"><div class="modal" style="margin-bottom: 30vh;"><div class="modal-title">Identidade</div><input type="hidden" id="operadorAlvo"><div class="form-group"><label>Senha:</label><input type="password" id="senhaTrocaOperador" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');" onkeypress="if(event.key === 'Enter') confirmarTrocaOperador()"></div><div class="modal-actions"><button class="btn-cancel" onclick="cancelarTrocaOperador()">Cancelar</button><button class="btn-action" onclick="confirmarTrocaOperador()">Confirmar</button></div></div></div><div class="modal-overlay" id="modalValidade"><div class="modal" style="max-width: 600px;"><div class="modal-title" style="color:#d32f2f; border-color:#d32f2f;">⏳ Rastreados (QR Code)</div><div style="display: flex; gap: 10px; margin-bottom: 10px;"><button id="btnSortValidade" class="btn-outline" style="margin:0; padding: 8px; font-size: 13px; flex:1;" onclick="mudarSortValidade('validade')">Vencimento ⬇️</button><button id="btnSortProduzido" class="btn-outline" style="margin:0; padding: 8px; font-size: 13px; color:#555; border-color:#ccc; flex:1;" onclick="mudarSortValidade('produzido')">Produzido ↕️</button></div><ul class="list" id="listaValidade" style="max-height: 50vh; overflow-y: auto; border: 1px solid #eee; padding: 0; border-radius:5px; margin-bottom: 15px;"></ul><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalValidade'); abrirEstoqueAtivo();">Voltar ao Estoque</button></div></div></div><div class="modal-overlay" id="modalEstoque"><div class="modal" id="modalEstoqueInner"><div id="estoqueMain"><div class="modal-title" style="margin-bottom: 10px;">Relatório Consolidado <button onclick="excluirHistoricoSeguroDireto()" style="background:none; border:none; font-size:16px; cursor:pointer;" title="Limpar">🧹 Limpar</button></div><div style="display:flex; gap:5px; margin-bottom:10px; overflow-x:auto; padding-bottom:5px;"><button class="chip chip-diario" id="btnRelDiario" onclick="mudarFiltroRel('diario')">Hoje</button><button class="chip chip-diario" id="btnRel7" onclick="mudarFiltroRel('7')">7 Dias</button><button class="chip chip-diario" id="btnRel15" onclick="mudarFiltroRel('15')">15 Dias</button><button class="chip chip-diario" id="btnRel30" onclick="mudarFiltroRel('30')">30 Dias</button><button class="chip chip-diario" id="btnRelCustom" onclick="mudarFiltroRel('custom')">Custom</button></div><div id="filtroRelCustom" style="display:none; gap:5px; margin-bottom:15px; background: #f5f5f5; padding: 10px; border-radius: 8px;"><input type="date" id="dataRelIni" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px; flex:1;"> <input type="date" id="dataRelFim" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px; flex:1;"><button onclick="mudarFiltroRel('aplicarCustom')" style="background: var(--primaria); color: white; border: none; padding: 0 15px; border-radius: 4px; font-weight: bold;">OK</button></div><div style="display:flex; gap:5px; margin-bottom:15px;"><button class="chip chip-diario active" id="btnAbaProd" onclick="mudarAbaEstoque('prod')" style="flex:1; text-align:center;">Por Produto</button><button class="chip chip-diario" id="btnAbaColab" onclick="mudarAbaEstoque('colab')" style="flex:1; text-align:center;">Por Colaborador</button></div><div class="form-group" style="background:#f5f5f5; padding: 10px; border-radius: 8px; text-align: center;"><div style="font-size: 14px; font-weight: bold; color: #555;">TOTAL NO PERÍODO</div><div id="estoqueTotal" style="font-size: 28px; font-weight: 900; color: var(--primaria);">0</div></div><ul class="list" id="listaEstoque" style="max-height: 35vh; overflow-y: auto; border: 1px solid #eee; padding: 5px; border-radius:5px;"></ul><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalEstoque'); abrirPainelUnificadoComNivel(db.configs.mestreAtivo);">Voltar</button><button class="btn-action" onclick="exportarRelatorioTXT()">📤 Gerar TXT</button></div></div><div id="estoqueDetalhes" style="display: none;"><div class="modal-title" id="estoqueDetTitulo" style="font-size: 18px; color: var(--primaria);">Produto</div><ul class="list detalhes-estoque-lista" id="listaEstoqueDetalhes" style="max-height: 50vh; overflow-y: auto; border: 1px solid #eee; padding: 0; border-radius:5px; margin-bottom: 15px;"></ul><div class="modal-actions"><button class="btn-cancel" onclick="voltarEstoqueMain()">⬅️ Voltar à Lista</button></div></div></div></div><div class="modal-overlay" id="modalLeitorQR"><div class="modal" style="width:100%;height:100%;max-height:100%;max-width:100%;border-radius:0;display:flex;flex-direction:column;padding:0;background:#000"><div style="background:var(--primaria);color:#fff;padding:15px;font-weight:700;font-size:18px;text-align:center">QR Code</div><div id="reader" style="flex:1;width:100%;display:flex;align-items:center;justify-content:center"></div><div style="padding:20px;background:#000;display:flex;flex-direction:column;gap:10px"><button class="btn-outline" id="btnTrocarCamera" style="margin:0;font-size:16px;padding:12px;background:#333;color:#fff;border:1px solid #555;display:none;justify-content:center" onclick="trocarCamera()">🔄 Trocar Câmera</button><button class="btn-danger" style="margin:0;font-size:18px;padding:15px" onclick="fecharLeitorQR()">Fechar Câmera</button></div></div></div><div class="modal-overlay" id="modalListagem"><div class="modal"><div class="modal-title" id="tituloListagem">Gerenciar</div><button class="btn-action" id="btnNovoListagem" style="width:100%;margin-bottom:15px">+ Novo</button><div id="conteudoListagem" style="max-height:50vh;overflow-y:auto;padding-right:5px"></div><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalListagem');abrirPainelUnificadoComNivel(db.configs.mestreAtivo);">Voltar</button></div></div></div><div class="modal-overlay" id="modalImprimir"><div class="modal"><div class="modal-title" id="imprimirNomeProduto" style="font-size:18px">Produto</div><input type="hidden" id="imprimirCodigoProduto"><div style="display:flex;gap:10px"><div class="form-group" style="flex:.6"><label>Ação:</label><select id="imprimirAcao"></select></div><div class="form-group" style="flex:.4"><label>Qtd:</label><div class="qtd-control"><button class="qtd-btn" onclick="mudarQtd(-1)">-</button><span id="imprimirQtd" style="font-size:18px;font-weight:700">1</span><button class="qtd-btn" onclick="mudarQtd(1)">+</button></div></div></div><div style="display:flex;gap:10px"><div class="form-group" style="flex:1" id="boxMarcaSelect"><label>Marca:</label><select id="imprimirMarca" onchange="toggleLote()"></select></div><div class="form-group" style="flex:1;display:none" id="boxLote"><label>Lote:</label><input type="text" id="imprimirLote"></div></div><div style="display:flex;gap:10px"><div class="form-group" style="flex:1"><label>Peso (g):</label><input type="number" id="imprimirPeso" oninput="calcularTotalPagar()"></div><div class="form-group" style="flex:1"><label>Preço (R$):</label><input type="text" id="imprimirPreco" inputmode="numeric" oninput="formatarMoedaElemento(this);calcularTotalPagar()"></div></div><div id="boxCalculoTotal" style="background:#e8f5e9;padding:10px;border-radius:5px;text-align:center;font-weight:700;color:#2e7d32;margin-bottom:15px;display:none">Total Calc: R$ <span id="imprimirCalculo">0,00</span></div><div class="form-group"><label>Validade Final:</label><input type="date" id="imprimirValidade"></div><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalImprimir')">Cancelar</button><button class="btn-action" id="btnProcessarImpressao" onclick="processarImpressao()">🖨️ IMPRIMIR</button></div></div></div><div class="modal-overlay" id="modalImprimirPers"><div class="modal"><div class="modal-title" style="color:var(--primaria)">Avulso</div><div class="form-group"><label>Nome Produto:</label><input type="text" id="impPersNome"></div><div style="display:flex;gap:10px"><div class="form-group" style="flex:.6"><label>Ação:</label><select id="impPersAcao"></select></div><div class="form-group" style="flex:.4"><label>Qtd:</label><div class="qtd-control"><button class="qtd-btn" onclick="mudarQtdPers(-1)">-</button><span id="impPersQtd" style="font-size:18px;font-weight:700">1</span><button class="qtd-btn" onclick="mudarQtdPers(1)">+</button></div></div></div><div style="display:flex;gap:10px"><div class="form-group" style="flex:1"><label>Marca:</label><input type="text" id="impPersMarca"></div><div class="form-group" style="flex:1"><label>Lote:</label><input type="text" id="impPersLote"></div></div><div style="display:flex;gap:10px"><div class="form-group" style="flex:1"><label>Peso (g):</label><input type="number" id="impPersPeso" oninput="calcularTotalPagarPers()"></div><div class="form-group" style="flex:1"><label>Preço (R$):</label><input type="text" id="impPersPreco" inputmode="numeric" oninput="formatarMoedaElemento(this);calcularTotalPagarPers()"></div></div><div id="boxCalculoTotalPers" style="background:#e8f5e9;padding:10px;border-radius:5px;text-align:center;font-weight:700;color:#2e7d32;margin-bottom:15px;display:none">Total Calc: R$ <span id="impPersCalculo">0,00</span></div><div style="display:flex;gap:10px"><div class="form-group" style="flex:1"><label>Conservação:</label><select id="impPersArmazenamento"></select></div><div class="form-group" style="flex:1"><label>Validade:</label><input type="date" id="impPersValidade"></div></div><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalImprimirPers')">Cancelar</button><button class="btn-action" id="btnPersImprimir" onclick="processarImpressaoPers()">🖨️ IMPRIMIR</button></div></div></div><div class="modal-overlay" id="modalFormProduto"><div class="modal"><div class="modal-title">Produto</div><input type="hidden" id="prodCodigoOriginal"><div style="display:flex;gap:10px"><div class="form-group" style="flex:.3"><label>Cód:</label><input type="number" id="prodCodigo" oninput="checarCodigoDisponivel()"></div><div class="form-group" style="flex:.7"><label>Nome:</label><input type="text" id="prodNome"></div></div><div id="msgCodigoDisponivel" style="font-size:13px;font-weight:700;margin-top:-10px;margin-bottom:15px"></div><div style="display:flex;gap:10px"><div class="form-group" style="flex:1"><label>Categoria:</label><select id="prodCategoria"></select></div><div class="form-group" style="flex:1"><label>Val(Dias):</label><input type="number" id="prodValidade"></div></div><div class="form-group"><label>Ação Padrão:</label><select id="prodAcaoPadrao"></select></div><div class="form-group"><label>Marcas (por vírgula):</label><input type="text" id="prodMarcas"></div><div style="display:flex;gap:10px"><div class="form-group" style="flex:1"><label>Conservação:</label><select id="prodArmazenamento"></select></div><div class="form-group" style="flex:1"><label>Preço Base(R$):</label><input type="text" id="prodPreco" inputmode="numeric" oninput="formatarMoedaElemento(this)"></div></div><div class="switch-container"><div style="display:flex;flex-direction:column"><span style="font-weight:700;font-size:14px">Controle QR</span><span style="font-size:10px;color:#666">Gerar baixa</span></div><label class="switch"><input type="checkbox" id="prodUsaQR"><span class="slider"></span></label></div><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalFormProduto');abrirGerenciar('produtos')">Cancelar</button><button class="btn-action" onclick="salvarProduto()">Salvar</button></div></div></div><div class="modal-overlay" id="modalFormCategoria"><div class="modal"><div class="modal-title">Categoria</div><input type="hidden" id="catNomeOriginal"><div class="form-group"><label>Nome:</label><input type="text" id="catNome"></div><div style="display:flex;gap:10px"><div class="form-group" style="flex:1"><label>Fundo:</label><input type="color" id="catCor" value="#1565C0"></div><div class="form-group" style="flex:1"><label>Texto:</label><input type="color" id="catCorTexto" value="#ffffff"></div></div><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalFormCategoria');abrirGerenciar('categorias')">Cancelar</button><button class="btn-action" onclick="salvarCategoria()">Salvar</button></div></div></div><div class="modal-overlay" id="modalFormOperador"><div class="modal"><div class="modal-title">Operador(a)</div><input type="hidden" id="opNomeOriginal"><div class="form-group"><label>Nome:</label><input type="text" id="opNome"></div><div class="form-group"><label>Senha (Vazio=sem):</label><input type="password" id="opSenha" inputmode="numeric" onfocus="this.select()" oninput="this.value=this.value.replace(/[^0-9]/g,'')"></div><div class="switch-container"><span style="font-weight:bold;font-size:14px;">Ocultar Engrenagem ⚙️</span><label class="switch"><input type="checkbox" id="opOcultarEngrenagem"><span class="slider"></span></label></div><div class="modal-actions"><button class="btn-cancel" onclick="fecharModal('modalFormOperador');abrirGerenciar('operadores')">Cancelar</button><button class="btn-action" onclick="salvarOperador()">Salvar</button></div></div></div>
 
 <div class="modal-overlay" id="modalFilaImpressao">
     <div class="modal" style="text-align:center;">
@@ -126,7 +126,7 @@ function carregarBanco(){
         produtos:[{codigo:1,nome:"Hambúrguer",categoria:"Carnes",validadeDias:5,armazenamento:"Não informar",precoPadrao:"",marcas:[],acaoPadrao:"Manipulado:",usaQR:!1}],
         categorias:[{nome:"Carnes",cor:"#ffcccc",corTexto:"#000000"}],
         operadores:[{nome:"Admin",senha:"",ocultarEngrenagem:!1}],
-        configs:{modo:"pdf",estabelecimento:"Restaurante",urlAppScript:"",tamanhoEtiqueta:"60x40",destaqueProd:!1,destaqueVal:!1,controleQR:!1,senhaAdmin:"",ultimoWipe:0,ajusteGapPx:0,acoes:["Manipulado:","Aberto:","Congelado:"],conservacoes:["Não informar","Ambiente","Resfriado","Congelado"],tema:"azul",ultimaModificacaoLocal:0,mestreAtivo:!1},
+        configs:{modo:"pdf",estabelecimento:"Restaurante",urlAppScript:"",tamanhoEtiqueta:"60x40",destaqueProd:!1,destaqueVal:!1,controleQR:!1,senhaAdmin:"",ultimoWipe:0,ajusteGapPx:0,acoes:["Manipulado:","Aberto:","Congelado:"],conservacoes:["Não informar","Ambiente","Resfriado","Congelado"],tema:"azul",ultimaModificacaoLocal:0,ultimaModificacaoEstrutura:0,ultimaModificacaoHistorico:0,mestreAtivo:!1},
         historico:[]
     };
     let l=JSON.parse(localStorage.getItem('etiquetadora_db'));
@@ -138,6 +138,8 @@ function carregarBanco(){
         if(typeof l.configs.senhaAdmin==='undefined')l.configs.senhaAdmin="";
         if(typeof l.configs.ultimoWipe==='undefined')l.configs.ultimoWipe=0;
         if(typeof l.configs.ultimaModificacaoLocal==='undefined')l.configs.ultimaModificacaoLocal=0;
+        if(typeof l.configs.ultimaModificacaoEstrutura==='undefined')l.configs.ultimaModificacaoEstrutura=l.configs.ultimaModificacaoLocal||0;
+        if(typeof l.configs.ultimaModificacaoHistorico==='undefined')l.configs.ultimaModificacaoHistorico=0;
         if(typeof l.configs.ajusteGapPx==='undefined')l.configs.ajusteGapPx=0;
         if(typeof l.configs.ajusteGapPx2==='undefined')l.configs.ajusteGapPx2=0;
         if(typeof l.configs.alternarGap==='undefined')l.configs.alternarGap=!1;
@@ -160,6 +162,93 @@ function carregarBanco(){
 
 function salvarBancoLocal(){
     localStorage.setItem('etiquetadora_db',JSON.stringify(db));
+}
+
+function garantirMetadadosSync(){
+    if(!db.configs)db.configs={};
+    if(typeof db.configs.ultimoWipe==='undefined')db.configs.ultimoWipe=0;
+    if(typeof db.configs.ultimaModificacaoLocal==='undefined')db.configs.ultimaModificacaoLocal=0;
+    if(typeof db.configs.ultimaModificacaoEstrutura==='undefined')db.configs.ultimaModificacaoEstrutura=db.configs.ultimaModificacaoLocal||0;
+    if(typeof db.configs.ultimaModificacaoHistorico==='undefined')db.configs.ultimaModificacaoHistorico=0;
+}
+
+function marcarAlteracaoEstrutura(){
+    garantirMetadadosSync();
+    const agora=Date.now();
+    db.configs.ultimaModificacaoEstrutura=agora;
+    db.configs.ultimaModificacaoLocal=agora;
+}
+
+function marcarAlteracaoHistorico(){
+    garantirMetadadosSync();
+    db.configs.ultimaModificacaoHistorico=Date.now();
+}
+
+function marcarWipeHistorico(){
+    const agora=Date.now();
+    garantirMetadadosSync();
+    db.configs.ultimoWipe=agora;
+    db.configs.ultimaModificacaoHistorico=agora;
+}
+
+function prepararBancoRecebido(d){
+    d=d&&typeof d==='object'?d:{};
+    d.produtos=Array.isArray(d.produtos)?d.produtos:[];
+    d.categorias=Array.isArray(d.categorias)?d.categorias:[];
+    d.operadores=Array.isArray(d.operadores)?d.operadores:[];
+    d.historico=Array.isArray(d.historico)?d.historico:[];
+    d.configs=d.configs&&typeof d.configs==='object'?d.configs:{};
+    if(typeof d.configs.ultimoWipe==='undefined')d.configs.ultimoWipe=0;
+    if(typeof d.configs.ultimaModificacaoLocal==='undefined')d.configs.ultimaModificacaoLocal=0;
+    if(typeof d.configs.ultimaModificacaoEstrutura==='undefined')d.configs.ultimaModificacaoEstrutura=d.configs.ultimaModificacaoLocal||0;
+    if(typeof d.configs.ultimaModificacaoHistorico==='undefined')d.configs.ultimaModificacaoHistorico=0;
+    return d;
+}
+
+function chaveHistorico(h){
+    if(!h)return null;
+    return h.sku?`sku:${h.sku}`:(h.id?`id:${h.id}`:null);
+}
+
+function mesclarRegistroHistorico(remoto,local){
+    const r=remoto||{},l=local||{};
+    const m=Object.assign({},r,l);
+    m.baixado=!!(r.baixado||l.baixado);
+    m.excluido=!!(r.excluido||l.excluido);
+    if(m.baixado)m.dataBaixa=l.dataBaixa||r.dataBaixa||m.dataBaixa||"";
+    else if(!m.dataBaixa)m.dataBaixa="";
+    return m;
+}
+
+function mesclarHistoricos(local,remoto){
+    const mapa={},semChave=[];
+    (remoto||[]).forEach((h,idx)=>{
+        const k=chaveHistorico(h);
+        if(k)mapa[k]=Object.assign({},h);
+        else semChave.push(Object.assign({__ordemRemota:idx},h));
+    });
+    (local||[]).forEach((h,idx)=>{
+        const k=chaveHistorico(h);
+        if(k)mapa[k]=mapa[k]?mesclarRegistroHistorico(mapa[k],h):Object.assign({},h);
+        else semChave.push(Object.assign({__ordemLocal:idx},h));
+    });
+    const historico=Object.values(mapa).concat(semChave).map(h=>{
+        const c=Object.assign({},h);
+        delete c.__ordemRemota;delete c.__ordemLocal;
+        return c;
+    });
+    return {
+        historico,
+        mudouLocal:JSON.stringify(local||[])!==JSON.stringify(historico),
+        mudouNuvem:JSON.stringify(remoto||[])!==JSON.stringify(historico)
+    };
+}
+
+function bancoParaNuvem(){
+    const clone=JSON.parse(JSON.stringify(db));
+    if(!clone.configs)clone.configs={};
+    clone.configs.mestreAtivo=!1;
+    return clone;
 }
 
 function prepararTelaLogin(){
@@ -236,7 +325,7 @@ function iniciar(){
     renderizarOperadores();
     prepararTelaLogin();
     atualizarEngrenagem();
-    
+
     // Auto-login
     let opAtual = localStorage.getItem('etiquetadora_operadorAtual');
     const l = document.getElementById('login-screen');
@@ -245,7 +334,7 @@ function iniciar(){
          document.getElementById('seletorOperador').value = opAtual;
          operadorAnteriorSelect = opAtual;
     }
-    
+
     setTimeout(()=>{
         const s=document.getElementById('splash-screen');
         if(s){
@@ -256,20 +345,20 @@ function iniciar(){
             },500);
         }
     },1500);
-    
+
     document.getElementById('btnScannerQRHome').style.display=db.configs.controleQR?'flex':'none';
     renderizarFiltros();
     renderizarLista();
-    
+
     const b=document.getElementById('buscaCodigo');
     b.addEventListener('keypress',e=>{if(e.key==='Enter')acionarBusca(!0)});
     b.addEventListener('input',function(){
         if(modoBusca==='nome'){filtroTextoBusca=this.value.toLowerCase();renderizarLista()}
     });
-    
+
     setInterval(sincronizarComNuvemSilencioso,20000);
     sincronizarComNuvemSilencioso();
-    
+
     // Armadilha do Botão de Voltar
     window.history.pushState(null, null, window.location.href);
     window.addEventListener('popstate', function(event) {
@@ -316,7 +405,9 @@ function abrirPainelUnificadoComNivel(mestre){
 
 function salvarSenhaPainel(){
     db.configs.senhaAdmin=document.getElementById('cfgSenhaAdmin').value;
+    marcarAlteracaoEstrutura();
     salvarBancoLocal();
+    sincronizarComNuvemSilencioso();
 }
 
 function popularSelectGenerico(id,a){
@@ -340,7 +431,7 @@ function salvarConfigGerais(){
     db.configs.estabelecimento=document.getElementById('cfgEstabelecimento').value.trim()||"Restaurante";
     db.configs.modo=document.getElementById('cfgModo').value;
     db.configs.tema=document.getElementById('cfgTema').value;
-    db.configs.ultimaModificacaoLocal=Date.now();
+    marcarAlteracaoEstrutura();
     salvarBancoLocal();
     aplicarTemaCores();
     sincronizarComNuvemSilencioso();
@@ -360,7 +451,7 @@ function salvarTemaRapido(){
     let opIndex=db.operadores.findIndex(o=>o.nome===opAtual);
     if(opIndex!==-1){
         db.operadores[opIndex].tema=document.getElementById('cfgTemaRapido').value;
-        db.configs.ultimaModificacaoLocal=Date.now();
+        marcarAlteracaoEstrutura();
         salvarBancoLocal();
         aplicarTemaCores();
         sincronizarComNuvemSilencioso();
@@ -444,7 +535,7 @@ function removerConservacaoCfg(n){
 }
 
 function salvarEtiquetaConfigsSilencioso(){
-    db.configs.ultimaModificacaoLocal=Date.now();
+    marcarAlteracaoEstrutura();
     salvarBancoLocal();
     sincronizarComNuvemSilencioso();
 }
@@ -455,7 +546,7 @@ function abrirGerenciarEtiquetas(){
     document.getElementById('cfgDestaqueProd').checked=db.configs.destaqueProd;
     document.getElementById('cfgDestaqueVal').checked=db.configs.destaqueVal;
     document.getElementById('cfgQRGlobal').checked=db.configs.controleQR;
-    
+
     document.getElementById('cfgAlternarGap').checked = db.configs.alternarGap;
 
     let gapVal1 = db.configs.ajusteGapPx !== undefined ? parseInt(db.configs.ajusteGapPx) : 0;
@@ -467,7 +558,7 @@ function abrirGerenciarEtiquetas(){
     if (isNaN(gapVal2)) gapVal2 = 0;
     document.getElementById('cfgAjusteGapNum2').value = gapVal2;
     document.getElementById('cfgAjusteGapSlider2').value = gapVal2;
-    
+
     toggleGapSecundario();
     renderizarAcoesCfg();
     renderizarConservacoesCfg();
@@ -480,14 +571,14 @@ function salvarEtiquetaConfigs(){
     db.configs.destaqueVal=document.getElementById('cfgDestaqueVal').checked;
     db.configs.controleQR=document.getElementById('cfgQRGlobal').checked;
     db.configs.alternarGap = document.getElementById('cfgAlternarGap').checked;
-    
+
     let valGap1 = parseInt(document.getElementById('cfgAjusteGapNum').value);
     db.configs.ajusteGapPx = isNaN(valGap1) ? 0 : valGap1;
-    
+
     let valGap2 = parseInt(document.getElementById('cfgAjusteGapNum2').value);
     db.configs.ajusteGapPx2 = isNaN(valGap2) ? 0 : valGap2;
 
-    db.configs.ultimaModificacaoLocal=Date.now();
+    marcarAlteracaoEstrutura();
     salvarBancoLocal();
     document.getElementById('btnScannerQRHome').style.display=db.configs.controleQR?'flex':'none';
     sincronizarComNuvemSilencioso();
@@ -503,7 +594,7 @@ function abrirZonaRisco(){
 async function salvarUrlESincronizar(e){
     const u=document.getElementById('configUrlAppScript').value.trim();
     db.configs.urlAppScript=u;
-    salvarBancoLocal(); 
+    salvarBancoLocal();
     if(!u)return alert("URL vazia!");
     const b=e.target;
     let t = b.innerText;
@@ -517,103 +608,109 @@ async function salvarUrlESincronizar(e){
 
 async function sincronizarComNuvemSilencioso(){
     const i=document.getElementById('indicadorConexao');
-    if(!navigator.onLine){i.innerText='🔴'; i.title="Offline"; return}
-    if(!db.configs.urlAppScript){i.innerText='🌐'; i.title="Online (Nuvem Off)"; return}
+    garantirMetadadosSync();
+    if(!navigator.onLine){i.innerText='\u{1F534}'; i.title="Offline"; return}
+    if(!db.configs.urlAppScript){i.innerText='\u{1F310}'; i.title="Online (Nuvem Off)"; return}
 
     if(isSyncing) return;
     isSyncing=!0;
-    i.innerText='🔄';
+    i.innerText='\u{1F504}';
 
     try {
         let f = db.configs.urlAppScript + (db.configs.urlAppScript.includes('?') ? '&' : '?') + 't=' + Date.now();
         let r = await fetch(f, {redirect: 'follow'});
         let t = await r.text();
-        let d = JSON.parse(t);
+        let bruto = JSON.parse(t);
+        let nuvemVazia = !bruto || Object.keys(bruto).length === 0;
+        let d = prepararBancoRecebido(bruto);
 
-        if(d){
-            if(!d.configs) d.configs = {};
-            if(!d.historico) d.historico = [];
+        let precisaEnviarBancoCompleto = nuvemVazia;
+        const urlSalva = db.configs.urlAppScript;
+        const mestreLocal = db.configs.mestreAtivo;
+        const wipeLocal = db.configs.ultimoWipe||0;
+        const wipeNuvem = d.configs.ultimoWipe||0;
+        let historicoLocal = db.historico||[];
+        let historicoNuvem = d.historico||[];
 
-            if(d.configs.ultimoWipe > (db.configs.ultimoWipe||0)){
-                db.historico=[];
-                db.configs.ultimoWipe=d.configs.ultimoWipe;
-            }
-
-            let mHistorico = !1, map = {};
-            d.historico.forEach(x => map[x.id] = x);
-            db.historico.forEach(h => {
-                if(map[h.id]){
-                    if(h.baixado && !map[h.id].baixado){ map[h.id].baixado = true; map[h.id].dataBaixa = h.dataBaixa; mHistorico = !0; }
-                    if(h.excluido && !map[h.id].excluido){ map[h.id].excluido = true; mHistorico = !0; }
-                } else {
-                    map[h.id] = h; mHistorico = !0;
-                }
-            });
-            db.historico = Object.values(map);
-
-            let tl = db.configs.ultimaModificacaoLocal || 0;
-            let tn = d.configs.ultimaModificacaoLocal || 0;
-
-            if(tn > tl){
-                db.produtos = d.produtos || [];
-                db.categorias = d.categorias || [];
-                db.operadores = d.operadores || [];
-                let urlSalva = db.configs.urlAppScript;
-                db.configs = Object.assign({}, db.configs, d.configs);
-                db.configs.urlAppScript = urlSalva; 
-                db.configs.ultimaModificacaoLocal = tn;
-
-                aplicarTemaCores();
-                document.getElementById('btnScannerQRHome').style.display = db.configs.controleQR ? 'flex' : 'none';
-            }
-
-            salvarBancoLocal();
-            i.innerText='🟢'; i.title="Sincronizado";
-
-            if(mHistorico){
-                await fetch(db.configs.urlAppScript, {
-                    method: 'POST', 
-                    body: JSON.stringify({action: 'salvar_historico', historico: db.historico, ultimoWipe: db.configs.ultimoWipe})
-                });
-            }
-
-            if(document.getElementById('modalValidade').style.display==='flex')abrirPainelValidade();
-            if(document.getElementById('modalEstoqueAtivo').style.display==='flex')abrirEstoqueAtivo();
-            if(document.getElementById('modalHistoricoDiario').style.display==='flex')abrirHistoricoDiario();
+        if(wipeNuvem > wipeLocal){
+            historicoLocal=[];
+            db.configs.ultimoWipe=wipeNuvem;
+            db.configs.ultimaModificacaoHistorico=Math.max(db.configs.ultimaModificacaoHistorico||0,d.configs.ultimaModificacaoHistorico||0,wipeNuvem);
+        }else if(wipeLocal > wipeNuvem){
+            historicoNuvem=[];
+            precisaEnviarBancoCompleto = true;
         }
+
+        const mergeHist = mesclarHistoricos(historicoLocal,historicoNuvem);
+        db.historico = mergeHist.historico;
+        if(mergeHist.mudouNuvem)precisaEnviarBancoCompleto = true;
+
+        let tl = db.configs.ultimaModificacaoEstrutura || db.configs.ultimaModificacaoLocal || 0;
+        let tn = d.configs.ultimaModificacaoEstrutura || d.configs.ultimaModificacaoLocal || 0;
+
+        if(tn > tl){
+            db.produtos = d.produtos || [];
+            db.categorias = d.categorias || [];
+            db.operadores = d.operadores || [];
+            db.configs = Object.assign({}, db.configs, d.configs);
+            db.configs.urlAppScript = urlSalva;
+            db.configs.mestreAtivo = mestreLocal;
+            db.configs.ultimaModificacaoEstrutura = tn;
+            db.configs.ultimaModificacaoLocal = Math.max(db.configs.ultimaModificacaoLocal||0,tn);
+            garantirMetadadosSync();
+
+            aplicarTemaCores();
+            document.getElementById('btnScannerQRHome').style.display = db.configs.controleQR ? 'flex' : 'none';
+        }else if(tl > tn){
+            precisaEnviarBancoCompleto = true;
+        }
+
+        salvarBancoLocal();
+        i.innerText='\u{1F7E2}'; i.title="Sincronizado";
+
+        if(precisaEnviarBancoCompleto){
+            await fetch(db.configs.urlAppScript, {
+                method: 'POST',
+                body: JSON.stringify({action: 'salvar_banco_completo', dados: bancoParaNuvem()})
+            });
+        }
+
+        if(document.getElementById('modalValidade').style.display==='flex')abrirPainelValidade();
+        if(document.getElementById('modalEstoqueAtivo').style.display==='flex')abrirEstoqueAtivo();
+        if(document.getElementById('modalHistoricoDiario').style.display==='flex')abrirHistoricoDiario();
     } catch(e) {
-        i.innerText='🔴'; i.title="Erro na Nuvem";
+        i.innerText='\u{1F534}'; i.title="Erro na Nuvem";
     }
     isSyncing=!1;
 }
-
 async function forcarEnvioNuvem(e){
     if(!db.configs.urlAppScript) return alert("Configure a URL do Apps Script primeiro!");
     if(!confirm("⚠️ ATENÇÃO: Isso vai jogar Produtos, Categorias e os ESTILOS DA ETIQUETA na nuvem, esmagando o que estiver lá. Continuar?")) return;
-    
-    db.configs.ultimaModificacaoLocal = Date.now() + 10000; 
+
+    db.configs.ultimaModificacaoEstrutura = Date.now() + 10000;
+    db.configs.ultimaModificacaoLocal = db.configs.ultimaModificacaoEstrutura;
     salvarBancoLocal();
     const btn = e.target;
     let txt = btn.innerText;
     btn.innerText = "Enviando...";
     btn.disabled = true;
-    
+
     try {
         let r = await fetch(db.configs.urlAppScript, {
-            method: 'POST', 
-            body: JSON.stringify({action: 'salvar_banco_completo', dados: db})
+            method: 'POST',
+            body: JSON.stringify({action: 'salvar_banco_completo', dados: bancoParaNuvem()})
         });
         if(!r.ok) throw new Error("Falha HTTP " + r.status);
         let t = await r.text();
         let resp;
         try { resp = JSON.parse(t); } catch(errP) { throw new Error("A nuvem devolveu um erro do Google."); }
-        
+
         if(resp.status === 'ok') mostrarToast("Tudo enviado e salvo na nuvem!");
         else throw new Error(resp.erro || "Erro Desconhecido");
     } catch(err) {
         alert("❌ Erro ao enviar: " + err.message);
     }
-    
+
     btn.innerText = txt;
     btn.disabled = false;
 }
@@ -621,20 +718,20 @@ async function forcarEnvioNuvem(e){
 async function forcarDownloadNuvem(e){
     if(!db.configs.urlAppScript) return alert("Configure a URL do Apps Script primeiro!");
     if(!confirm("⚠️ PERIGO: Isso vai APAGAR TUDO que tem neste navegador e baixar a versão completa que está na Nuvem. Quer continuar?")) return;
-    
+
     const btn = e.target;
     let txt = btn.innerText;
     btn.innerText = "Baixando...";
     btn.disabled = true;
-    
+
     try {
         let f = db.configs.urlAppScript + (db.configs.urlAppScript.includes('?') ? '&' : '?') + 'pull=' + Date.now();
         let r = await fetch(f, {redirect: 'follow'});
         if(!r.ok) throw new Error("Falha HTTP " + r.status);
         let t = await r.text();
         let d;
-        try { d = JSON.parse(t); } catch(errParse) { throw new Error("A nuvem não enviou dados formatados."); }
-        
+        try { d = prepararBancoRecebido(JSON.parse(t)); } catch(errParse) { throw new Error("A nuvem não enviou dados formatados."); }
+
         if(d && Object.keys(d).length > 0 && d.configs) {
             let urlSalva = db.configs.urlAppScript;
             db.produtos = d.produtos || [];
@@ -643,6 +740,7 @@ async function forcarDownloadNuvem(e){
             db.historico = d.historico || [];
             db.configs = Object.assign({}, db.configs, d.configs);
             db.configs.urlAppScript = urlSalva;
+            garantirMetadadosSync();
             salvarBancoLocal();
             mostrarToast("Dados e Estilos baixados!");
             setTimeout(() => location.reload(), 1000);
@@ -652,7 +750,7 @@ async function forcarDownloadNuvem(e){
     } catch(err) {
         alert("❌ Erro ao puxar: " + err.message);
     }
-    
+
     btn.innerText = txt;
     btn.disabled = false;
 }
@@ -660,8 +758,7 @@ async function forcarDownloadNuvem(e){
 function excluirHistoricoSeguro(){
     if(document.getElementById('inputConfirmarExclusao').value==="quero excluir todo o histórico"){
         db.historico=[];
-        db.configs.ultimoWipe=Date.now();
-        db.configs.ultimaModificacaoLocal=Date.now();
+        marcarWipeHistorico();
         salvarBancoLocal();
         sincronizarComNuvemSilencioso();
         mostrarToast("Apagado!");
@@ -675,8 +772,7 @@ function excluirHistoricoSeguroDireto(){
     if(confirm("Apagar tudo?")){
         if(prompt("Digite: quero excluir todo o histórico")==="quero excluir todo o histórico"){
             db.historico=[];
-            db.configs.ultimoWipe=Date.now();
-            db.configs.ultimaModificacaoLocal=Date.now();
+            marcarWipeHistorico();
             salvarBancoLocal();
             sincronizarComNuvemSilencioso();
             voltarEstoqueMain();
@@ -719,7 +815,8 @@ function importarBancoTXT(e){
             let lido=JSON.parse(ev.target.result);
             if(!lido.produtos) throw new Error("Sem produtos");
             db=lido;
-            db.configs.ultimaModificacaoLocal=Date.now();
+            marcarAlteracaoEstrutura();
+            marcarAlteracaoHistorico();
             salvarBancoLocal();
             mostrarToast("Restaurado!");
             sincronizarComNuvemSilencioso();
@@ -856,7 +953,7 @@ function renderizarLista(){
     }
     if(modoBusca==='nome') f.sort((a,b)=>a.nome.localeCompare(b.nome));
     else f.sort((a,b)=>a.codigo-b.codigo);
-    
+
     f.forEach(p=>{
         const c=db.categorias.find(x=>x.nome===p.categoria)||{cor:'#eee',corTexto:'#333'};
         let a=modoBusca==='codigo'?p.codigo:p.nome.charAt(0).toUpperCase();
@@ -872,7 +969,7 @@ function moverItem(t,i,d){
     }else if(d==='baixo'&&i<a.length-1){
         let x=a[i];a[i]=a[i+1];a[i+1]=x;
     }
-    db.configs.ultimaModificacaoLocal=Date.now();
+    marcarAlteracaoEstrutura();
     salvarBancoLocal();
     abrirGerenciar(t);
     if(t==='categorias')renderizarFiltros();
@@ -884,7 +981,7 @@ function duplicarProduto(i){
     let m=Math.max(...db.produtos.map(p=>p.codigo));
     n.codigo=m>0?m+1:1;
     db.produtos.push(n);
-    db.configs.ultimaModificacaoLocal=Date.now();
+    marcarAlteracaoEstrutura();
     salvarBancoLocal();
     abrirGerenciar('produtos');
     mostrarToast("Duplicado!");
@@ -924,7 +1021,7 @@ function excluirItem(t,id){
     if(t==='produtos')db.produtos=db.produtos.filter(i=>i.codigo!==id);
     if(t==='categorias')db.categorias=db.categorias.filter(i=>i.nome!==id);
     if(t==='operadores')db.operadores=db.operadores.filter(i=>i.nome!==id);
-    db.configs.ultimaModificacaoLocal=Date.now();
+    marcarAlteracaoEstrutura();
     salvarBancoLocal();
     iniciar();
     abrirGerenciar(t);
@@ -990,16 +1087,16 @@ function salvarProduto(){
     const m=document.getElementById('prodMarcas').value.split(',').map(x=>x.trim()).filter(x=>x!=="");
     const ac=document.getElementById('prodAcaoPadrao').value;
     const q=document.getElementById('prodUsaQR').checked;
-    
+
     if(!cod||!n||!c||isNaN(v))return alert("Campos obrigatórios!");
     if(o===""&&db.produtos.find(p=>p.codigo===cod))return alert("Código já existe!");
     if(o!==""&&parseInt(o)!==cod&&db.produtos.find(p=>p.codigo===cod))return alert("Código já existe!");
-    
+
     let obj={codigo:cod,nome:n,categoria:c,validadeDias:v,armazenamento:a,precoPadrao:pr,marcas:m,acaoPadrao:ac,usaQR:q};
     if(o!=="") db.produtos[db.produtos.findIndex(p=>p.codigo===parseInt(o))]=obj;
     else db.produtos.push(obj);
-    
-    db.configs.ultimaModificacaoLocal=Date.now();
+
+    marcarAlteracaoEstrutura();
     salvarBancoLocal();
     fecharModal('modalFormProduto');
     abrirGerenciar('produtos');
@@ -1028,17 +1125,17 @@ function salvarCategoria(){
     const n=document.getElementById('catNome').value.trim();
     const c=document.getElementById('catCor').value;
     const ct=document.getElementById('catCorTexto').value;
-    
+
     if(!n)return alert("Preencha!");
     if(o===""&&db.categorias.find(x=>x.nome.toLowerCase()===n.toLowerCase()))return alert("Já existe!");
-    
+
     if(o!==""){
         db.categorias[db.categorias.findIndex(x=>x.nome===o)]={nome:n,cor:c,corTexto:ct};
         db.produtos.forEach(p=>{if(p.categoria===o)p.categoria=n});
     }else{
         db.categorias.push({nome:n,cor:c,corTexto:ct});
     }
-    db.configs.ultimaModificacaoLocal=Date.now();
+    marcarAlteracaoEstrutura();
     salvarBancoLocal();
     fecharModal('modalFormCategoria');
     abrirGerenciar('categorias');
@@ -1067,17 +1164,17 @@ function salvarOperador(){
     const n=document.getElementById('opNome').value.trim();
     const s=document.getElementById('opSenha').value;
     const oe=document.getElementById('opOcultarEngrenagem').checked;
-    
+
     if(!n)return alert("Preencha!");
     if(o===""&&db.operadores.find(x=>x.nome.toLowerCase()===n.toLowerCase()))return alert("Já existe!");
-    
+
     if(o!==""){
         db.operadores[db.operadores.findIndex(x=>x.nome===o)]={nome:n,senha:s,ocultarEngrenagem:oe};
         if(localStorage.getItem('etiquetadora_operadorAtual')===o)localStorage.setItem('etiquetadora_operadorAtual',n);
     }else{
         db.operadores.push({nome:n,senha:s,ocultarEngrenagem:oe});
     }
-    db.configs.ultimaModificacaoLocal=Date.now();
+    marcarAlteracaoEstrutura();
     salvarBancoLocal();
     atualizarEngrenagem();
     fecharModal('modalFormOperador');
@@ -1133,21 +1230,21 @@ function abrirEstoque(m=!1){
     document.querySelectorAll('#estoqueMain .chip-diario').forEach(b=>{if(b.id.startsWith('btnRel'))b.classList.remove('active')});
     if(filtroRelAtual!=='aplicarCustom')document.getElementById('btnRel'+filtroRelAtual.charAt(0).toUpperCase()+filtroRelAtual.slice(1)).classList.add('active');
     else document.getElementById('btnRelCustom').classList.add('active');
-    
+
     let dIni=null,dFim=null;
     if(filtroRelAtual==='aplicarCustom'){
         let vi=document.getElementById('dataRelIni').value,vf=document.getElementById('dataRelFim').value;
         if(vi){let p=vi.split('-');dIni=new Date(p[0],p[1]-1,p[2])}
         if(vf){let p=vf.split('-');dFim=new Date(p[0],p[1]-1,p[2],23,59,59)}
     }
-    
+
     let total=0,listaFiltrada=[];
     db.historico.forEach(r=>{
-        if(r.excluido) return; 
+        if(r.excluido) return;
         let dObj=parseDataHoraBR(r.dataManipulado);
         if(verificaDataFiltro(dObj,filtroRelAtual,dIni,dFim))listaFiltrada.push(r);
     });
-    
+
     if(abaEstoqueAtual==='prod'){
         let s={};
         listaFiltrada.forEach(r=>{if(!s[r.produto])s[r.produto]=0;s[r.produto]++;total++});
@@ -1187,17 +1284,17 @@ function abrirHistoricoDiario(){
     document.querySelectorAll('#modalHistoricoDiario .chip-diario').forEach(b=>b.classList.remove('active'));
     if(filtroDiarioAtual!=='aplicarCustom')document.getElementById('btnFiltro'+filtroDiarioAtual.charAt(0).toUpperCase()+filtroDiarioAtual.slice(1)).classList.add('active');
     else document.getElementById('btnFiltroCustom').classList.add('active');
-    
+
     let dIni=null,dFim=null;
     if(filtroDiarioAtual==='aplicarCustom'){
         let vi=document.getElementById('dataInicioMov').value,vf=document.getElementById('dataFimMov').value;
         if(vi){let p=vi.split('-');dIni=new Date(p[0],p[1]-1,p[2])}
         if(vf){let p=vf.split('-');dFim=new Date(p[0],p[1]-1,p[2],23,59,59)}
     }
-    
+
     let dias={};
     db.historico.forEach(r=>{
-        if(r.excluido) return; 
+        if(r.excluido) return;
         let dE=parseDataHoraBR(r.dataManipulado),dS=r.baixado&&r.dataBaixa?parseDataHoraBR(r.dataBaixa):null;
         if(verificaDataFiltro(dE,filtroDiarioAtual,dIni,dFim)&&r.dataManipulado){
             let dt=r.dataManipulado.split(' ')[0];
@@ -1210,14 +1307,14 @@ function abrirHistoricoDiario(){
             dias[dt].s.push(r);
         }
     });
-    
+
     let ord=Object.keys(dias).sort((a,b)=>{
         let pA=a.split('/'),pB=b.split('/');
         return new Date(pB[2],pB[1]-1,pB[0])-new Date(pA[2],pA[1]-1,pA[0]);
     });
-    
+
     if(ord.length===0)l.innerHTML='<div style="padding:20px;text-align:center;color:#666;font-weight:bold">Vazio.</div>';
-    
+
     if(filtroDiarioAtual!=='diario'&&ord.length>0){
         let te={},ts={};
         ord.forEach(d=>{
@@ -1229,7 +1326,7 @@ function abrirHistoricoDiario(){
         for(let p in ts)hs+=`<div style="font-size:13px;color:#555">- ${ts[p]}x ${p}</div>`;
         l.innerHTML+=`<div style="background:var(--secundaria);border:2px solid var(--primaria);border-radius:8px;margin-bottom:20px;overflow:hidden"><div style="background:var(--primaria);padding:8px 12px;font-weight:900;color:#fff;text-align:center">📊 COMPILAÇÃO</div><div style="display:flex;background:#fff"><div style="flex:1;padding:12px;border-right:1px solid #eee"><div style="color:#2e7d32;font-weight:900;font-size:12px">🟢 PRODUZIDOS</div>${he||'<div style="font-size:13px;color:#999">Nenhum</div>'}</div><div style="flex:1;padding:12px"><div style="color:#d32f2f;font-weight:900;font-size:12px">🔴 CONSUMIDOS</div>${hs||'<div style="font-size:13px;color:#999">Nenhum</div>'}</div></div></div>`;
     }
-    
+
     ord.forEach(d=>{
         let he='',te={};
         dias[d].e.forEach(x=>te[x.produto]=(te[x.produto]||0)+1);
@@ -1249,7 +1346,7 @@ function abrirDetalhesEstoque(n,o='estoque'){
     document.getElementById('estoqueDetTitulo').innerText=n;
     const u=document.getElementById('listaEstoqueDetalhes');
     u.innerHTML='';
-    
+
     let regs=db.historico.filter(r=>r.produto===n && !r.excluido).reverse();
     if(o==='relatorio'){
         let dI=null,dF=null;
@@ -1260,7 +1357,7 @@ function abrirDetalhesEstoque(n,o='estoque'){
         }
         regs=regs.filter(r=>verificaDataFiltro(parseDataHoraBR(r.dataManipulado),filtroRelAtual,dI,dF));
     }
-    
+
     regs.forEach(r=>{
         let sSku=r.sku?r.sku.slice(-5):'----',acao=r.acaoImpressao||r.acaoSelect||"MANIPULADO:";
         let btn=o==='relatorio'?'':`<div style="display:flex;flex-direction:column;gap:4px;margin-left:10px;align-items:flex-end">${r.baixado?`<div style="font-size:11px;color:#999">Baixa: ${r.dataBaixa}</div>`:`<button class="btn-acao-micro ba" onclick="darBaixaManual('${r.sku}')">✅ Baixar</button>`}<button class="btn-acao-micro via" onclick="imprimirSegundaVia('${r.sku}')">🖨️ 2ª Via</button><button class="btn-acao-micro ex" onclick="excluirRegistroFisico('${r.sku}')">🗑️ Excluir</button></div>`;
@@ -1286,10 +1383,10 @@ function abrirEstoqueAtivo(){
     let h='<option value="">Todas as Categorias</option>';
     db.categorias.forEach(c=>h+=`<option value="${c.nome}" ${fVal===c.nome?'selected':''}>${c.nome}</option>`);
     sel.innerHTML=h;
-    
+
     let pQR=db.produtos.filter(p=>p.usaQR);
     if(fVal)pQR=pQR.filter(p=>p.categoria===fVal);
-    
+
     if(pQR.length===0){
         l.innerHTML='<div style="padding:20px;text-align:center;color:#666;font-weight:bold">Vazio.</div>';
     }else{
@@ -1299,7 +1396,7 @@ function abrirEstoqueAtivo(){
             if(!map[c])map[c]={};
             map[c][p.nome]={qtd:0,cod:p.codigo||9999};
         });
-        
+
         let atv=db.historico.filter(x=>!x.baixado && !x.excluido);
         atv.forEach(i=>{
             let p=db.produtos.find(x=>x.nome===i.produto);
@@ -1308,13 +1405,13 @@ function abrirEstoqueAtivo(){
                 if(map[c]&&map[c][i.produto])map[c][i.produto].qtd++;
             }
         });
-        
+
         let ordC=Object.keys(map).sort((a,b)=>{
             let iA=db.categorias.findIndex(c=>c.nome===a),iB=db.categorias.findIndex(c=>c.nome===b);
             if(iA===-1)iA=999;if(iB===-1)iB=999;
             return iA-iB;
         });
-        
+
         ordC.forEach(c=>{
             let cObj=db.categorias.find(x=>x.nome===c),bg=cObj?cObj.cor:'var(--primaria)',co=cObj?cObj.corTexto:'#fff';
             l.innerHTML+=`<div style="background:${bg};color:${co};padding:6px 12px;font-weight:900;font-size:14px;margin-top:10px;border-radius:4px">📁 ${c.toUpperCase()}</div>`;
@@ -1379,7 +1476,7 @@ function darBaixaManual(s){
         if(i){
             i.baixado=!0;
             i.dataBaixa=getDataHoraAtual();
-            db.configs.ultimaModificacaoLocal=Date.now();
+            marcarAlteracaoHistorico();
             salvarBancoLocal();
             if(document.getElementById('estoqueDetalhes').style.display==='block')abrirDetalhesEstoque(document.getElementById('estoqueDetTitulo').innerText,origemDetalhesEstoque);
             else if(document.getElementById('modalValidade').style.display==='flex')abrirPainelValidade();
@@ -1394,7 +1491,7 @@ function excluirRegistroFisico(s){
         let i=db.historico.find(x=>x.sku===s);
         if(i){
             i.excluido = true;
-            db.configs.ultimaModificacaoLocal=Date.now();
+            marcarAlteracaoHistorico();
             salvarBancoLocal();
             sincronizarComNuvemSilencioso();
             if(document.getElementById('estoqueDetalhes').style.display==='block')abrirDetalhesEstoque(document.getElementById('estoqueDetTitulo').innerText,origemDetalhesEstoque);
@@ -1422,7 +1519,7 @@ function exportarRelatorioTXT(){
     }
     let f=db.historico.filter(r=> !r.excluido && verificaDataFiltro(parseDataHoraBR(r.dataManipulado),filtroRelAtual,dI,dF));
     if(f.length===0)return alert("Vazio.");
-    
+
     let txt=`RELATÓRIO CONSOLIDADO DE PRODUÇÃO\nEstabelecimento: ${db.configs.estabelecimento}\nPeríodo: ${filtroRelAtual}\nGerado em: ${new Date().toLocaleString('pt-BR')}\n---------------------------------------\n\n`;
     let s={};
     f.forEach(r=>{if(!s[r.produto])s[r.produto]=0;s[r.produto]++});
@@ -1533,7 +1630,7 @@ async function processarImpressao(){
         sks.push(sk);
         db.historico.push({id:Date.now()+i,produto:p.nome,sku:sk,baixado:!1,excluido:!1,acaoImpressao:acI,acaoSelect:acS,peso:(ps===""?"-":`${ps}g`),marca:ma,lote:lo,preco:(isNaN(prN)?"":formataDinheiro(prN)),dataManipulado:mB,validadeFinal:vB,quantidade:1,operador:op});
     }
-    db.configs.ultimaModificacaoLocal=Date.now();
+    marcarAlteracaoHistorico();
     salvarBancoLocal();tocarBeep('sucesso');sincronizarComNuvemSilencioso();
     if(db.configs.modo==='pdf'){
         fecharModal('modalImprimir');gerarPDF(p,acI,ps,mB,vB,quantidadeAtual,op,est,prN,ma,lo,sks);
@@ -1558,7 +1655,7 @@ async function processarImpressaoPers(){
         let sk=`PERS${Date.now()}${i}`;sks.push(sk);
         db.historico.push({id:Date.now()+i,produto:nm+" (Avulso)",sku:sk,baixado:!0,excluido:!1,acaoImpressao:acI,acaoSelect:acS,peso:(ps===""?"-":`${ps}g`),marca:ma,lote:lo,preco:(isNaN(prN)?"":formataDinheiro(prN)),dataManipulado:mB,validadeFinal:vB,quantidade:1,operador:op});
     }
-    db.configs.ultimaModificacaoLocal=Date.now();
+    marcarAlteracaoHistorico();
     salvarBancoLocal();tocarBeep('sucesso');sincronizarComNuvemSilencioso();
     let pF={nome:nm,armazenamento:ar,usaQR:!1};
     if(db.configs.modo==='pdf'){
@@ -1569,6 +1666,72 @@ async function processarImpressaoPers(){
         fecharModal('modalImprimirPers');
         btn.innerText="🖨️ IMPRIMIR";btn.disabled=!1;
     }
+}
+
+function tsplTamanhoAtual(){
+    const tm=db.configs.tamanhoEtiqueta||"60x40";
+    if(tm==="40x40")return {largura:38,altura:40};
+    if(tm==="50x50")return {largura:50,altura:50};
+    return {largura:60,altura:40};
+}
+
+function tsplDots(mm){
+    return Math.round(mm*8);
+}
+
+function textoTSPL(t,max=40){
+    return String(t||"").normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/["\r\n]/g,' ').replace(/[^\x20-\x7E]/g,'').trim().substring(0,max);
+}
+
+function base64UTF8(t){
+    return btoa(unescape(encodeURIComponent(t)));
+}
+
+function enviarRawBTBase64(b64){
+    window.location.href = "intent:base64,"+b64+"#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;";
+}
+
+function montarTSPLTeste(gapMM){
+    const tam=tsplTamanhoAtual(),w=tsplDots(tam.largura),h=tsplDots(tam.altura),sku="TSPL"+Date.now();
+    const estreita=w<340,fonteTitulo=estreita?"2":"3",qrCell=estreita?4:5,qrX=estreita?Math.max(170,w-130):Math.max(250,w-165);
+    const textoProduto=textoTSPL((db.produtos&&db.produtos[0]?db.produtos[0].nome:"PRODUTO TESTE"),28)||"PRODUTO TESTE";
+    const operador=textoTSPL(document.getElementById('seletorOperador')?document.getElementById('seletorOperador').value:"TESTE",24)||"TESTE";
+    const linhas=[
+        `SIZE ${tam.largura} mm,${tam.altura} mm`,
+        `GAP ${gapMM} mm,0`,
+        "SPEED 4",
+        "DENSITY 8",
+        "DIRECTION 1",
+        "REFERENCE 0,0",
+        "OFFSET 0 mm",
+        "SET TEAR ON",
+        "HOME",
+        "CLS",
+        `BOX 8,8,${w-8},${h-8},2`,
+        `TEXT 20,24,"${fonteTitulo}",0,1,1,"ALO ETIQUETA"`,
+        `TEXT 20,62,"2",0,1,1,"TESTE TSPL + QR"`,
+        `TEXT 20,98,"2",0,1,1,"${textoProduto}"`,
+        `TEXT 20,136,"2",0,1,1,"VAL: ${getDataHoraAtual().split(' ')[0]}"`,
+        `QRCODE ${qrX},54,H,${qrCell},A,0,"${sku}"`,
+        `TEXT ${qrX+8},${h-78},"2",0,1,1,"${sku.slice(-5)}"`,
+        `BAR 20,${h-58},${w-20},2`,
+        `TEXT 20,${h-42},"2",0,1,1,"Op: ${operador}"`,
+        "PRINT 1,1",
+        ""
+    ];
+    return linhas.join("\r\n");
+}
+
+function testeTSPLRawBT(){
+    const tam=tsplTamanhoAtual();
+    let g=prompt(`Gap fisico em mm para ${tam.largura}x${tam.altura}:`,localStorage.getItem('alo_etiqueta_tspl_gap')||"3");
+    if(g===null)return;
+    g=parseFloat(String(g).replace(',','.'));
+    if(isNaN(g)||g<0)return alert("Gap invalido.");
+    localStorage.setItem('alo_etiqueta_tspl_gap',String(g));
+    const tspl=montarTSPLTeste(g);
+    if(!confirm("Vou enviar uma etiqueta TSPL simples com QR nativo para o RawBT. Continuar?"))return;
+    enviarRawBTBase64(base64UTF8(tspl));
 }
 
 function gerarPDF(p,ac,ps,mB,vB,q,op,es,prN,ma,lo,sk){
@@ -1624,25 +1787,25 @@ async function gerarRawBT(p,ac,ps,mB,vB,q,op,es,prN,ma,lo,sk,btn){
         bx.style.display="block";let ta=p.armazenamento.toUpperCase();if(!ta.startsWith("MANTER"))ta="MANTER "+ta;
         document.getElementById('viz-armazenamento').innerText=ta;
     }else bx.style.display="none";
-    
+
     // FANTASMA DA ETIQUETA (Mola Flexbox)
     const qc=document.getElementById('viz-qrcode-container'),uQ=db.configs.controleQR&&p.usaQR;
     qc.style.display='flex';
     qc.style.visibility=uQ?'visible':'hidden';
-    
+
     aplicarDestaquesVisuais();
-    
+
     const tm=db.configs.tamanhoEtiqueta||"60x40";
     const scaleMulti=2; // Reduzido de 3 para 2 para o Android aguentar tranquilo
     let hw=480,dhInt=320;
     if(tm==="40x40"){hw=316;dhInt=316;}
     else if(tm==="50x50"){hw=384;dhInt=400;}
-    
+
     let valGap1=db.configs.ajusteGapPx!==undefined?parseInt(db.configs.ajusteGapPx):0;if(isNaN(valGap1))valGap1=0;
     let valGap2=db.configs.ajusteGapPx2!==undefined?parseInt(db.configs.ajusteGapPx2):0;if(isNaN(valGap2))valGap2=0;
-    
+
     let alternar=db.configs.alternarGap,currentGapToggle=db.configs.estadoGapAtual||0;
-    
+
     gab.style.setProperty('width',hw+'px','important');
     gab.style.setProperty('min-width',hw+'px','important');
     gab.style.setProperty('max-width',hw+'px','important');
@@ -1650,12 +1813,12 @@ async function gerarRawBT(p,ac,ps,mB,vB,q,op,es,prN,ma,lo,sk,btn){
     gab.style.setProperty('min-height',dhInt+'px','important');
     gab.style.setProperty('max-height',dhInt+'px','important');
     gab.style.left="0px";
-    
+
     let lS=window.scrollY;
     let wasModalOpen=document.body.classList.contains('modal-open');
     document.body.classList.remove('modal-open');
     window.scrollTo(0,0);
-    
+
     filaImagensRawBT = [];
     filaAtualIdx = 0;
 
@@ -1667,15 +1830,15 @@ async function gerarRawBT(p,ac,ps,mB,vB,q,op,es,prN,ma,lo,sk,btn){
             new QRCode(document.getElementById('viz-qrcode'),{text:sk[i],width:85,height:85});
             await new Promise(r=>setTimeout(r,250));
         }
-        
+
         let c=await html2canvas(gab,{scale:scaleMulti,backgroundColor:"#ffffff",logging:!1,useCORS:!0,width:hw,height:dhInt,windowWidth:hw,windowHeight:dhInt,x:0,y:0});
-        
+
         let currentGapExtra=0;
         if(alternar){currentGapExtra=currentGapToggle===0?valGap1:valGap2;currentGapToggle=currentGapToggle===0?1:0;}
         else{currentGapExtra=valGap1;}
-        
+
         let espacoTotal = 24 + currentGapExtra;
-        
+
         let singleCanvas = document.createElement('canvas');
         singleCanvas.width = hw * scaleMulti;
         singleCanvas.height = (dhInt + espacoTotal) * scaleMulti;
@@ -1687,7 +1850,7 @@ async function gerarRawBT(p,ac,ps,mB,vB,q,op,es,prN,ma,lo,sk,btn){
 
         filaImagensRawBT.push(singleCanvas.toDataURL("image/png"));
     }
-    
+
     db.configs.estadoGapAtual=currentGapToggle;
     salvarBancoLocal();
 
@@ -1709,7 +1872,7 @@ function enviarFilaRawBT(){
     if(filaAtualIdx < filaImagensRawBT.length){
         window.location.href = "intent:"+filaImagensRawBT[filaAtualIdx]+"#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;";
         filaAtualIdx++;
-        
+
         if(filaAtualIdx < filaImagensRawBT.length){
             document.getElementById('filaStatus').innerText = `Progresso: ${filaAtualIdx + 1} de ${filaImagensRawBT.length}`;
             document.getElementById('btnFilaImprimir').innerText = `Enviar Etiqueta ${filaAtualIdx + 1}`;
@@ -1777,7 +1940,7 @@ function onScanSuccess(t){
         tocarBeep('erro');
         if(confirm("⚠️ Baixado em: "+i.dataBaixa+"\n\nDesfazer baixa?")){
             i.baixado=!1;i.dataBaixa=null;
-            db.configs.ultimaModificacaoLocal=Date.now();salvarBancoLocal();sincronizarComNuvemSilencioso();
+            marcarAlteracaoHistorico();salvarBancoLocal();sincronizarComNuvemSilencioso();
             alert("✅ Reincluído!");fecharLeitorQR();
         }else{
             setTimeout(()=>{if(html5QrCode)html5QrCode.resume()},1500);
@@ -1786,7 +1949,7 @@ function onScanSuccess(t){
         tocarBeep('sucesso');
         if(confirm("✅ ITEM: "+i.produto+"\n\nConfirmar baixa?")){
             i.baixado=!0;i.dataBaixa=getDataHoraAtual();
-            db.configs.ultimaModificacaoLocal=Date.now();salvarBancoLocal();mostrarToast("Baixa confirmada!");sincronizarComNuvemSilencioso();
+            marcarAlteracaoHistorico();salvarBancoLocal();mostrarToast("Baixa confirmada!");sincronizarComNuvemSilencioso();
             fecharLeitorQR();
         }else{
             setTimeout(()=>{if(html5QrCode)html5QrCode.resume()},1500);
