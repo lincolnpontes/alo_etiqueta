@@ -400,7 +400,28 @@ function abrirPainelUnificadoComNivel(mestre){
     db.configs.mestreAtivo=mestre;
     document.getElementById('cfgSenhaAdmin').value=db.configs.senhaAdmin||"";
     document.getElementById('painelSecreto').style.display=mestre?'block':'none';
+    if(mestre)garantirBotoesTesteImpressora();
     abrirModal('modalPainelUnificado');
+}
+
+function garantirBotoesTesteImpressora(){
+    const painel=document.getElementById('painelSecreto');
+    if(!painel||document.getElementById('blocoTestesImpressora'))return;
+    const botaoAntigo=Array.from(painel.querySelectorAll('button')).find(b=>b.getAttribute('onclick')==='testeTSPLRawBT()');
+    const bloco=document.createElement('div');
+    bloco.id='blocoTestesImpressora';
+    bloco.innerHTML='<hr style="border:0;border-top:1px solid #eee;margin:18px 0 12px"><div style="font-size:12px;color:#6a1b9a;font-weight:900;text-align:center;margin-bottom:8px">Testes da Impressora</div>'+
+        '<button class="btn-outline" style="border-color:#6a1b9a;color:#6a1b9a" onclick="calibrarSensorZPLRawBT()">Calibrar Sensor ZPL</button>'+
+        '<button class="btn-outline" style="border-color:#6a1b9a;color:#6a1b9a" onclick="testeZPLRawBT()">Teste ZPL + QR</button>'+
+        '<button class="btn-outline" style="border-color:#6a1b9a;color:#6a1b9a" onclick="calibrarGapTSPLRawBT()">Calibrar GAP TSPL</button>'+
+        '<button class="btn-outline" style="border-color:#6a1b9a;color:#6a1b9a" onclick="autoDetectTSPLRawBT()">AutoDetect TSPL</button>'+
+        '<button class="btn-outline" style="border-color:#6a1b9a;color:#6a1b9a" onclick="testeTSPLRawBT()">Teste TSPL + QR</button>';
+    if(botaoAntigo){
+        painel.insertBefore(bloco,botaoAntigo);
+        botaoAntigo.remove();
+    }else{
+        painel.appendChild(bloco);
+    }
 }
 
 function salvarSenhaPainel(){
@@ -1691,6 +1712,131 @@ function enviarRawBTBase64(b64){
     window.location.href = "intent:base64,"+b64+"#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;";
 }
 
+function enviarRawBTTexto(txt){
+    enviarRawBTBase64(base64UTF8(txt));
+}
+
+function confirmarTesteImpressora(titulo,detalhe){
+    return confirm(`${titulo}\n\n${detalhe}\n\nEsse teste fica restrito ao painel secreto e nao muda o fluxo normal dos funcionarios. Continuar?`);
+}
+
+function enviarTesteImpressora(titulo,comando,detalhe){
+    if(!confirmarTesteImpressora(titulo,detalhe))return;
+    enviarRawBTTexto(comando);
+    mostrarToast(`${titulo} enviado ao RawBT.`);
+}
+
+function montarZPLCalibrarSensor(){
+    const tam=tsplTamanhoAtual(),w=tsplDots(tam.largura),h=tsplDots(tam.altura);
+    return [
+        "^XA",
+        "^MNW",
+        `^PW${w}`,
+        `^LL${h}`,
+        "^XZ",
+        "~JC",
+        ""
+    ].join("\r\n");
+}
+
+function montarZPLTeste(){
+    const tam=tsplTamanhoAtual(),w=tsplDots(tam.largura),h=tsplDots(tam.altura),sku="ZPL"+Date.now();
+    const estreita=w<340,fonteTitulo=estreita?26:30,fonte=estreita?21:24,qrCell=estreita?4:5,qrX=estreita?Math.max(178,w-135):Math.max(255,w-175);
+    const textoProduto=textoTSPL((db.produtos&&db.produtos[0]?db.produtos[0].nome:"PRODUTO TESTE"),28)||"PRODUTO TESTE";
+    const operador=textoTSPL(document.getElementById('seletorOperador')?document.getElementById('seletorOperador').value:"TESTE",24)||"TESTE";
+    return [
+        "^XA",
+        "^CI28",
+        "^MNW",
+        `^PW${w}`,
+        `^LL${h}`,
+        "^LH0,0",
+        `^FO8,8^GB${w-16},${h-16},2^FS`,
+        `^FO20,24^A0N,${fonteTitulo},${fonteTitulo}^FDALO ETIQUETA^FS`,
+        `^FO20,64^A0N,${fonte},${fonte}^FDTESTE ZPL + QR^FS`,
+        `^FO20,100^A0N,${fonte},${fonte}^FD${textoProduto}^FS`,
+        `^FO20,136^A0N,${fonte},${fonte}^FDVAL: ${getDataHoraAtual().split(' ')[0]}^FS`,
+        `^FO${qrX},54^BQN,2,${qrCell}^FDLA,${sku}^FS`,
+        `^FO${qrX+8},${h-76}^A0N,22,22^FD${sku.slice(-5)}^FS`,
+        `^FO20,${h-58}^GB${w-40},2,2^FS`,
+        `^FO20,${h-42}^A0N,22,22^FDOp: ${operador}^FS`,
+        "^PQ1,0,1,Y",
+        "^XZ",
+        ""
+    ].join("\r\n");
+}
+
+function calibrarSensorZPLRawBT(){
+    enviarTesteImpressora(
+        "Calibrar Sensor ZPL",
+        montarZPLCalibrarSensor(),
+        "Manda comandos ZPL para midia com gap e forca a calibracao do sensor. A impressora pode puxar algumas etiquetas em branco."
+    );
+}
+
+function testeZPLRawBT(){
+    enviarTesteImpressora(
+        "Teste ZPL + QR",
+        montarZPLTeste(),
+        "Manda uma unica etiqueta em ZPL puro, com QR Code nativo da impressora."
+    );
+}
+
+function pedirGapTSPL(){
+    const tam=tsplTamanhoAtual();
+    let g=prompt(`Gap fisico em mm para ${tam.largura}x${tam.altura}:`,localStorage.getItem('alo_etiqueta_tspl_gap')||"3");
+    if(g===null)return null;
+    g=parseFloat(String(g).replace(',','.'));
+    if(isNaN(g)||g<0){alert("Gap invalido.");return null}
+    localStorage.setItem('alo_etiqueta_tspl_gap',String(g));
+    return g;
+}
+
+function montarTSPLCalibrarGap(gapMM){
+    const tam=tsplTamanhoAtual();
+    return [
+        `SIZE ${tam.largura} mm,${tam.altura} mm`,
+        `GAP ${gapMM} mm,0 mm`,
+        "SPEED 4",
+        "DENSITY 8",
+        "DIRECTION 1",
+        "GAPDETECT",
+        "HOME",
+        ""
+    ].join("\r\n");
+}
+
+function montarTSPLAutoDetect(){
+    const tam=tsplTamanhoAtual();
+    return [
+        `SIZE ${tam.largura} mm,${tam.altura} mm`,
+        "SPEED 4",
+        "DENSITY 8",
+        "DIRECTION 1",
+        "AUTODETECT",
+        "HOME",
+        ""
+    ].join("\r\n");
+}
+
+function calibrarGapTSPLRawBT(){
+    const g=pedirGapTSPL();
+    if(g===null)return;
+    enviarTesteImpressora(
+        "Calibrar GAP TSPL",
+        montarTSPLCalibrarGap(g),
+        "Manda GAPDETECT em TSPL. Serve para descobrir se a L42 esta aceitando o dialeto TSPL para sensor."
+    );
+}
+
+function autoDetectTSPLRawBT(){
+    enviarTesteImpressora(
+        "AutoDetect TSPL",
+        montarTSPLAutoDetect(),
+        "Manda AUTODETECT em TSPL. A impressora pode puxar algumas etiquetas para procurar gap ou tarja."
+    );
+}
+
 function montarTSPLTeste(gapMM){
     const tam=tsplTamanhoAtual(),w=tsplDots(tam.largura),h=tsplDots(tam.altura),sku="TSPL"+Date.now();
     const estreita=w<340,fonteTitulo=estreita?"2":"3",qrCell=estreita?4:5,qrX=estreita?Math.max(170,w-130):Math.max(250,w-165);
@@ -1698,7 +1844,7 @@ function montarTSPLTeste(gapMM){
     const operador=textoTSPL(document.getElementById('seletorOperador')?document.getElementById('seletorOperador').value:"TESTE",24)||"TESTE";
     const linhas=[
         `SIZE ${tam.largura} mm,${tam.altura} mm`,
-        `GAP ${gapMM} mm,0`,
+        `GAP ${gapMM} mm,0 mm`,
         "SPEED 4",
         "DENSITY 8",
         "DIRECTION 1",
@@ -1723,15 +1869,14 @@ function montarTSPLTeste(gapMM){
 }
 
 function testeTSPLRawBT(){
-    const tam=tsplTamanhoAtual();
-    let g=prompt(`Gap fisico em mm para ${tam.largura}x${tam.altura}:`,localStorage.getItem('alo_etiqueta_tspl_gap')||"3");
+    const g=pedirGapTSPL();
     if(g===null)return;
-    g=parseFloat(String(g).replace(',','.'));
-    if(isNaN(g)||g<0)return alert("Gap invalido.");
-    localStorage.setItem('alo_etiqueta_tspl_gap',String(g));
     const tspl=montarTSPLTeste(g);
-    if(!confirm("Vou enviar uma etiqueta TSPL simples com QR nativo para o RawBT. Continuar?"))return;
-    enviarRawBTBase64(base64UTF8(tspl));
+    enviarTesteImpressora(
+        "Teste TSPL + QR",
+        tspl,
+        "Manda uma unica etiqueta em TSPL puro, com QR Code nativo. Se sair texto quebrado ou varias etiquetas, o RawBT ou a impressora nao esta interpretando TSPL cru."
+    );
 }
 
 function gerarPDF(p,ac,ps,mB,vB,q,op,es,prN,ma,lo,sk){
