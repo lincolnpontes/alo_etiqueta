@@ -413,6 +413,8 @@ function garantirBotoesTesteImpressora(){
     bloco.innerHTML='<hr style="border:0;border-top:1px solid #eee;margin:18px 0 12px"><div style="font-size:12px;color:#6a1b9a;font-weight:900;text-align:center;margin-bottom:8px">Testes da Impressora</div>'+
         '<button class="btn-outline" style="border-color:#6a1b9a;color:#6a1b9a" onclick="calibrarSensorZPLRawBT()">Calibrar Sensor ZPL</button>'+
         '<button class="btn-outline" style="border-color:#6a1b9a;color:#6a1b9a" onclick="testeZPLRawBT()">Teste ZPL + QR</button>'+
+        '<button class="btn-outline" style="border-color:#6a1b9a;color:#6a1b9a" onclick="ajustarRepousoZPLRawBT()">Ajustar Ponto ZPL</button>'+
+        '<button class="btn-outline" style="border-color:#6a1b9a;color:#6a1b9a" onclick="feedZPLRawBT()">Avancar 1 Etiqueta ZPL</button>'+
         '<button class="btn-outline" style="border-color:#6a1b9a;color:#6a1b9a" onclick="calibrarGapTSPLRawBT()">Calibrar GAP TSPL</button>'+
         '<button class="btn-outline" style="border-color:#6a1b9a;color:#6a1b9a" onclick="autoDetectTSPLRawBT()">AutoDetect TSPL</button>'+
         '<button class="btn-outline" style="border-color:#6a1b9a;color:#6a1b9a" onclick="testeTSPLRawBT()">Teste TSPL + QR</button>';
@@ -1726,15 +1728,64 @@ function enviarTesteImpressora(titulo,comando,detalhe){
     mostrarToast(`${titulo} enviado ao RawBT.`);
 }
 
+function zplAjusteTearOff(v){
+    v=Math.max(-120,Math.min(120,parseInt(v)||0));
+    return v<0?`-${String(Math.abs(v)).padStart(3,'0')}`:String(v).padStart(3,'0');
+}
+
 function montarZPLCalibrarSensor(){
+    const tam=tsplTamanhoAtual(),w=tsplDots(tam.largura),h=tsplDots(tam.altura);
+    const maxLen=Math.max(h*2,h+tsplDots(20));
+    return [
+        "^XA",
+        "^MNY",
+        "^MMT",
+        `^PW${w}`,
+        `^LL${h}`,
+        `^ML${maxLen}`,
+        "~TA000",
+        "^JUS",
+        "^XZ",
+        "~JC",
+        "^XA",
+        "^MNY",
+        "^MMT",
+        `^PW${w}`,
+        `^LL${h}`,
+        `^ML${maxLen}`,
+        "^JUS",
+        "^PH",
+        "^XZ",
+        ""
+    ].join("\r\n");
+}
+
+function montarZPLFeed(){
     const tam=tsplTamanhoAtual(),w=tsplDots(tam.largura),h=tsplDots(tam.altura);
     return [
         "^XA",
-        "^MNW",
+        "^MNY",
+        "^MMT",
         `^PW${w}`,
         `^LL${h}`,
+        "^PH",
         "^XZ",
-        "~JC",
+        ""
+    ].join("\r\n");
+}
+
+function montarZPLAjusteRepouso(dots){
+    const tam=tsplTamanhoAtual(),w=tsplDots(tam.largura),h=tsplDots(tam.altura);
+    return [
+        "^XA",
+        "^MNY",
+        "^MMT",
+        `^PW${w}`,
+        `^LL${h}`,
+        `~TA${zplAjusteTearOff(dots)}`,
+        "^JUS",
+        "^PH",
+        "^XZ",
         ""
     ].join("\r\n");
 }
@@ -1744,12 +1795,15 @@ function montarZPLTeste(){
     const estreita=w<340,fonteTitulo=estreita?26:30,fonte=estreita?21:24,qrCell=estreita?4:5,qrX=estreita?Math.max(178,w-135):Math.max(255,w-175);
     const textoProduto=textoTSPL((db.produtos&&db.produtos[0]?db.produtos[0].nome:"PRODUTO TESTE"),28)||"PRODUTO TESTE";
     const operador=textoTSPL(document.getElementById('seletorOperador')?document.getElementById('seletorOperador').value:"TESTE",24)||"TESTE";
+    const maxLen=Math.max(h*2,h+tsplDots(20));
     return [
         "^XA",
         "^CI28",
-        "^MNW",
+        "^MNY",
+        "^MMT",
         `^PW${w}`,
         `^LL${h}`,
+        `^ML${maxLen}`,
         "^LH0,0",
         `^FO8,8^GB${w-16},${h-16},2^FS`,
         `^FO20,24^A0N,${fonteTitulo},${fonteTitulo}^FDALO ETIQUETA^FS`,
@@ -1770,7 +1824,7 @@ function calibrarSensorZPLRawBT(){
     enviarTesteImpressora(
         "Calibrar Sensor ZPL",
         montarZPLCalibrarSensor(),
-        "Manda comandos ZPL para midia com gap e forca a calibracao do sensor. A impressora pode puxar algumas etiquetas em branco."
+        "Manda midia com gap, modo tear-off, tamanho da etiqueta, calibra, salva na memoria e avanca uma etiqueta para conferir o ponto. A impressora pode puxar algumas etiquetas em branco."
     );
 }
 
@@ -1779,6 +1833,27 @@ function testeZPLRawBT(){
         "Teste ZPL + QR",
         montarZPLTeste(),
         "Manda uma unica etiqueta em ZPL puro, com QR Code nativo da impressora."
+    );
+}
+
+function ajustarRepousoZPLRawBT(){
+    let v=prompt("Ajuste do ponto de parada em dots (-120 a 120).\nValor positivo joga a etiqueta mais para fora; negativo puxa para dentro.",localStorage.getItem('alo_etiqueta_zpl_tear')||"0");
+    if(v===null)return;
+    v=parseInt(String(v).replace(',','.'),10);
+    if(isNaN(v)||v<-120||v>120)return alert("Use um numero entre -120 e 120.");
+    localStorage.setItem('alo_etiqueta_zpl_tear',String(v));
+    enviarTesteImpressora(
+        "Ajustar Ponto ZPL",
+        montarZPLAjusteRepouso(v),
+        `Salva o ajuste ~TA${zplAjusteTearOff(v)} e avanca uma etiqueta para conferir. Use aos poucos: tente 20, 40, -20 etc.`
+    );
+}
+
+function feedZPLRawBT(){
+    enviarTesteImpressora(
+        "Avancar 1 Etiqueta ZPL",
+        montarZPLFeed(),
+        "Manda o comando ZPL de feed para ver se, depois da calibracao, a impressora avanca exatamente uma etiqueta e para no gap."
     );
 }
 
